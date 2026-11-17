@@ -95,18 +95,18 @@ sans refaire `prepare` ni le raccordement déjà enregistré.
 
 | Étape | Action | Machine | Attendu avant de continuer |
 | --- | --- | --- | --- |
-| 1 | Confirmer le serveur et le dossier de raccordement | Ubuntu | Bon serveur, Python et sudo, fiche et fichiers reçus |
-| 2 | Vérifier et extraire les sources | Ubuntu | Archive `OK`, manifeste `passed: true` |
-| 3 | Choisir l'instance et le compte administrateur | Ubuntu | Mode `external`, vrai compte LDAP habilité |
-| 4 | Vérifier les prérequis | Ubuntu | Docker, Compose, Buildx et capacité disponibles |
-| 5 | Préparer l'instance privée | Ubuntu | Permissions privées, aucun service démarré |
-| 6 | Compléter la fiche dans NiceGUI et importer son dossier | Navigateur et Ubuntu | Préparation importée, secrets privés ajoutés |
-| 7 | Récupérer les deux images et démarrer le PoC | Ubuntu | `pdl`, `incidents`, `portal` sains ; catalogue à approuver |
-| 8 | Revoir et approuver les mappings | Ubuntu et navigateur | Sources requises prêtes, catalogue approuvé |
-| 9 | Raccorder les précédents ITSM-NG | Ubuntu | Identités individuelles et lecture API vérifiée |
-| 10 | Préparer le client puis autoriser les sources | Ubuntu et poste utilisateur | Deux connexions OAuth personnelles disponibles |
-| 11 | Jouer les deux UC et leurs ACL avec Albert | Navigateur | Résultats de référence et refus conformes |
-| 12 | Vérifier l'exploitation et consigner | Ubuntu et navigateur | Sauvegarde, reprise et restauration réelles |
+| [1](#1-identifier-ubuntu-et-vérifier-le-si-existant) | Confirmer le serveur et le dossier de raccordement | Ubuntu | Bon serveur, Python et sudo, fiche et fichiers reçus |
+| [2](#2-vérifier-et-extraire-le-paquet) | Vérifier et extraire les sources | Ubuntu | Archive `OK`, manifeste `passed: true` |
+| [3](#3-choisir-instance-mode-et-administrateur) | Choisir l'instance et le compte administrateur | Ubuntu | Mode `external`, vrai compte LDAP habilité |
+| [4](#4-vérifier-les-prérequis) | Vérifier les prérequis | Ubuntu | Docker, Compose, Buildx et capacité disponibles |
+| [5](#5-préparer-linstance-privée) | Préparer l'instance privée | Ubuntu | Permissions privées, aucun service démarré |
+| [6](#6-préparer-le-raccordement-avec-nicegui) | Compléter la fiche dans NiceGUI et importer son dossier | Navigateur et Ubuntu | Préparation importée, secrets privés ajoutés |
+| [7](#7-valider-récupérer-les-images-et-démarrer) | Récupérer les deux images et démarrer le PoC | Ubuntu | `pdl`, `incidents`, `portal` sains ; catalogue à approuver |
+| [8](#8-revoir-et-approuver-les-mappings-pdl) | Revoir et approuver les mappings | Ubuntu et navigateur | Sources requises prêtes, catalogue approuvé |
+| [9](#9-raccorder-les-précédents-itsm-ng) | Raccorder les précédents ITSM-NG | Ubuntu | Identités individuelles et lecture API vérifiée |
+| [10](#10-connecter-nicegui-et-open-webui-local) | Préparer le client puis autoriser les sources | Ubuntu et poste utilisateur | Deux connexions OAuth personnelles disponibles |
+| [11](#11-jouer-les-deux-uc-et-leurs-acl-avec-albert) | Jouer les deux UC et leurs ACL avec Albert | Navigateur | Résultats de référence et refus conformes |
+| [12](#12-vérifier-lexploitation-et-consigner) | Vérifier l'exploitation et consigner | Ubuntu et navigateur | Sauvegarde, reprise et restauration réelles |
 
 ## Les services du PoC et leur utilisation
 

@@ -28,7 +28,9 @@
     "reference_directory": "reference",
     "reference_pages": 27,
     "source_guide": "docs/si-rie/README.md",
-    "old_portal_guide_url_preserved": true
+    "old_portal_guide_url_preserved": true,
+    "navigation_source_commit": "1cc615be33e59d86ea126a341f934ec9ebebd527",
+    "summary_step_links_verified": 12
   },
   "previous_delivery": {
     "source_commit": "60169b11c7be916ae15305219835d5959d7a542b",
