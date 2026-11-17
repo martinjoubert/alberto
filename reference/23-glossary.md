@@ -82,4 +82,5 @@ des services fournissent ou confirment ces informations.
 | Sonde de santé / `healthy` | Contrôle du fonctionnement d'un processus ou service. Son succès ne valide pas à lui seul le corpus, les droits ou une réponse IA. |
 | Disponibilité métier / `ready` | Résultat de contrôles sur les dépendances, l'identité et le catalogue nécessaires au PoC. La génération Albert conserve sa recette distincte. |
 | Recette / qualification | La recette vérifie les scénarios et leurs attendus. La qualification rassemble les résultats, versions, environnements, preuves et limites ; la réception du SI réel reste une validation propre à ce SI. |
+| Cas de référence | Demande complète et résultat attendu vérifié dans les sources, avec identité, index, période/fuseau et limites connus. La recette remet un texte exact à envoyer et ses attendus ; les exemples fictifs ne remplacent pas ceux du SI réel. |
 | CI / Allure | La CI exécute les contrôles automatisés lors de la validation du code. Allure présente leurs résultats et pièces de diagnostic ; NiceGUI donne accès aux publications importées. |

@@ -1,17 +1,17 @@
 {
-  "source_commit": "2c2fa92529d385e52f985b7ecd6044dca899c2f7",
+  "source_commit": "f50e56cacfd3236b4beca21c6678547ed63daf6b",
   "source_dirty": false,
   "runtime_context": "03763e37a65820d831cc",
   "archives": [
     {
-      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz",
-      "bytes": 10759913,
-      "sha256": "8d4d35969b1a0d5a254aff0d044d0a1a5e96b4e2ca2feb704f9f42eb41098076"
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r8.tar.gz",
+      "bytes": 10765226,
+      "sha256": "cba7b56093f52854ff149b3a9e056b6b68ff89c33dce8549acb0f6ee664c0aba"
     },
     {
-      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip",
-      "bytes": 20465223,
-      "sha256": "60a0ec12ebc5874ace94f2a3bcadbd1f8870b410b8c8406a8ce8e8e05340e802"
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r8.zip",
+      "bytes": 20483376,
+      "sha256": "536c5525deca2ebd2ea75ff78f245d941205c5250324ed99a85c07c82903065c"
     }
   ],
   "deterministic_tests": {
@@ -29,25 +29,27 @@
     "reference_pages": 27,
     "source_guide": "docs/si-rie/README.md",
     "old_portal_guide_url_preserved": true,
-    "navigation_source_commit": "2c2fa92529d385e52f985b7ecd6044dca899c2f7",
+    "navigation_source_commit": "f50e56cacfd3236b4beca21c6678547ed63daf6b",
     "summary_step_links_verified": 12,
     "mapping_example_screenshots": 8,
-    "raw_only_tacacs_target": "incomplete; structured IP required for operational use"
+    "raw_only_tacacs_target": "incomplete; structured IP required for operational use",
+    "owui_recipe_copyable_messages": 13,
+    "recipe_wording_albert_qualification": "not_rerun"
   },
   "previous_delivery": {
-    "source_commit": "dca1b3c9a0b57d8e2d5b16633773a853fc306ea7",
+    "source_commit": "2c2fa92529d385e52f985b7ecd6044dca899c2f7",
     "source_dirty": false,
     "runtime_context": "03763e37a65820d831cc",
     "archives": [
       {
-        "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz",
-        "bytes": 10442622,
-        "sha256": "be729738e4eb571a2771645c6f873a4045fcd20f2057ce5e6d2e26704f9399df"
+        "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz",
+        "bytes": 10759913,
+        "sha256": "8d4d35969b1a0d5a254aff0d044d0a1a5e96b4e2ca2feb704f9f42eb41098076"
       },
       {
-        "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip",
-        "bytes": 19823417,
-        "sha256": "f4572d9a855ff512602f480d8be26dda4f97f6f65c50661efde05c07b1cb8022"
+        "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip",
+        "bytes": 20465223,
+        "sha256": "60a0ec12ebc5874ace94f2a3bcadbd1f8870b410b8c8406a8ce8e8e05340e802"
       }
     ],
     "deterministic_tests": {
@@ -65,29 +67,31 @@
       "reference_pages": 27,
       "source_guide": "docs/si-rie/README.md",
       "old_portal_guide_url_preserved": true,
-      "navigation_source_commit": "2c2fa92529d385e52f985b7ecd6044dca899c2f7",
+      "navigation_source_commit": "f50e56cacfd3236b4beca21c6678547ed63daf6b",
       "summary_step_links_verified": 12,
       "mapping_example_screenshots": 8,
-      "raw_only_tacacs_target": "incomplete; structured IP required for operational use"
+      "raw_only_tacacs_target": "incomplete; structured IP required for operational use",
+      "owui_recipe_copyable_messages": 13,
+      "recipe_wording_albert_qualification": "not_rerun"
     },
     "previous_delivery": {
-      "source_commit": "60169b11c7be916ae15305219835d5959d7a542b",
+      "source_commit": "dca1b3c9a0b57d8e2d5b16633773a853fc306ea7",
       "source_dirty": false,
       "runtime_context": "03763e37a65820d831cc",
       "archives": [
         {
-          "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz",
-          "bytes": 10441748,
-          "sha256": "c52557de0d7f535c4f02f57dbae771c1e3d3ce8d50bcf397914193dea966f465"
+          "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz",
+          "bytes": 10442622,
+          "sha256": "be729738e4eb571a2771645c6f873a4045fcd20f2057ce5e6d2e26704f9399df"
         },
         {
-          "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip",
-          "bytes": 19821722,
-          "sha256": "1977061763d51e3de61a843de69f48d5e23c01f7b2a1a5eb8b19d538f1fa876d"
+          "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip",
+          "bytes": 19823417,
+          "sha256": "f4572d9a855ff512602f480d8be26dda4f97f6f65c50661efde05c07b1cb8022"
         }
       ],
       "deterministic_tests": {
-        "passed": 1383,
+        "passed": 1388,
         "skipped": 1,
         "failed": 0
       },
@@ -100,26 +104,30 @@
         "reference_directory": "reference",
         "reference_pages": 27,
         "source_guide": "docs/si-rie/README.md",
-        "old_portal_guide_url_preserved": true
+        "old_portal_guide_url_preserved": true,
+        "navigation_source_commit": "2c2fa92529d385e52f985b7ecd6044dca899c2f7",
+        "summary_step_links_verified": 12,
+        "mapping_example_screenshots": 8,
+        "raw_only_tacacs_target": "incomplete; structured IP required for operational use"
       },
       "previous_delivery": {
-        "source_commit": "d3c098695f1b4c045713b08ddd075d3c455ad3dd",
+        "source_commit": "60169b11c7be916ae15305219835d5959d7a542b",
         "source_dirty": false,
         "runtime_context": "03763e37a65820d831cc",
         "archives": [
           {
-            "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz",
-            "bytes": 10441662,
-            "sha256": "24dcdb4180536e9322e2247009bf5f8caa93c2c494fe96ebc9d5cdbc9ae1c31f"
+            "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz",
+            "bytes": 10441748,
+            "sha256": "c52557de0d7f535c4f02f57dbae771c1e3d3ce8d50bcf397914193dea966f465"
           },
           {
-            "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip",
-            "bytes": 19823866,
-            "sha256": "e2df1f500104db94724f278151e58999abb85b507f25606fb354f993819dbb59"
+            "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip",
+            "bytes": 19821722,
+            "sha256": "1977061763d51e3de61a843de69f48d5e23c01f7b2a1a5eb8b19d538f1fa876d"
           }
         ],
         "deterministic_tests": {
-          "passed": 1381,
+          "passed": 1383,
           "skipped": 1,
           "failed": 0
         },
@@ -135,19 +143,19 @@
           "old_portal_guide_url_preserved": true
         },
         "previous_delivery": {
-          "source_commit": "96d708a2a6ebfe859d8d43ede50ac72f32a7a100",
+          "source_commit": "d3c098695f1b4c045713b08ddd075d3c455ad3dd",
           "source_dirty": false,
           "runtime_context": "03763e37a65820d831cc",
           "archives": [
             {
-              "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz",
-              "bytes": 10440773,
-              "sha256": "364f015dec07b7b3a13e234c767635912c06442b8dd978300e254b5e43703204"
+              "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz",
+              "bytes": 10441662,
+              "sha256": "24dcdb4180536e9322e2247009bf5f8caa93c2c494fe96ebc9d5cdbc9ae1c31f"
             },
             {
-              "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r3.zip",
-              "bytes": 19820351,
-              "sha256": "f9784eb72c1588328d9e28663e1cae68fd73ec53a8e4a673fc0be6acce3f651e"
+              "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip",
+              "bytes": 19823866,
+              "sha256": "e2df1f500104db94724f278151e58999abb85b507f25606fb354f993819dbb59"
             }
           ],
           "deterministic_tests": {
@@ -167,23 +175,23 @@
             "old_portal_guide_url_preserved": true
           },
           "previous_delivery": {
-            "source_commit": "1f3af5d2544325b02cd05fcfdd79d5f7566c594d",
+            "source_commit": "96d708a2a6ebfe859d8d43ede50ac72f32a7a100",
             "source_dirty": false,
             "runtime_context": "03763e37a65820d831cc",
             "archives": [
               {
-                "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz",
-                "bytes": 10420211,
-                "sha256": "4f8ad7d89bda6d143d1a6dde6fb8c01ecb8f941f677b8a249bc74da639ab6319"
+                "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz",
+                "bytes": 10440773,
+                "sha256": "364f015dec07b7b3a13e234c767635912c06442b8dd978300e254b5e43703204"
               },
               {
-                "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r2.zip",
-                "bytes": 19800715,
-                "sha256": "3c84534bcc77a27335d883997714557d7f2f1a0d026faf4a679d2242fa3f23f3"
+                "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r3.zip",
+                "bytes": 19820351,
+                "sha256": "f9784eb72c1588328d9e28663e1cae68fd73ec53a8e4a673fc0be6acce3f651e"
               }
             ],
             "deterministic_tests": {
-              "passed": 1367,
+              "passed": 1381,
               "skipped": 1,
               "failed": 0
             },
@@ -194,38 +202,80 @@
             "documentation": {
               "guide": "README.md",
               "reference_directory": "reference",
-              "reference_pages": 26,
+              "reference_pages": 27,
               "source_guide": "docs/si-rie/README.md",
               "old_portal_guide_url_preserved": true
             },
             "previous_delivery": {
-              "source_commit": "8affa9b0544a0ed556c8ab0613833a211e9360ef",
+              "source_commit": "1f3af5d2544325b02cd05fcfdd79d5f7566c594d",
               "source_dirty": false,
               "runtime_context": "03763e37a65820d831cc",
               "archives": [
                 {
-                  "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy.tar.gz",
-                  "bytes": 10421111,
-                  "sha256": "68dbb30597e497ef95d533d1797f4defb96a0c29129cb7068f173633716db1d6"
+                  "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz",
+                  "bytes": 10420211,
+                  "sha256": "4f8ad7d89bda6d143d1a6dde6fb8c01ecb8f941f677b8a249bc74da639ab6319"
                 },
                 {
-                  "file": "rie-si-rie-wikijs-2026-11-17-si-deploy.zip",
-                  "bytes": 19815486,
-                  "sha256": "bf182a8c34147eaed263f33ad42e6182cdd2503f3754365c0281fb08a46b74bc"
+                  "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r2.zip",
+                  "bytes": 19800715,
+                  "sha256": "3c84534bcc77a27335d883997714557d7f2f1a0d026faf4a679d2242fa3f23f3"
                 }
               ],
               "deterministic_tests": {
-                "passed": 1364,
+                "passed": 1367,
                 "skipped": 1,
                 "failed": 0
               },
               "real_si_reception": "not_qualified",
               "gitlab_history_included": false,
               "private_credentials_included": false,
-              "si_registry_images": "references_and_access_to_be_provided_by_SI"
+              "si_registry_images": "references_and_access_to_be_provided_by_SI",
+              "documentation": {
+                "guide": "README.md",
+                "reference_directory": "reference",
+                "reference_pages": 26,
+                "source_guide": "docs/si-rie/README.md",
+                "old_portal_guide_url_preserved": true
+              },
+              "previous_delivery": {
+                "source_commit": "8affa9b0544a0ed556c8ab0613833a211e9360ef",
+                "source_dirty": false,
+                "runtime_context": "03763e37a65820d831cc",
+                "archives": [
+                  {
+                    "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy.tar.gz",
+                    "bytes": 10421111,
+                    "sha256": "68dbb30597e497ef95d533d1797f4defb96a0c29129cb7068f173633716db1d6"
+                  },
+                  {
+                    "file": "rie-si-rie-wikijs-2026-11-17-si-deploy.zip",
+                    "bytes": 19815486,
+                    "sha256": "bf182a8c34147eaed263f33ad42e6182cdd2503f3754365c0281fb08a46b74bc"
+                  }
+                ],
+                "deterministic_tests": {
+                  "passed": 1364,
+                  "skipped": 1,
+                  "failed": 0
+                },
+                "real_si_reception": "not_qualified",
+                "gitlab_history_included": false,
+                "private_credentials_included": false,
+                "si_registry_images": "references_and_access_to_be_provided_by_SI"
+              }
+            },
+            "portal_context": "118072dbed251a59c0e7",
+            "features": {
+              "deployment_preparation": "NiceGUI /deployment, offline, no instance read, no secret collection",
+              "before_ldap": "manage.py deployment-ui without instance mounts",
+              "operator_import": "configure-connection for fresh external instances only",
+              "maintenance": "reference/27-development-and-images.md",
+              "vscode_workspace": "deploy/ubuntu/rie-development.code-workspace inside source archive; complete regression task requires complete development repository",
+              "registry_publication": "documented operator commands for three images; target registry not qualified"
             }
           },
-          "portal_context": "118072dbed251a59c0e7",
+          "portal_context": "3cb4a0c35620f3794582",
           "features": {
             "deployment_preparation": "NiceGUI /deployment, offline, no instance read, no secret collection",
             "before_ldap": "manage.py deployment-ui without instance mounts",
@@ -233,9 +283,12 @@
             "maintenance": "reference/27-development-and-images.md",
             "vscode_workspace": "deploy/ubuntu/rie-development.code-workspace inside source archive; complete regression task requires complete development repository",
             "registry_publication": "documented operator commands for three images; target registry not qualified"
-          }
+          },
+          "release_revision": "r4",
+          "change_scope": "documentation only; application code and dependency locks unchanged from r3",
+          "version_references_verified": true
         },
-        "portal_context": "3cb4a0c35620f3794582",
+        "portal_context": "2f471b831379b56778b2",
         "features": {
           "deployment_preparation": "NiceGUI /deployment, offline, no instance read, no secret collection",
           "before_ldap": "manage.py deployment-ui without instance mounts",
@@ -244,11 +297,11 @@
           "vscode_workspace": "deploy/ubuntu/rie-development.code-workspace inside source archive; complete regression task requires complete development repository",
           "registry_publication": "documented operator commands for three images; target registry not qualified"
         },
-        "release_revision": "r4",
-        "change_scope": "documentation only; application code and dependency locks unchanged from r3",
+        "release_revision": "r5",
+        "change_scope": "simplified NiceGUI walkthrough and graceful cancellation in the host preparation tool; application code and dependency locks unchanged from r3",
         "version_references_verified": true
       },
-      "portal_context": "2f471b831379b56778b2",
+      "portal_context": "c713818a9d131151dbb9",
       "features": {
         "deployment_preparation": "NiceGUI /deployment, offline, no instance read, no secret collection",
         "before_ldap": "manage.py deployment-ui without instance mounts",
@@ -257,11 +310,11 @@
         "vscode_workspace": "deploy/ubuntu/rie-development.code-workspace inside source archive; complete regression task requires complete development repository",
         "registry_publication": "documented operator commands for three images; target registry not qualified"
       },
-      "release_revision": "r5",
-      "change_scope": "simplified NiceGUI walkthrough and graceful cancellation in the host preparation tool; application code and dependency locks unchanged from r3",
+      "release_revision": "r6",
+      "change_scope": "explicit project images and services in step 7; external project image download fixed; application code and dependency locks unchanged from r3",
       "version_references_verified": true
     },
-    "portal_context": "c713818a9d131151dbb9",
+    "portal_context": "99056aab6f6ac46d33e4",
     "features": {
       "deployment_preparation": "NiceGUI /deployment, offline, no instance read, no secret collection",
       "before_ldap": "manage.py deployment-ui without instance mounts",
@@ -270,11 +323,11 @@
       "vscode_workspace": "deploy/ubuntu/rie-development.code-workspace inside source archive; complete regression task requires complete development repository",
       "registry_publication": "documented operator commands for three images; target registry not qualified"
     },
-    "release_revision": "r6",
-    "change_scope": "explicit project images and services in step 7; external project image download fixed; application code and dependency locks unchanged from r3",
+    "release_revision": "r7",
+    "change_scope": "illustrated PDL mapping example with eight screenshots in a collapsed portal panel; structured TACACS verified, raw-only target limitation explicit",
     "version_references_verified": true
   },
-  "portal_context": "99056aab6f6ac46d33e4",
+  "portal_context": "d48fc50334cd8662ae71",
   "features": {
     "deployment_preparation": "NiceGUI /deployment, offline, no instance read, no secret collection",
     "before_ldap": "manage.py deployment-ui without instance mounts",
@@ -283,7 +336,7 @@
     "vscode_workspace": "deploy/ubuntu/rie-development.code-workspace inside source archive; complete regression task requires complete development repository",
     "registry_publication": "documented operator commands for three images; target registry not qualified"
   },
-  "release_revision": "r7",
-  "change_scope": "illustrated PDL mapping example with eight screenshots in a collapsed portal panel; structured TACACS verified, raw-only target limitation explicit",
+  "release_revision": "r8",
+  "change_scope": "explicit Open WebUI recipe messages, model names, thread boundaries and expected results; documentation only, application code and dependencies unchanged",
   "version_references_verified": true
 }

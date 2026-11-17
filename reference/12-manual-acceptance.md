@@ -22,6 +22,16 @@ Renseigner : date `________` ; opérateur `________` ; version/manifeste
 `________` ; machine/architecture `________` ; mode/instance `________` ;
 fournisseur IA réellement accessible `________`.
 
+Les textes exacts à envoyer sont dans l’[étape 11](../README.md#11-jouer-les-deux-uc-et-leurs-acl-avec-albert) :
+**PDL-1/2** pour la clarification et les deux refus PFS de la sandbox,
+**PDL-3/4/5** pour six documents puis deux TACACS puis quatre sans TACACS,
+**INC-1/2/3** pour diagnostic, horodatages et clarification,
+**ACL-1/2/3** pour les listes de droits et les demandes par identité.
+Sur le SI réel, utiliser les [textes préparés de la fiche](26-si-connection-sheet.md#textes-open-webui-à-préparer-pour-le-si-réel)
+et leurs attendus réels. Les valeurs chiffrées ci-dessus concernent seulement la sandbox.
+Pour chaque essai, conserver le texte envoyé, le modèle, « nouveau fil » ou
+« même fil », le titulaire et son résultat ; le mot « fait » seul ne décrit pas l’essai.
+
 Pour chaque ligne, écrire **réussi**, **échoué** ou **non fait**, avec le reçu
 ou la raison. Les cellules restent volontairement vides avant la séance.
 Ne joindre aucun mot de passe, jeton ou preuve réelle non autorisée.
@@ -32,9 +42,9 @@ Ne joindre aucun mot de passe, jeton ou preuve réelle non autorisée.
 | 2. Lire l'état, les logs et le stockage | `ready` ou cause explicite ; logs ciblés et occupation consultables sans arrêter ni purger, selon [Exploitation](07-operations.md#lire-létat-sans-interrompre-le-service) | | |
 | 3. Vérifier les trois rôles dans des sessions distinctes | Administrateur, interne lecteur et externe utilisent chacun leur identité ; Alice/Bruno/Eric dans une nouvelle démo. Le lecteur interne conserve ses lectures métier et refuse administration/rapports ; l'externe reste soumis à ses droits. Credentials fictifs récupérables compte par compte ; [ACL](06-acl.md) | | |
 | 3 bis. Revoir les mappings dans NiceGUI | Dans **Mappings PDL**, l’administrateur retrouve les revues existantes, choisit les champs découverts, vérifie la proposition et lit les différences ; aucun mapping n’est activé avant confirmation et justification. Un lecteur/externe ne reçoit pas de schéma. Export YAML récupérable ; [parcours](../README.md#8-revoir-et-approuver-les-mappings-pdl) | | |
-| 4. Jouer PDL et un suivi dans le même fil | Quatre familles visibles, période fixe et rapprochement de référence retrouvés, clarification et reprise liées au titulaire ; [Démo PDL](09-demonstrations.md#démo-pdl--cinq-minutes) | | |
+| 4. Jouer PDL et un suivi dans le même fil | Quatre familles visibles, période fixe et rapprochement de référence retrouvés, clarification et reprise liées au titulaire ; [Demandes exactes PDL-1 à PDL-5](../README.md#pdl--clarification-puis-reprise-du-même-fil) | | |
 | 5. Examiner les quatre droits Incidents | Deux index physiques plus ressources métriques/tickets visibles et distincts ; l'interne autorisé lit les sources attendues, l'externe refusé ne voit aucune preuve interdite ; [ACL](06-acl.md#ce-qui-est-protégé) | | |
-| 6. Refuser puis rétablir un droit UC2 | Dans la simulation, modifier successivement un droit de source avec les révisions correctes ; refus fermé, puis nouvelle demande réussie après rétablissement, sans changement d'identité ni preuve ancienne ; [Administration](06-acl.md#lire-et-modifier-la-politique-active) | | |
+| 6. Refuser puis rétablir un droit UC2 | Dans la simulation, modifier successivement un droit de source avec les révisions correctes ; refus fermé, puis nouvelle demande réussie après rétablissement, sans changement d'identité ni preuve ancienne ; [Demande ACL-3 et cycle exact](../README.md#acl--lecteurs-refus-et-rétablissement) | | |
 | 7. Arrêter puis reprendre explicitement | Même corpus, politique, mappings et jetons ; aucune réinitialisation nécessaire, selon [Arrêt/reprise](07-operations.md#arrêter-et-reprendre-volontairement) | | |
 | 8. Restaurer une sauvegarde froide neuve | Nouvelle destination, empreintes vérifiées, données/droits conservés ; archive corrompue refusée si ce cas est joué ; [Sauvegarde/restauration](07-operations.md#sauvegarder-à-froid) | | |
 | 9. Qualifier séparément le client IA et les exports | Si Albert disponible : conversations/citations/refus dans Open WebUI, sans boucle automatique ; sinon « génération non qualifiée ». Pages et draw.io exportables, sources éditables, selon [Client](02-configuration.md#configurer-le-client-open-webui-local-qualifi%C3%A9) et [Wiki.js](10-wikijs.md) | | |

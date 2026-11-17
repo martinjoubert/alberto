@@ -12,6 +12,7 @@ ne les crée pas dans les sources ou l'annuaire du SI.
 | --- | --- |
 | Simulation `demo` initialisée | [Démonstration reproductible](#avant-de-commencer-la-démonstration) avec les noms, dates et valeurs du jeu fictif |
 | Raccordement aux sources SI-RIE en `external` | [Utiliser vos sources SI-RIE](#utiliser-vos-sources-si-rie), avec un incident connu et les identités préparées par l'équipe du SI |
+| Sandbox SI simulé préparée en `external` | Même parcours fictif ci-dessous, seulement si le préparateur confirme les sources et comptes de la [sandbox](22-external-sandbox.md) ; aucun `seed` en `external` |
 | Mode ou données disponibles inconnus | Faire confirmer l'instance et ses sources par l'installateur avant d'envoyer les questions |
 
 ## Utiliser vos sources SI-RIE
@@ -24,7 +25,7 @@ doivent être renseignés pour votre instance :
 
 | Élément nécessaire | Valeur à obtenir |
 | --- | --- |
-| Identité et client | Votre compte LDAP, son jeton personnel et le modèle Open WebUI connecté au MCP Incidents de l'instance |
+| Identité et client | Votre compte LDAP, son autorisation OAuth personnelle et le modèle Open WebUI connecté au MCP Incidents de l'instance |
 | Équipement et site | Identifiants réels déclarés dans l'inventaire, interfaces et périmètre autorisés |
 | Période | Date, bornes horaires et fuseau d'un incident ou d'une situation connue |
 | Mesures | Séries réellement raccordées, unités, cadence et couverture attendue |
@@ -84,7 +85,7 @@ initiales du jeu fictif ne décrivent pas nécessairement votre installation.
 
 Préparer avec l'administrateur un **lecteur disposant des quatre droits**, un
 **compte de recette privé d'au moins un de ces droits** et un **administrateur
-des accès**. Chaque lecteur utilise son jeton personnel. Rejouer le diagnostic
+des accès**. Chaque lecteur utilise sa propre autorisation OAuth, selon l’[étape 10](../README.md#10-connecter-nicegui-et-open-webui-local). Rejouer le diagnostic
 complet préparé : accès selon la politique pour le premier, refus sans preuves
 des sources pour le second. Un externe n'est pas systématiquement interdit :
 le résultat dépend des règles effectivement configurées et de son identité vérifiée.
@@ -102,7 +103,7 @@ du diagnostic ou du raccordement sur ces sources réelles.
 
 ## Avant de commencer la démonstration
 
-**La suite de cette page concerne exclusivement le mode `demo` et son corpus fictif.**
+**La suite utilise le corpus fictif initialisé en `demo`, ou celui de la sandbox `external` préparée à l’avance.**
 Ce parcours apprend à diagnostiquer un équipement, distinguer résolution
 technique et clôture d'un ticket, comparer deux équipements, reconnaître
 des mesures manquantes et vérifier les droits sur les sources.
@@ -111,9 +112,7 @@ pour l'[exercice ACL](#9-vérifier-les-acl-incidents).
 Pour une présentation courte, jouer les étapes 1, 2 et 4, puis montrer le refus
 de l'externe à l'étape 9.
 
-Dans votre **Open WebUI local**, sélectionner le modèle relié au MCP Incidents
-de cette instance. L'identifiant de référence est `albert-observabilite-gptoss` ;
-le nom affiché peut avoir été personnalisé. Utiliser votre jeton personnel et
+Dans votre **Open WebUI local**, sélectionner **SI-RIE — INCIDENTS**, nom affiché par la configuration livrée ; l’identifiant technique reste `albert-observabilite-gptoss`. Un ancien client peut avoir un autre libellé. Utiliser son autorisation OAuth personnelle et
 un compte interne disposant des quatre droits : logs, documents, mesures et
 tickets. Voir la [configuration du client](02-configuration.md#configurer-le-client-open-webui-local-qualifi%C3%A9).
 
@@ -253,9 +252,17 @@ dans Open WebUI ; le bouton NiceGUI garde son scénario R1 fixe.
 
 ## 8. Examiner les précédents et une solution proposée
 
-**Extension facultative :** cette étape suppose l'historique ITSM activé par
-l'opérateur. Rejouer l'étape 1 ou la lecture de preuves de l'étape 7, puis
-examiner les précédents et la solution proposée dans le rapport.
+**Extension facultative :** cette étape suppose l’historique ITSM activé par
+l’opérateur et les droits individuels du lecteur préparés. Attendre le délai
+de synthèse, puis **nouveau fil, modèle SI-RIE — INCIDENTS** :
+
+```text
+Diagnostique R1 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, sur le site de Rennes. Recherche les précédents ITSM-NG disponibles et présente la solution la mieux étayée, ses conditions et les niveaux de confiance du diagnostic et de la solution. Cite les sources et distingue résolution technique et clôture du ticket.
+```
+
+Comparer au diagnostic de l’étape 1. Dans NiceGUI, le bouton **Diagnostiquer
+avec Albert API** rejoue ce scénario fixe avec génération. La lecture technique
+« sans génération IA » ne remplace pas ce test du rapport généré.
 
 Vérifier les tickets cités, les points de similitude et les différences avec
 l'incident courant. La **confiance dans la solution proposée** est distincte
@@ -301,9 +308,8 @@ diagnostic complet.
 3. Vérifier que Bruno et Eric ne peuvent ni ouvrir l'administration des règles
    ni consulter les rapports de qualification réservés aux administrateurs.
 
-Pour jouer le même contrôle depuis Open WebUI, utiliser deux clients ou
-connexions MCP portant chacun **le jeton personnel de l'utilisateur testé**.
-Une seconde fenêtre qui conserve le même jeton conserve aussi la même identité.
+Pour jouer le même contrôle depuis Open WebUI, utiliser deux sessions utilisateur avec chacune **son autorisation OAuth personnelle**.
+Une seconde fenêtre qui conserve la même autorisation conserve aussi la même identité.
 Dans un **nouveau fil Incidents pour chacun**, envoyer :
 
 ```text
@@ -332,6 +338,18 @@ Respecter l'intervalle entre synthèses indiqué au début du tutoriel.
 6. Dans la même session Bruno, relancer la lecture. Attendu : nouvelles preuves
    autorisées. Les anciennes valeurs affichées avant le blocage ne doivent pas
    être présentées comme une nouvelle lecture.
+
+**Équivalent dans Open WebUI :** modèle **SI-RIE — INCIDENTS**, conserver
+le fil du compte testé. Après chaque changement de règle enregistré
+(blocage, puis rétablissement), envoyer à nouveau la **demande complète** :
+
+```text
+Diagnostique R1 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, sur le site de Rennes.
+```
+
+Pendant le blocage : refus sans preuve des sources. Après rétablissement :
+nouvelles preuves pour le seul compte autorisé, après le délai d’admission.
+Le même texte sert au cycle Tickets et suivi ITSM ci-dessous.
 
 Un droit retiré refuse le diagnostic ; une source autorisée mais en panne peut
 produire un rapport partiel signalant l'erreur. Ces deux situations ne doivent

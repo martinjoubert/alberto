@@ -19,17 +19,17 @@ index, dates et accès Lima/Colima du laboratoire ne sont pas ceux du SI-RIE.
 ## Avant de commencer
 
 Les fichiers de cette livraison sont disponibles sur GitHub :
-[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz)
-et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz.sha256),
-ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip).
+[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r8.tar.gz)
+et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r8.tar.gz.sha256),
+ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r8.zip).
 Le déployeur reçoit les fichiers du SI séparément ; les archives ne contiennent pas ses secrets.
 
 ### Versions à utiliser pour cette livraison
 
 | Élément | Référence à retenir |
 | --- | --- |
-| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz` et son propre fichier `.sha256` |
-| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip` |
+| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r8.tar.gz` et son propre fichier `.sha256` |
+| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r8.zip` |
 | Serveur Ubuntu | 24.04 pour la qualification complète ; consulter le bilan daté pour la compatibilité 26.04 |
 | Python des images serveur | 3.12.15, base figée dans `deploy/ubuntu/Dockerfile` ; les commandes hôte demandent Python 3.10 ou plus |
 | NiceGUI | 3.17.1, verrouillé dans `deploy/ubuntu/requirements-portal.lock` |
@@ -37,11 +37,12 @@ Le déployeur reçoit les fichiers du SI séparément ; les archives ne contienn
 | ITSM-NG | Contrat du connecteur 1.6.17 ; faire confirmer la version réelle et les droits par le responsable ITSM |
 | Rapports de qualification seulement | Allure 3.33.0 et Node.js 24.22.2 ; ces outils ne sont pas des prérequis des moteurs |
 
-La révision **r7 ajoute l’exemple illustré des mappings PDL** dans un bloc
-fermé par défaut au début du formulaire NiceGUI. Elle conserve les corrections
-d’images de r6 et le sommaire cliquable. Les moteurs et leurs dépendances restent
-identiques ; le portail présente le guide et ses nouvelles captures fictives.
-Les archives précédentes sont conservées pour leur traçabilité ; utiliser r7
+La révision **r8 explicite les demandes Open WebUI de la recette** : textes
+copiables, modèles, nouveaux fils, suivis et attendus, avec des textes distincts
+à préparer pour le SI réel. Elle conserve l’exemple de mapping illustré de r7,
+le sommaire cliquable et les corrections d’images. Les codes applicatifs et les
+dépendances restent identiques à r7 ; seule la documentation est actualisée.
+Les archives précédentes sont conservées pour leur traçabilité ; utiliser r8
 pour une nouvelle installation, avec son propre fichier SHA-256.
 Les valeurs datées des comptes rendus de qualification décrivent leurs campagnes
 historiques ; elles ne remplacent pas ce tableau ni les références du reçu courant.
@@ -161,11 +162,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r8.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r7"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r8"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.
@@ -468,9 +469,12 @@ d'un autre port et adapter les liens. Ne pas publier l'écoute sur `0.0.0.0`.
 
 1. Ouvrir [Mappings PDL dans NiceGUI](http://127.0.0.1:28090/admin-mappings)
    et se connecter avec le compte LDAP administrateur réel.
-2. Cliquer **Actualiser les sources**. Choisir **Ajouter un index découvert**,
-   ou importer le fichier initial si une proposition a été fournie. Une
-   proposition déjà chargée n'est pas à recréer.
+2. Cliquer **Actualiser les sources**. Sans proposition fournie, choisir
+   **Ajouter un index découvert**. Facultatif : **Charger le fichier initial**
+   reprend `config/mappings.yaml` fourni par le responsable des sources ;
+   **Importer un fichier YAML/JSON** reprend un fichier reçu ou exporté lors
+   d’une précédente configuration de mappings. Ce YAML est distinct du ZIP de
+   raccordement de l’étape 6. Une proposition déjà chargée n’est pas à recréer.
 3. Choisir le profil/famille et les champs physiques des concepts. Leur type
    est contrôlé ; le sens métier et la casse des valeurs restent à confirmer
    sur les échantillons réels. Ceux-ci ne sont pas un dictionnaire exhaustif.
@@ -670,59 +674,161 @@ autre application ne démontre pas un raccordement SSO de ce PoC. Le
 
 ## 11. Jouer les deux UC et leurs ACL avec Albert
 
-**Où : navigateur du poste.** Reprendre les cas **réels et attendus** de la fiche,
-sans copier `demo-alpha`, les dates de 2026 ou les équipements du laboratoire.
-Consigner demandes, identité, fenêtre/fuseau, résultat, `request_id` et appels
-Albert réellement exécutés. Un état `ready` ne prouve aucune génération.
+**Où : Open WebUI sur le poste utilisateur.** Vérifier l’autorisation personnelle
+aux deux sources selon l’étape 10. Un nouveau fil signifie **une nouvelle
+conversation**, pas une actualisation de la page. Attendre la réponse avant
+d’envoyer le message suivant. Un état `ready` ne prouve aucune génération.
+
+| Environnement de recette | Textes et attendus à utiliser |
+| --- | --- |
+| **Sandbox SI simulé préparée**, y compris en mode `external` | Les blocs copiables ci-dessous utilisent ses données fictives : `demo-alpha`, `edge-a`, `OBS-RTR-01` et les deux fenêtres datées. |
+| **SI-RIE réel** | Faire compléter les [demandes de recette du SI](reference/26-si-connection-sheet.md#textes-open-webui-à-préparer-pour-le-si-réel), puis utiliser ces textes avec les mêmes indications de modèle et de fil. Ne pas envoyer les noms et dates fictifs ci-dessous. Aucun nombre de la sandbox ne vaut attendu du SI. |
+
+Consigner le texte **effectivement envoyé**, l’identité, le modèle, la fenêtre
+et son fuseau, le résultat, le `request_id` et les appels Albert exécutés.
+Les exemples suivants sont des **demandes à jouer et des attendus**, pas de
+nouveaux résultats de qualification enregistrés.
 
 ### PDL : clarification puis reprise du même fil
 
-1. Dans un nouveau fil Open WebUI, choisir **SI-RIE — PDL**.
-2. Poser le cas de référence en omettant seulement sa période.
-3. Attendre la demande de période, sans résultat fabriqué.
-4. Donner date complète, heures et fuseau dans **ce même fil**.
-5. Comparer le résultat et la période aux données de référence OpenSearch.
-   Contrôler les sources, les éventuelles limites et les appels Albert du rapport.
-6. Dans [NiceGUI PDL](http://127.0.0.1:28090/demo-pdl-5min), se connecter avec
-   ce même compte LDAP. Remplacer la **Question métier** préremplie par la
-   **demande réelle complète**, période comprise ; laisser la reprise décochée
-   puis cliquer **Investiguer la question**. Comparer au même attendu.
-7. Cliquer **Lire mon catalogue approuvé** : `Résultat · ok`, liste `catalogue`
-   des index accessibles approuvés, versions et `concepts` attendus. `mapping`
-   peut être `null`, les correspondances sont dans `concepts`. Ce bouton lit
-   la configuration ; il ne lance ni recherche de logs ni génération Albert.
+**Cas de référence de la sandbox :** compter les refus PFS de `demo-alpha`,
+le **12 octobre 2026 de 08:00 à 09:00 UTC** ; attendu : **deux refus**.
+Voici exactement comment tester l’omission de la période.
 
-**Attendu :** cas exact conforme, une action métier vérifiable par tour,
-clarification et reprise cohérentes. Un outil seulement mentionné ou « aucun
-traitement vérifiable » est un échec. Les quatre familles PFS, BB, PFAING et
-TACACS sont à réceptionner sur les index réellement raccordés, avec le métier.
+**PDL-1 — Nouveau fil**, modèle **SI-RIE — PDL**. Envoyer seulement :
 
-### Incidents : diagnostic et précédents natifs
+```text
+Compte les refus PFS dans demo-alpha.
+```
 
-Dans un nouveau fil Open WebUI, choisir **SI-RIE — INCIDENTS**. Demander le
-diagnostic de l'équipement et de la fenêtre de référence réels, avec précédents,
-solution proposée, conditions et confiance. Comparer cinq mesures, couverture,
-logs et chronologie aux outils sources, puis un précédent connu à ITSM-NG.
-La résolution technique doit rester distincte de la clôture administrative.
-Une solution reste conditionnelle, sourcée et à valider par un opérateur.
+**Attendu :** l’assistant demande la période. Il ne doit pas annoncer un nombre
+comme si la recherche avait déjà été exécutée.
 
-Contrôler **rédaction et relecture Albert**, modèle retourné et tokens, ainsi
-que les deux niveaux de confiance. `partial`, synthèse non validée, appel
-absent ou fournisseur indisponible ne valent pas réussite de la génération.
-Attendre au moins **60 secondes après la réponse** avant une nouvelle synthèse
-Incidents. Une limitation explicite est consignée puis retentée manuellement ;
-ne pas désactiver le budget pour faire passer la recette.
+**PDL-2 — Même fil et même modèle**, après cette clarification. Envoyer :
 
-La page **démo Incidents cinq minutes de NiceGUI** garde son scénario et sa
-fenêtre de laboratoire. Elle ne permet pas de choisir librement les données
-réelles : ne pas la compter comme recette du SI réel. Le parcours métier réel
-est celui d'Open WebUI/MCP ci-dessus ; NiceGUI porte aussi l'administration
-et le rapport Allure. La fiche sandbox conserve ses attendus de démo.
+```text
+Le 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
+
+**Attendu : deux refus PFS**, dans `demo-alpha`, sur la fenêtre UTC donnée.
+Contrôler le filtre de refus, les index et la lecture OpenSearch réellement
+exécutée. Une simple mention d’outil ou « aucun traitement vérifiable » est un échec.
+
+**Comparaison NiceGUI :** dans [PDL](http://127.0.0.1:28090/demo-pdl-5min),
+se connecter avec le même compte LDAP, remplacer **Question métier** par cette
+**demande complète**, laisser la reprise décochée et cliquer **Investiguer la question** :
+
+```text
+Compte les refus PFS dans demo-alpha le 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
+
+Comparer au même attendu. Dans le SI réel, saisir à cet endroit la demande
+complète préparée avec les valeurs du SI, pas le texte fictif ci-dessus.
+
+### PDL : quatre familles puis restriction des sources
+
+**PDL-3 — Nouveau fil**, modèle **SI-RIE — PDL** :
+
+```text
+Montre les logs de l'équipement edge-a PFS BB PFAING TACACS dans demo-alpha du 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
+
+**Attendu dans la sandbox : six documents**, deux PFS, un BB, un PFAING et
+deux TACACS. Vérifier les rapprochements approuvés et l’exclusion des autres
+équipements, périmètres et jours.
+
+**PDL-4 — Même fil que PDL-3** :
+
+```text
+Uniquement TACACS pour ce même équipement, sur la même période.
+```
+
+**Attendu : deux documents TACACS**, liés aux IP de gestion IPv4 et IPv6.
+Les sources PFS/BB peuvent servir à résoudre l’identité ; leurs logs ne doivent
+pas être publiés comme cibles de cette demande.
+
+**PDL-5 — Toujours ce même fil** :
+
+```text
+Pour edge-a dans demo-alpha, sur la même période, montre PFS, BB et PFAING, sans TACACS.
+```
+
+**Attendu : quatre documents**, deux PFS, un BB et un PFAING, issus de nouvelles
+lectures autorisées. La période et le périmètre restent ceux de PDL-3.
+Les cas de [recherche par IP et de résultat vide](reference/16-pdl-tutorial.md#5-chercher-les-accès-internet-dune-ip)
+complètent ce parcours si ces usages font partie de la réception.
+
+Dans NiceGUI, **Lire mon catalogue approuvé** attend `Résultat · ok`, une liste
+`catalogue` des index accessibles approuvés, leurs versions et `concepts`.
+`mapping` peut être `null` : les correspondances sont dans `concepts`.
+Ce bouton lit la configuration ; il ne recherche aucun log et n’appelle pas Albert.
+
+<a id="incidents--diagnostic-et-précédents-natifs"></a>
+
+### Incidents : diagnostic, suivi et précédents
+
+**Cas de référence de la sandbox :** `OBS-RTR-01` (alias `R1`), site de Rennes,
+le **28 septembre 2026 de 10:00 à 12:00, heure de Paris**.
+Cette fenêtre est différente de celle de PDL.
+
+**INC-1 — Nouveau fil**, modèle **SI-RIE — INCIDENTS** :
+
+```text
+Diagnostique OBS-RTR-01 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, sur le site de Rennes. Recherche les précédents ITSM-NG disponibles et présente la solution la mieux étayée, ses conditions et les niveaux de confiance du diagnostic et de la solution. Cite les sources et distingue résolution technique et clôture du ticket.
+```
+
+**Attendu dans la sandbox :** cinq mesures de 120 points chacune et 120 logs ;
+la résolution de l’alerte est à **11:30**, la clôture du ticket à **12:15**.
+Comparer les mesures, couverture, logs et chronologie aux sources. L’historique
+ITSM exige son raccordement et les droits natifs individuels de l’étape 9 :
+son absence ou une recherche sans précédent doit être indiquée, pas remplacée
+par des tickets inventés. Une solution reste conditionnelle, sourcée et à
+valider par un opérateur ; sa confiance est distincte de celle du diagnostic.
+
+Contrôler **rédaction et relecture Albert**, modèle retourné et tokens.
+`partial`, synthèse non validée, appel absent ou fournisseur indisponible ne
+valent pas réussite de la génération. Attendre au moins **60 secondes après
+la réponse** avant toute nouvelle synthèse Incidents ; respecter aussi tout
+délai de limitation annoncé, sans désactiver le budget.
+
+**INC-2 — Même fil que INC-1**, même modèle :
+
+```text
+À 12 h, heure de Paris, l'alerte était-elle résolue et le ticket déjà clôturé ? Cite les horodatages disponibles.
+```
+
+**Attendu :** à midi, l’alerte est résolue et le ticket pas encore clôturé.
+Un statut final `closed` ne doit pas être appliqué rétroactivement à midi.
+
+**INC-3 — Nouveau fil**, modèle **SI-RIE — INCIDENTS**, pour vérifier aussi
+sa clarification de période :
+
+```text
+Diagnostique OBS-RTR-01 sur le site de Rennes.
+```
+
+**Attendu :** demande de période, sans diagnostic sur des dates inventées.
+**Dans ce même fil**, répondre :
+
+```text
+Le 28 septembre 2026 de 10:00 à 12:00, heure de Paris.
+```
+
+**Attendu :** le diagnostic conserve `OBS-RTR-01` et Rennes et relit les sources
+sur cette fenêtre. Les [autres cas Incidents](reference/17-incidents-tutorial.md#3-comparer-les-équipements-du-site-de-rennes)
+fournissent les demandes exactes pour comparer Rennes, constater le trou de
+collecte de R3 et vérifier le refus de R4.
+
+La [démo Incidents NiceGUI](http://127.0.0.1:28090/demo-incidents-5min) garde
+ce scénario de laboratoire fixe : **Diagnostiquer avec Albert API** permet de
+comparer ses faits à INC-1. Pour le SI réel, jouer la demande adaptée dans Open
+WebUI/MCP ; le bouton de démo fixe ne réceptionne pas les données du SI.
 
 ### ACL : lecteurs, refus et rétablissement
 
-Utiliser des sessions navigateur distinctes et les propres autorisations LDAP
-de chaque titulaire. Ne pas réutiliser l'autorisation de l'administrateur.
+Utiliser des sessions utilisateur distinctes et l’autorisation OAuth propre à
+chaque titulaire. Une nouvelle conversation ou une autre fenêtre portant la
+même autorisation ne change pas l’identité. Ne pas partager celle de l’administrateur.
 
 | Profil réel à fournir | Vérification |
 | --- | --- |
@@ -731,17 +837,52 @@ de chaque titulaire. Ne pas réutiliser l'autorisation de l'administrateur.
 | Externe | PDL seulement si `authenticated` ; sources Incidents selon les règles réellement décidées |
 | Non classé | Connexion et lectures protégées refusées |
 
-Dans [Administration ACL](http://127.0.0.1:28090/admin-acces), noter la révision.
-Passer **Mesures VictoriaMetrics** à `blocked`, enregistrer, vérifier la hausse
-de révision et rejouer le cas Incidents réel : **refus même pour l'administrateur,
-sans preuve interdite ni ancien diagnostic réutilisé**. Rétablir exactement
-la règle initiale, enregistrer et refaire une demande après admission : nouvelles
-preuves attendues si le compte est autorisé. Répéter pour **Tickets et suivi ITSM**.
-Conserver les autres règles et les décisions initiales approuvées.
+**ACL-1 — Nouveau fil par utilisateur**, modèle **SI-RIE — PDL** :
+
+```text
+Quels sont mes index accessibles ?
+```
+
+**Attendu :** uniquement les index de ce titulaire, sans période nécessaire.
+Tester aussi cette liste dans un fil PDL déjà utilisé : elle ne doit pas
+reprendre la période ou l’équipement de son ancienne recherche.
+
+**ACL-2 — Nouveau fil PDL par lecteur**, pour comparer l’accès TACACS :
+
+```text
+Montre les logs de l'équipement edge-a uniquement TACACS dans demo-alpha du 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
+
+Dans la sandbox avec TACACS `authenticated`, Bruno et Eric reçoivent chacun
+deux documents. Le [cycle TACACS complet](reference/16-pdl-tutorial.md#9-vérifier-les-acl-pdl)
+précise la question de relance et les attendus après restriction et rétablissement.
+Sur le SI, utiliser la source de recette et la politique convenues dans la fiche.
+
+**ACL-3 — Nouveau fil Incidents par lecteur**, modèle **SI-RIE — INCIDENTS**,
+avec le texte complet suivant dans la sandbox, ou la demande Incidents préparée du SI :
+
+```text
+Diagnostique OBS-RTR-01 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, sur le site de Rennes.
+```
+
+Selon la politique initiale de la sandbox, Bruno est autorisé et Eric refusé,
+sans preuve interdite. Les attendus du SI réel dépendent de sa politique.
+
+Pour le retrait/rétablissement, dans [Administration ACL](http://127.0.0.1:28090/admin-acces),
+noter la révision et la règle initiale de la **source de recette convenue**.
+Passer **Mesures VictoriaMetrics** à `blocked`, enregistrer et vérifier la
+hausse de révision. **Dans chacun des fils Incidents déjà ouverts**, renvoyer
+**le texte complet ACL-3 ci-dessus**, sans changer de compte ni d’autorisation :
+refus même pour l’administrateur, sans preuve interdite ni ancien diagnostic
+republié. Rétablir exactement la règle initiale, enregistrer et **renvoyer
+encore le texte complet ACL-3 dans ces mêmes fils**, après admission : nouvelles
+preuves attendues pour les seuls comptes autorisés. Répéter ce cycle pour
+**Tickets et suivi ITSM**, en notant sa propre règle initiale. Restaurer chaque
+règle avant de passer à la suivante.
 
 Comparer aussi deux utilisateurs ayant des droits natifs ITSM différents :
 entités, tickets, solutions et suivis privés ne doivent pas être élargis par le
-PoC. Un compte administrateur local Open WebUI n'est pas une preuve du parcours
+PoC. Un compte administrateur local Open WebUI n’est pas une preuve du parcours
 utilisateur ordinaire. Tout cas non joué reste **non qualifié**, avec sa raison.
 
 ## 12. Vérifier l'exploitation et consigner
@@ -808,9 +949,16 @@ sudo python3 deploy/ubuntu/manage.py check "$RIE_RESTORED" --username "$RIE_ADMI
 ```
 
 **Attendu :** intégrité acceptée, nouvelle instance et `ready`. Comparer la
-révision ACL, les mappings, audits et états des autorisations. Rejouer les deux
-cas métier avec Albert, un refus et un accès personnel encore valide. Les
-sources externes n'ont pas été remplacées. Une copie de sauvegarde corrompue
+révision ACL, les mappings, audits et états des autorisations.
+Dans Open WebUI, ouvrir **un nouveau fil SI-RIE — PDL** et envoyer le texte
+complet **PDL-3** de l’étape 11 ; attendu de la sandbox : six documents des
+quatre familles. Ouvrir **un nouveau fil SI-RIE — INCIDENTS** et envoyer le
+texte complet **INC-1** ; comparer les faits aux références initiales et vérifier
+les nouveaux appels Albert. En production, utiliser les demandes préparées du SI.
+Avec un compte privé d’un droit, renvoyer aussi la demande complète **ACL-3** :
+refus sans preuve interdite. Respecter le délai de synthèse et conserver les
+nouveaux `request_id` ; une ancienne réponse affichée ne prouve pas la restauration.
+Les sources externes n’ont pas été remplacées. Une copie de sauvegarde corrompue
 doit être refusée avant écriture ; ne jamais altérer la bonne archive pour ce test.
 
 Le dernier service actif est **l'instance restaurée** ; conserver l'originale

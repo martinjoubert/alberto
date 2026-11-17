@@ -12,6 +12,7 @@ sur une machine du SI-RIE ne détermine pas, à lui seul, les données utilisée
 | --- | --- |
 | Simulation `demo` initialisée | [Exercice reproductible avec les données fictives](#avant-de-commencer-la-démonstration) ; les noms et chiffres fournis ci-dessous s'appliquent à ce seul corpus |
 | Sources SI-RIE raccordées en `external` | [Utiliser vos sources SI-RIE](#utiliser-vos-sources-si-rie) ; comptes, équipements, périodes et résultats à établir avec l'équipe du SI |
+| Sandbox SI simulé préparée en `external` | Même parcours fictif ci-dessous si les données et comptes ont été confirmés selon la [fiche sandbox](22-external-sandbox.md) ; aucun `seed` en `external` |
 | Mode ou initialisation inconnus | Faire identifier l'instance par l'installateur avant de jouer les questions ; la présence du tutoriel ne prouve pas celle de son corpus |
 
 ## Utiliser vos sources SI-RIE
@@ -24,7 +25,7 @@ le tutoriel ne fournit pas ces identités ni ces données.
 
 | Élément nécessaire | Valeur à obtenir pour votre instance |
 | --- | --- |
-| Accès utilisateur | Votre compte LDAP, votre jeton personnel et le modèle Open WebUI relié au MCP PDL de cette instance |
+| Accès utilisateur | Votre compte LDAP, son autorisation OAuth personnelle et le modèle Open WebUI relié au MCP PDL de cette instance |
 | Source et droits | Une famille ou un index réellement raccordé, autorisé pour votre compte et présent dans le catalogue approuvé |
 | Périmètre et équipement | Un périmètre et un équipement réels dont l'identité et les relations ont été vérifiées |
 | Période | Une date, un créneau et un fuseau pour lesquels des événements sont connus |
@@ -63,10 +64,28 @@ Montre les logs de l'équipement [EQUIPEMENT] dans les familles [FAMILLES_RACCOR
 effectivement lus et documents attendus. Demander seulement les familles
 présentes et approuvées. Le résultat réel n'a pas de total prédéfini de six documents.
 
-Pour tester une clarification, omettre la période dans une nouvelle question,
-puis donner **la période réelle préparée** dans le même fil. Pour tester un
-résultat vide, utiliser une fenêtre vérifiée comme vide dans la source ;
-l'absence de données ne se déduit pas d'une date choisie au hasard.
+Pour tester la clarification, **nouveau fil, modèle SI-RIE — PDL** :
+
+```text
+Compte les refus PFS dans [PERIMETRE_AUTORISE].
+```
+
+Attendre la demande de période, puis **dans ce même fil** :
+
+```text
+Le [DATE] de [HEURE_DEBUT] à [HEURE_FIN], [FUSEAU].
+```
+
+Attendu : le comptage préparé, sans changement de source ni de périmètre.
+Pour un résultat vide, préparer une fenêtre réellement vérifiée comme vide :
+**nouveau fil, même modèle**, après remplacement des champs :
+
+```text
+Compte les refus PFS dans [PERIMETRE_AUTORISE] le [DATE_FENETRE_VIDE] de [DEBUT_FENETRE_VIDE] à [FIN_FENETRE_VIDE], [FUSEAU].
+```
+
+L’absence de données ne se déduit pas d’une date choisie au hasard. Le résultat
+zéro doit venir d’une lecture réussie, pas d’une erreur ou d’un refus.
 
 ### Vérifier les ACL avec les identités du SI
 
@@ -76,7 +95,7 @@ Alice, Bruno et Eric du parcours fictif ne sont pas des comptes à rechercher
 dans l'annuaire réel. Le caractère interne ou externe ne suffit pas à prédire
 le résultat : c'est la politique active de la source qui fixe l'accès.
 
-Rejouer la même question préparée avec les jetons personnels des deux lecteurs.
+Dans un nouveau fil PDL pour chacun des deux lecteurs, envoyer le texte complet de comptage préparé ci-dessus, avec sa propre autorisation OAuth.
 Comparer les résultats à la politique : preuves pour le compte autorisé,
 refus sans preuve interdite pour l'autre. Pour tester le retrait et le
 rétablissement d'un droit, utiliser un index de recette dédié convenu avec
@@ -91,7 +110,7 @@ du jeu fictif ne remplit pas cette validation des données réelles.
 
 ## Avant de commencer la démonstration
 
-**La suite de cette page concerne exclusivement le mode `demo` et son corpus fictif.**
+**La suite utilise le corpus fictif initialisé en `demo`, ou celui de la sandbox `external` préparée à l’avance.**
 Ce parcours apprend à compter des événements, retrouver les logs d'un équipement
 entre plusieurs familles, préciser une demande, lire un résultat vide et
 comprendre les droits d'accès aux sources.
@@ -100,11 +119,9 @@ Ajouter environ cinq minutes pour l'[exercice ACL](#9-vérifier-les-acl-pdl).
 Pour une présentation courte, jouer les étapes 2, 3 et 4, puis montrer le refus
 TACACS de l'étape 9.
 
-Ouvrir votre **Open WebUI local** et sélectionner le modèle relié au MCP PDL
-de cette instance. L'identifiant de référence est `albert-pdl-rie` ; le nom
-affiché peut avoir été personnalisé par l'installateur. La
+Ouvrir votre **Open WebUI local** et sélectionner **SI-RIE — PDL**, nom affiché par la configuration livrée. Son identifiant technique est `albert-pdl-rie` ; un ancien client peut avoir un autre libellé. La
 [configuration du client](02-configuration.md#configurer-le-client-open-webui-local-qualifi%C3%A9)
-doit être terminée, avec votre jeton personnel.
+doit être terminée, avec l’autorisation OAuth personnelle du compte testé ; aucun jeton n’est à copier dans ce parcours.
 
 Pour les questions métier, utiliser un compte lecteur comme `bruno.lecteur`.
 L'exercice ACL utilise aussi `eric.durand.ext` (externe) et `alice.martin`
@@ -285,8 +302,8 @@ déjà ouverte. Cet exercice se joue sur les sources fictives de la simulation.
 
 Dans NiceGUI, utiliser des sessions navigateur distinctes et vérifier l'identité
 affichée après connexion LDAP. Dans Open WebUI, chaque client de test doit
-présenter **le jeton personnel du compte testé** sur sa connexion MCP. Ouvrir
-une autre fenêtre avec la même connexion et le même jeton ne change pas
+présenter **l’autorisation OAuth personnelle du compte testé** sur sa connexion MCP. Ouvrir
+une autre fenêtre avec la même connexion et la même autorisation ne change pas
 l'identité reçue par le serveur. Le [guide ACL](06-acl.md#préparer-une-connexion-fictive)
 explique la remise des identifiants de démonstration.
 
@@ -334,9 +351,15 @@ déjà reçus peuvent rester dans l'historique ; ils ne prouvent pas un droit ac
 
 Dans la session Alice, actualiser les règles puis **rétablir exactement la valeur
 notée au début** — `authenticated` dans la simulation initiale. Vérifier la
-valeur enregistrée et la nouvelle révision. Rejouer la même question complète
-dans le fil d'Eric : les deux documents doivent redevenir accessibles si la
-règle initiale les autorisait. Les preuves doivent venir de cette nouvelle lecture.
+valeur enregistrée et la nouvelle révision. **Dans le même fil PDL d’Eric**,
+envoyer de nouveau exactement :
+
+```text
+Relance la recherche TACACS pour edge-a dans demo-alpha le 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
+
+Les deux documents doivent redevenir accessibles si la règle initiale les
+autorisait. Les preuves doivent venir de cette nouvelle lecture.
 
 Ouvrir enfin **Administration ACL** avec Bruno puis Eric : tous deux doivent
 être refusés. Être interne lecteur ne donne pas le droit de modifier une règle.

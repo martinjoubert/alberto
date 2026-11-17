@@ -459,8 +459,19 @@ pourcentage inventé par le modèle.
 ## Recette et revue des rendus
 
 Sur la démonstration, dans NiceGUI, ouvrir Incidents avec Alice et choisir
-**Diagnostiquer avec Albert API**, puis effectuer la même demande dans Open WebUI.
-L'équipe de qualification vérifie les appels réels de rédaction/relecture,
+**Diagnostiquer avec Albert API**. Ce bouton utilise `OBS-RTR-01`, alias `R1`,
+le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, site de Rennes.
+Attendre au moins 60 secondes après la réponse, puis, avec la même identité
+autorisée, **nouveau fil Open WebUI, modèle SI-RIE — INCIDENTS** :
+
+```text
+Diagnostique OBS-RTR-01 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, sur le site de Rennes. Recherche les précédents ITSM-NG disponibles et présente la solution la mieux étayée, ses conditions et les niveaux de confiance du diagnostic et de la solution. Cite les sources et distingue résolution technique et clôture du ticket.
+```
+
+Comparer les faits et citations, pas une formulation littéralement identique.
+Ce texte concerne le corpus fictif disponible dans `demo` ou la sandbox préparée.
+Pour le SI réel, utiliser le [texte Incidents complété de la fiche](26-si-connection-sheet.md#incidents--diagnostic-précédents-et-suivi).
+L’équipe de qualification vérifie les appels réels de rédaction/relecture,
 les modèles retournés, les tokens et les erreurs. Le contrôle technique
 « sans génération IA » ne valide pas cette chaîne.
 

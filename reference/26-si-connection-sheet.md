@@ -134,6 +134,118 @@ techniques privilégiés n'ont pas leur place dans le PoC.
 | ACL | Comptes autorisés/refusés, sources interdites et rétablissements à tester | Responsable des accès |
 | Sauvegarde/restauration | Destination privée, fenêtre d'interruption et instance de restauration neuve | Exploitant |
 
+## Textes Open WebUI à préparer pour le SI réel
+
+Le **cas de référence** est une demande complète dont les faits attendus ont
+été vérifiés dans les sources par le responsable métier. Le déployeur reçoit
+**le texte exact à envoyer et son attendu**, pas seulement « faire un diagnostic ».
+Les blocs ci-dessous sont des modèles : remplacer **tous les champs entre
+crochets**, faire valider le texte résultant, puis le copier dans Open WebUI.
+Ne pas envoyer les crochets et ne pas remplacer les valeurs manquantes par
+`edge-a`, `demo-alpha`, R1 ou les dates de la sandbox.
+
+### PDL : comptage et clarification
+
+**Modèle SI-RIE — PDL, nouveau fil : demande complète de référence.** Exemple
+pour PFS si cette famille et la notion de refus sont réellement raccordées :
+
+```text
+Compte les refus PFS dans [PERIMETRE_AUTORISE] le [DATE_PDL] de [HEURE_DEBUT_PDL] à [HEURE_FIN_PDL], [FUSEAU_PDL].
+```
+
+Noter le **nombre exact**, les index, le filtre du refus et la requête manuelle
+qui établissent l’attendu. Si ce comptage n’est pas disponible, le responsable
+PDL doit fournir une autre demande de comptage prise en charge et son résultat.
+
+**Autre nouveau fil, même modèle : première demande sans la période.**
+
+```text
+Compte les refus PFS dans [PERIMETRE_AUTORISE].
+```
+
+Attendre la demande de période. **Dans ce même fil**, envoyer :
+
+```text
+Le [DATE_PDL] de [HEURE_DEBUT_PDL] à [HEURE_FIN_PDL], [FUSEAU_PDL].
+```
+
+Attendu : clarification avant lecture métier, puis le résultat du comptage
+complet préparé, avec les mêmes filtres. L’absence de période ne doit pas être
+compensée par celle d’une ancienne conversation.
+
+### PDL : rapprochement et suivi des sources
+
+**Nouveau fil, modèle SI-RIE — PDL.** Fournir la liste des familles réellement
+raccordées et leurs documents attendus :
+
+```text
+Montre les logs de l'équipement [EQUIPEMENT_PDL] dans les familles [FAMILLES_RACCORDEES] du périmètre [PERIMETRE_AUTORISE], le [DATE_PDL] de [HEURE_DEBUT_PDL] à [HEURE_FIN_PDL], [FUSEAU_PDL].
+```
+
+**Même fil**, en choisissant une famille effectivement incluse et autorisée :
+
+```text
+Pour ce même équipement, sur la même période et dans le même périmètre, garde uniquement la famille [FAMILLE_CIBLE].
+```
+
+Noter les documents de la seule cible, les sources servant à l’identité et
+les leurres à exclure. Si un résultat vide est à tester, fournir aussi une
+fenêtre **vérifiée vide** dans la source et sa question complète.
+
+### Incidents : diagnostic, précédents et suivi
+
+**Nouveau fil, modèle SI-RIE — INCIDENTS : demande complète.**
+
+```text
+Diagnostique [EQUIPEMENT_INCIDENT] le [DATE_INCIDENT] de [HEURE_DEBUT_INCIDENT] à [HEURE_FIN_INCIDENT], [FUSEAU_INCIDENT], sur le site [SITE_AUTORISE]. Recherche les précédents ITSM-NG disponibles et présente la solution la mieux étayée, ses conditions et les niveaux de confiance du diagnostic et de la solution. Cite les sources et distingue résolution technique et clôture du ticket.
+```
+
+Fournir les mesures/couverture, logs, ticket courant, horodatages et un précédent
+connu accessible au compte testé. Si l’historique ITSM n’est pas raccordé, le
+noter ; aucune solution historique n’est attendue par défaut.
+
+**Même fil**, pour une heure de référence connue à l’intérieur de la fenêtre :
+
+```text
+À [HEURE_DE_REFERENCE], [FUSEAU_INCIDENT], l'alerte de cet équipement était-elle résolue et le ticket déjà clôturé ? Cite les horodatages disponibles.
+```
+
+Le responsable renseigne l’attendu de cette heure, ou l’absence de date source.
+Ne pas reprendre 11:30 ou 12:15 de la simulation comme faits du SI.
+
+**Autre nouveau fil, même modèle**, pour tester la clarification Incidents :
+
+```text
+Diagnostique [EQUIPEMENT_INCIDENT] sur le site [SITE_AUTORISE].
+```
+
+Après la demande de période, **dans ce même fil** :
+
+```text
+Le [DATE_INCIDENT] de [HEURE_DEBUT_INCIDENT] à [HEURE_FIN_INCIDENT], [FUSEAU_INCIDENT].
+```
+
+Respecter l’intervalle minimal de synthèse et tout délai annoncé par le
+fournisseur avant une nouvelle génération ; ne pas désactiver ces contrôles.
+
+### ACL : réutiliser des textes identifiés
+
+Pour comparer les utilisateurs, créer un nouveau fil **pour chaque compte**,
+avec sa propre autorisation OAuth. Pour tester un retrait ou rétablissement,
+conserver le fil de ce compte et **renvoyer la demande complète**, période
+comprise. Ne pas utiliser un simple « recommence » qui ajoute une ambiguïté.
+
+| Texte à remettre au déployeur | Attendu à compléter selon la politique du SI |
+| --- | --- |
+| `Quels sont mes index accessibles ?`, modèle PDL, sans période | Liste autorisée de chaque compte, avant/après modification |
+| Demande PDL complète sur la famille de recette | Compte autorisé, compte refusé, références permises et preuves absentes en refus |
+| Demande Incidents complète ci-dessus | Diagnostic selon les quatre droits, refus après `blocked`, nouvelle lecture après rétablissement pour les seuls comptes autorisés |
+| Demande Incidents avec précédents, pour deux utilisateurs ITSM | Identifiants des tickets accessibles à chacun ; tickets, solutions et suivis privés qui ne doivent pas apparaître |
+
+Conserver avec chaque texte l’identité de test, les règles initiales à restaurer,
+les sources, la période/fuseau et la validation métier. La recette suit ensuite
+l’[étape 11](../README.md#11-jouer-les-deux-uc-et-leurs-acl-avec-albert).
+
 **Prêt à installer** lorsque les accès, fichiers, images et cas de référence
 sont disponibles et validés par leurs responsables. **Prêt à utiliser** après
 les étapes 11 et 12 et la [réception du SI réel](14-si-rie-acceptance.md).

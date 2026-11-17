@@ -9,6 +9,7 @@ Le tutoriel propose deux parcours selon les sources de l'instance :
 | Objectif | Conditions et données utilisées |
 | --- | --- |
 | Apprendre avec un exemple reproductible | Instance isolée `demo`, annuaire et corpus initialisés avec succès : comptes et données fictifs fournis par le paquet |
+| Répéter sur le SI fictif préparé séparément | Sandbox `external` dont les sources et comptes ont été confirmés ; [valeurs du laboratoire](22-external-sandbox.md), aucun `seed` du PoC |
 | Utiliser le PoC sur les sources SI-RIE | Instance `external` configurée et raccordée : comptes LDAP, droits, équipements, périodes et références fournis par les responsables du SI |
 
 Une instance `demo` peut être hébergée sur une machine du SI-RIE tout en utilisant
@@ -55,8 +56,7 @@ servent de trame à une présentation de cinq minutes.
 
 ## Préparer la séance
 
-**La suite concerne la démonstration isolée en mode `demo`.** L'initialisation
-de ce jeu doit être terminée selon [Installation](01-installation.md).
+**La suite concerne le corpus fictif initialisé en `demo`, ou la sandbox `external` préparée à l’avance.** Son mode ne suffit pas à établir la présence des données : faire confirmer les comptes et sources, selon [Installation](01-installation.md) ou la [fiche sandbox](22-external-sandbox.md).
 
 1. Démarrer l'instance et exécuter `check`, puis la recette technique.
 2. Ouvrir les tunnels des deux MCP et du portail NiceGUI.
@@ -78,71 +78,135 @@ de ce jeu doit être terminée selon [Installation](01-installation.md).
 
 ## Démo PDL — cinq minutes
 
-Montrer les quatre familles, la période fixe et le catalogue de cette instance.
-Faire copier la question complète depuis NiceGUI, puis ouvrir son preset sans
-soumission automatique. Exemple de demande :
+Les textes ci-dessous utilisent le corpus fictif confirmé par le préparateur.
+**Nouveau fil Open WebUI, modèle SI-RIE — PDL** :
 
-> Montre les logs de l'équipement edge-a dans demo-alpha du 12 octobre 2026 de 08:00 à 09:00 UTC.
+```text
+Montre les logs de l'équipement edge-a PFS BB PFAING TACACS dans demo-alpha du 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
 
-Le résultat doit montrer la sélection du périmètre, l'identité retrouvée, la
-lecture de plusieurs familles et les preuves. Le scénario croisé de référence
-contient six documents : deux PFS, un BB, un PFAING et deux TACACS. Les documents
-liés par référence ou IP de gestion restent retrouvés sans recopier le nom initial.
-Le leurre hors périmètre est exclu.
+**Attendu : six documents**, deux PFS, un BB, un PFAING et deux TACACS.
+Vérifier périmètre, identité retrouvée, lectures et preuves. PFAING et TACACS
+sont retrouvés par référence/IP sans devoir recopier le nom `edge-a`.
 
-Poursuivre par une restriction « uniquement TACACS » ou « sans TACACS », puis
-une question qui omet la période pour montrer la clarification. Un tour de suivi
-transmet le dernier jeton de reprise du serveur ; le client ne reconstruit pas
-l'autorisation à partir de l'historique.
+**Même fil**, restreindre les cibles :
 
-Conclure par le mapping approuvé et la requête exécutée. L'approbation d'un
-mapping n'accorde aucun droit supplémentaire sur l'index.
+```text
+Uniquement TACACS pour ce même équipement, sur la même période.
+```
+
+**Attendu : deux documents TACACS**. **Toujours dans le même fil**, exclure TACACS :
+
+```text
+Pour edge-a dans demo-alpha, sur la même période, montre PFS, BB et PFAING, sans TACACS.
+```
+
+**Attendu : quatre documents**, deux PFS, un BB et un PFAING.
+La source utilisée pour l’identité n’élargit pas les cibles demandées.
+
+Pour montrer la clarification, **nouveau fil, même modèle** :
+
+```text
+Compte les refus PFS dans demo-alpha.
+```
+
+Attendre la question sur la période, puis **dans ce même fil** :
+
+```text
+Le 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
+
+**Attendu : deux refus**, après une nouvelle lecture de la bonne fenêtre.
+Conclure par le catalogue approuvé et le DSL exécuté. Un mapping n’accorde
+aucun droit d’accès supplémentaire.
 
 ## Démo Incidents — cinq minutes
 
-Afficher la séparation des quatre sources : mesures, logs, tickets et fiches.
-Poser depuis le preset Incidents :
+**Nouveau fil Open WebUI, modèle SI-RIE — INCIDENTS** :
 
-> Examine R1 le 28 septembre 2026 de 10 h à 12 h, heure de Paris. Que montrent les mesures, les alertes et les logs ?
+```text
+Diagnostique R1 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, sur le site de Rennes. Cite les sources et distingue résolution technique et clôture du ticket.
+```
 
-Vérifier le périmètre, les cinq mesures, leur couverture et les citations. La
-fixture R1 contient des pertes maximales de 3 % et une latence maximale de
-80 ms sur cette fenêtre. Le diagnostic technique de référence lit 120 logs.
-Ces chiffres sont calculés par Python ; la rédaction IA doit s'appuyer sur eux.
+**Attendu :** cinq mesures avec leur couverture, 120 logs, latence maximale
+80 ms, pertes maximales 3 %. Python calcule ces faits ; Albert rédige et relit
+à partir des preuves. Vérifier les appels réels, pas une simple mention d’outil.
 
-Demander ensuite quand l'alerte a été résolue et distinguer sa résolution
-technique de la clôture du ticket. Les fiches historiques apportent des analogies,
-pas une cause actuelle démontrée. Montrer R3 pour expliquer qu'un trou de collecte
-ne signifie pas un réseau sain. Une demande sur un équipement exclu doit être
-refusée, sans présenter ses preuves.
+**Même fil** :
 
-Si Albert n'est pas disponible, présenter le diagnostic technique sans synthèse
-et annoncer clairement cette limite. Ne pas jouer une réponse du simulateur
-comme une génération Albert réelle.
+```text
+À 12 h, heure de Paris, l'alerte était-elle résolue et le ticket déjà clôturé ? Cite les horodatages disponibles.
+```
 
-Entre deux synthèses Incidents, attendre au moins 60 secondes après la réponse
-de la précédente. Une réponse lente décale donc le début de cette attente. En
-cas de limitation, conserver le refus de cadence et relancer manuellement
-seulement après le délai annoncé.
+**Attendu :** résolution à 11:30, clôture à 12:15 ; à midi, seule l’alerte est
+résolue. Les fiches historiques apportent des analogies, pas une cause actuelle démontrée.
+
+Pour le trou de collecte, **nouveau fil, même modèle** :
+
+```text
+Pour R3 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, combien de points de latence sont disponibles et quelle est la latence moyenne ?
+```
+
+**Attendu : zéro point sur 120 attendus**, moyenne inconnue, pas zéro.
+Pour le refus de périmètre, **autre nouveau fil, même modèle** :
+
+```text
+Diagnostique R4 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris.
+```
+
+**Attendu : refus de périmètre**, sans diagnostic ni preuve de R4.
+Ce cas ne remplace pas la comparaison des droits de deux comptes sur R1.
+
+Si Albert est indisponible, le contrôle technique sans synthèse reste utile,
+mais le résultat de génération est **non qualifié**. Ne pas présenter une
+réponse simulée comme un appel Albert réel. Attendre au moins **60 secondes
+après chaque réponse** avant une nouvelle synthèse et respecter tout délai
+supplémentaire de limitation. La [recette ITSM](15-itsm-precedents.md#recette-et-revue-des-rendus)
+fournit la demande exacte incluant précédents, solution et confiance.
 
 ## Démo ACL — cinq minutes
 
-1. Se connecter comme interne lecteur (`bruno.lecteur`) et afficher les index
-   accessibles. Vérifier que PDL et le diagnostic technique Incidents restent
-   lisibles, tandis que `/admin-acces` et `/qualification` sont refusés.
-2. Ouvrir une autre session comme externe, avec son propre jeton. Montrer les
-   mêmes index PDL ouverts et le refus des index Incidents réservés aux internes.
-3. Dans la session administratrice (`alice.martin`, groupe dédié), passer `rie-tacacs-fixture` de
-   `authenticated` à `internal`, avec la révision courante.
-4. Rejouer la demande TACACS avec l'externe : elle doit être refusée, même si
-   un ancien échange avait réussi. Le contenu refusé ne doit pas rester dans
-   le nouveau résultat.
-5. Rétablir la règle après la démonstration et constater le changement au nouvel
-   appel. Révoquer un jeton de séance et constater son refus immédiat.
+Préparer Bruno (interne lecteur), Eric (externe) et Alice (administratrice)
+dans des sessions distinctes, avec leurs propres autorisations OAuth.
+Dans **un nouveau fil PDL pour chaque lecteur**, modèle **SI-RIE — PDL** :
 
-Un interne lecteur et un externe ne peuvent pas changer une règle. Un compte non classé ou un annuaire
-indisponible ne doit pas recevoir un accès de secours. Aucun secret de signature
-commun n'est remis aux clients locaux.
+```text
+Quels sont mes index accessibles ?
+```
+
+**Attendu :** seulement les droits de ce titulaire, sans demander une période.
+Puis, **nouveau fil PDL pour chacun**, garder ces deux fils pour la suite :
+
+```text
+Montre les logs de l'équipement edge-a uniquement TACACS dans demo-alpha du 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
+
+Avec la politique de départ `authenticated`, les deux lecteurs reçoivent deux
+documents. Alice note la règle et la révision puis passe `rie-tacacs-fixture`
+à `internal` dans **Administration ACL**. Après enregistrement, **dans les
+mêmes fils de Bruno et Eric**, sans changer de compte, envoyer :
+
+```text
+Relance la recherche TACACS pour edge-a dans demo-alpha le 12 octobre 2026 de 08:00 à 09:00 UTC.
+```
+
+**Attendu :** deux documents pour Bruno ; refus sans preuve TACACS pour Eric.
+Après rétablissement de la **règle initiale notée**, envoyer **ce même texte de
+relance complet** dans le fil d’Eric : nouvelles preuves permises si cette
+règle l’autorise. Le [tutoriel ACL PDL](16-pdl-tutorial.md#9-vérifier-les-acl-pdl)
+détaille les clics et la restauration de la règle.
+
+Pour Incidents, **nouveau fil par lecteur**, modèle **SI-RIE — INCIDENTS** :
+
+```text
+Diagnostique R1 le 28 septembre 2026 de 10:00 à 12:00, heure de Paris, sur le site de Rennes.
+```
+
+**Attendu avec la politique fictive initiale :** Bruno autorisé, Eric refusé,
+sans preuve des quatre sources. Le [cycle Incidents](17-incidents-tutorial.md#retirer-puis-rétablir-les-mesures-dans-une-session-ouverte)
+indique le retrait/rétablissement et la demande complète à renvoyer.
+Bruno et Eric doivent aussi être refusés dans `/admin-acces` et `/qualification`.
+Un compte non classé est refusé. Un administrateur ne contourne pas `blocked`.
 
 ## Terminer et conserver la preuve
 
