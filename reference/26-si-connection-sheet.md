@@ -6,7 +6,12 @@ Cette fiche rassemble les paramètres à remettre au déployeur pour suivre
 le [guide pas à pas](../README.md). Elle décrit le SI cible ; ce
 n'est ni une configuration LDAP/OpenSearch standard, ni un fichier à exécuter.
 Les responsables des sources renseignent leurs parties et le déployeur prépare
-les fichiers du PoC dans les formats indiqués. Une valeur inconnue reste
+les fichiers du PoC dans les formats indiqués. L’espace **Déploiement** de
+NiceGUI propose désormais la saisie guidée, le dépôt des CA et des trois fichiers
+Incidents, la vérification locale et l’export de cette préparation. Le
+[guide principal, étape 6](../README.md#préparer-avec-nicegui) explique son lancement
+avant LDAP et l’import dans une instance neuve. Les mots de passe et tokens
+restent remis séparément. L’assistant ne teste pas la disponibilité du SI. Une valeur inconnue reste
 **à fournir** : ne pas la remplacer par celle de la sandbox.
 
 **Ne mettre aucun secret dans cette page ou le wiki.** Indiquer uniquement

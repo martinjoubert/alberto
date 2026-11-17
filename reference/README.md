@@ -6,6 +6,7 @@ de leurs numéros et ne constituent pas une deuxième installation.
 
 ## Préparer le raccordement
 
+- Assistant **Déploiement** dans NiceGUI : [préparation guidée du raccordement](../README.md#préparer-avec-nicegui).
 - [Fiche de raccordement à compléter avec les responsables du SI](26-si-connection-sheet.md).
 - [Détail des fichiers et contrats de configuration](02-configuration.md).
 - [Glossaire : instance, mapping, LDAP, ACL, jeton et recette](23-glossary.md).
@@ -40,6 +41,10 @@ ensuite où reporter ces valeurs dans les fichiers privés du PoC.
 - [Tutoriel métier PDL](16-pdl-tutorial.md).
 - [Tutoriel métier Incidents](17-incidents-tutorial.md).
 - [Paramètres et état de la sandbox du 16 novembre](22-external-sandbox.md).
+
+## Maintenir le code et publier les images
+
+- [Espace VS Code, builds, publication dans la registry et cycle de correction](27-development-and-images.md).
 
 ## Consulter une variante ou exporter vers le wiki
 

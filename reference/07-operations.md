@@ -178,7 +178,9 @@ créées, puis choisir une autre destination avec l'exploitant. Ne pas réessaye
 1. Lire le bilan de la nouvelle version, ses migrations et les droits UC2.
 2. Sauvegarder à froid ; conserver paquet source, manifeste et images associés.
 3. Extraire et vérifier le nouveau paquet dans un autre dossier, garder le même
-   `RIE_INSTANCE`, puis y exécuter `validate`, `build`, `pull` et `up`.
+   `RIE_INSTANCE`, renseigner les nouveaux digests approuvés dans son `.env`, puis
+   y exécuter `validate`, `pull` et `up`. La construction est faite en amont
+   selon la [procédure du mainteneur](27-development-and-images.md).
 4. Rejouer `check` et la recette autorisée ; en `demo`, `acceptance` ne remplace
    pas la vérification des conversations et de la politique effectivement voulue.
 5. Après succès, remettre les clients. Après échec, arrêter l'instance mise à

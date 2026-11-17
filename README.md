@@ -19,9 +19,9 @@ index, dates et accès Lima/Colima du laboratoire ne sont pas ceux du SI-RIE.
 ## Avant de commencer
 
 Les fichiers de cette livraison sont disponibles sur GitHub :
-[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz)
-et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz.sha256),
-ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r2.zip).
+[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz)
+et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz.sha256),
+ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r3.zip).
 Le déployeur reçoit les fichiers du SI séparément ; les archives ne contiennent pas ses secrets.
 
 Le coordinateur remet au déployeur :
@@ -120,11 +120,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r2"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r3"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.
@@ -223,6 +223,79 @@ instance existante. Conserver les clés de session et de service générées.
 **Où : Ubuntu, `sudo`.** Les paramètres viennent de la fiche complétée. Les
 trois fichiers Incidents ci-dessous doivent avoir été préparés au format du
 PoC à partir des données et contrats réels, puis relus avec leurs responsables.
+
+### Préparer avec NiceGUI
+
+L’espace **Déploiement** prépare la fiche et les fichiers du PoC avec une saisie
+guidée. Il ne lit aucune configuration existante, ne contacte aucune source et
+ne remplace pas les tests de connexion des étapes suivantes. Il n’exige pas LDAP :
+il ne donne accès à aucune donnée métier. Les mots de passe, tokens et clés privées
+restent hors du formulaire et du ZIP.
+
+Si le portail est déjà disponible, ouvrir son menu **Déploiement**. Pour une
+première installation, lancer la **même application NiceGUI en mode préparation**,
+avec l’image approuvée fournie par le responsable de la livraison :
+
+```bash
+# Mémorise la référence exacte de l'image NiceGUI approuvée ; remplacer ce marqueur par la valeur fournie par le SI.
+export RIE_SETUP_IMAGE=REPLACE_APPROVED_PORTAL_IMAGE
+# Récupère cette seule image depuis la registry autorisée, avant de configurer l'instance.
+sudo docker pull "$RIE_SETUP_IMAGE"
+# Lance NiceGUI sans montage d'instance, sans LDAP et sans service métier ; garde ce terminal ouvert.
+sudo python3 deploy/ubuntu/manage.py deployment-ui --image "$RIE_SETUP_IMAGE"
+```
+
+**Attendu :** `http://127.0.0.1:18091/deployment`. Sur un serveur distant,
+ouvrir dans un second terminal du poste un tunnel SSH vers le port Ubuntu 18091,
+suivant les accès fournis par le SI. Par exemple, remplacer `USER@UBUNTU_HOST` :
+
+```bash
+# Transmet le port de préparation Ubuntu vers le poste, uniquement sur sa boucle locale ; garde ce second terminal ouvert.
+ssh -N -L 18091:127.0.0.1:18091 USER@UBUNTU_HOST
+```
+
+Dans le navigateur du poste, ouvrir <http://127.0.0.1:18091/deployment>, puis :
+
+1. Renseigner la cible, les images, LDAP, les sources, les droits, Albert et,
+   si disponibles, les paramètres OAuth Open WebUI. Les règles commencent à `blocked`.
+2. Déposer la CA LDAP, les trois fichiers Incidents relus et, si nécessaire,
+   le bundle de CA des sources. Aucun nom de fichier déposé ne choisit un chemin serveur.
+3. Confirmer la revue avec leurs responsables, cliquer **Vérifier le dossier**,
+   corriger les erreurs, puis **Télécharger le dossier privé**.
+4. Transférer `rie-connection.zip` dans le dossier privé `RIE_SI` du serveur par
+   le canal SI prévu. Les paramètres internes et snapshots ne doivent pas être
+   publiés dans le dépôt public. Un brouillon JSON permet de reprendre la saisie ;
+   les fichiers déposés doivent être ajoutés à nouveau après fermeture de la page.
+5. Sur Ubuntu, dans un terminal qui conserve les variables des étapes 1 à 5 :
+
+```bash
+# Rend l'archive de raccordement lisible uniquement par son propriétaire.
+chmod 600 "$RIE_SI/rie-connection.zip"
+# Importe les paramètres revus dans l'instance externe neuve de l'étape 5, avant toute commande manage.py pull/build/up sur cette instance.
+sudo python3 deploy/ubuntu/manage.py configure-connection "$RIE_INSTANCE" --input "$RIE_SI/rie-connection.zip"
+# Installe le secret du seul lecteur LDAP, fourni séparément par le SI.
+sudo install -m 600 "$RIE_SI/private/ldap-reader.password" "$RIE_INSTANCE/secrets/reader.password"
+# Installe le secret lecteur OpenSearch, fourni séparément.
+sudo install -m 600 "$RIE_SI/private/opensearch.password" "$RIE_INSTANCE/secrets/opensearch_password"
+# Installe le token lecteur VictoriaMetrics, fourni séparément.
+sudo install -m 600 "$RIE_SI/private/victoria.token" "$RIE_INSTANCE/secrets/victoria_token"
+# Installe la clé Albert autorisée, fournie séparément.
+sudo install -m 600 "$RIE_SI/private/albert.key" "$RIE_INSTANCE/secrets/albert_key"
+```
+
+**Attendu :** `prepared: true`, `secrets_changed: false`, `services_started: false`.
+Le ZIP est contrôlé avant écriture ; les clés internes générées à l’étape 5 sont
+conservées. Une instance déjà raccordée ou attachée à Docker est refusée.
+Arrêter le seul assistant avec **Ctrl+C**, fermer son tunnel, puis **passer
+directement à l’étape 7**. Ne pas rejouer les copies et éditions manuelles ci-dessous.
+Si OAuth a été renseigné, sa proposition est déjà présente dans `config/oauth-candidate.json` ;
+sa revue à l’étape 10 et la préparation de chaque client restent nécessaires.
+
+<details>
+<summary>Alternative sans formulaire : préparer les fichiers manuellement</summary>
+
+Les sections suivantes remplacent l’assistant pour cette seule étape 6.
+Ne pas cumuler les deux méthodes sur la même instance.
 
 ### Copier les modèles et les fichiers remis
 
@@ -355,6 +428,8 @@ Un diagnostic complet exige les deux index Incidents **et** les deux ressources.
 Les droits natifs ITSM s'ajoutent aux règles du PoC. Après cette préparation,
 les modifications passent par l'administration ACL ; ne pas écraser les
 révisions/audits actifs avec un ancien fichier de politique.
+
+</details>
 
 ## 7. Valider, récupérer les images et démarrer
 
@@ -501,8 +576,8 @@ deux personnes différentes ; convenir de qui réalise chaque action.
 ### Sur Ubuntu : activer la connexion individuelle
 
 ```bash
-# Installe le modèle public OAuth dans un fichier privé à compléter.
-sudo install -m 600 deploy/ubuntu/examples/oauth.json "$RIE_INSTANCE/config/oauth-candidate.json"
+# Conserve la proposition de l'assistant si elle existe ; sinon installe le modèle public OAuth à compléter.
+sudo test -f "$RIE_INSTANCE/config/oauth-candidate.json" || sudo install -m 600 deploy/ubuntu/examples/oauth.json "$RIE_INSTANCE/config/oauth-candidate.json"
 # Renseigne l'émetteur, les deux URLs MCP HTTPS et les callbacks locaux exacts de la fiche.
 sudoedit "$RIE_INSTANCE/config/oauth-candidate.json"
 # Valide et enregistre ce raccordement, sans authentifier un utilisateur.
@@ -787,6 +862,10 @@ restant à effectuer dans le SI réel. La
 des campagnes historiques ; ce guide ne les transforme pas en mesures AMD64.
 
 ## Préparation des images — responsable de la construction, avant l'étape 1
+
+La [procédure du mainteneur](reference/27-development-and-images.md) détaille
+les builds, la publication des trois images, l’espace VS Code du dépôt complet
+et le cycle de correction après déploiement.
 
 Le responsable utilise **les mêmes sources figées** que le déployeur, dans un
 environnement de construction autorisé. Il peut préparer une instance de

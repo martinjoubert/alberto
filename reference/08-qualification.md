@@ -7,6 +7,23 @@ La recette manuelle du 9 novembre complète les campagnes des 6 et 7 novembre.
 Chaque campagne conserve ses sources, images et manifestes ; l'ancienne recette
 Colima garde aussi sa propre configuration.
 
+## Assistant de préparation NiceGUI — 17 novembre 2026
+
+L’espace **Déploiement** prépare une nouvelle installation sans lire l’instance
+active et sans dépendre de LDAP. Les contrôles du formulaire restent locaux :
+URLs, groupes distincts, index, droits initiaux, format des CA et contrats Incidents.
+La recette navigateur sur Ubuntu 24.04 ARM64 vérifie les brouillons, les fichiers
+refusés, la revue obligatoire, l’export et l’isolation entre sessions. Les tests
+opérateur couvrent l’intégrité, le refus d’une archive modifiée, la conservation
+des secrets et le retour à l’état initial après une erreur d’écriture.
+
+Ces résultats ne constituent ni un test de connexion LDAP/OpenSearch/metrics,
+ni un appel Albert, ni un raccordement au SI réel. Le runtime des moteurs conserve
+son contexte `03763e37a65820d831cc`. Les reçus de cette campagne identifient la
+nouvelle image NiceGUI et les suites rejouées ; les preuves Albert et d’endurance
+précédentes gardent leurs versions et dates. La revue humaine des paramètres
+réels et les étapes 7 à 12 du guide restent nécessaires.
+
 ## Recette externe, ACL et restauration — 16 novembre 2026
 
 La préparation du 17 novembre remet le guide en douze étapes au format SI réel
