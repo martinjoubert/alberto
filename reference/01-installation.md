@@ -68,6 +68,8 @@ qualifier.
 
 ### Récupérer une version identifiée
 
+Pour une nouvelle installation, utiliser la [version courante indiquée par le guide](../README.md#versions-à-utiliser-pour-cette-livraison). Les versions datées des preuves restent historiques.
+
 Depuis le dossier `$HOME/deploy` contenant le paquet d'installation et son
 empreinte, choisir une seule fois le nom exact de l'archive reçue :
 
@@ -75,11 +77,11 @@ empreinte, choisir une seule fois le nom exact de l'archive reçue :
 # Se place dans le dossier contenant le paquet d'installation et son fichier SHA-256.
 cd "$HOME/deploy"
 # Mémorise le nom exact de l'archive fournie ; adapter cette valeur au fichier effectivement reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz
 # Compare l'empreinte de l'archive au fichier SHA-256 reçu ; attendre OK avant toute extraction.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour extraire les sources ; cette ligne ne crée pas le dossier.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r2"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r4"
 # Crée le dossier d'extraction ; si ce nom existe déjà, choisir un dossier neuf avant de continuer.
 mkdir "$RIE_SOURCES"
 # Décompresse les sources dans le dossier choisi ; n'installe et ne démarre aucun service.

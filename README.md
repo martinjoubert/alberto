@@ -19,10 +19,31 @@ index, dates et accès Lima/Colima du laboratoire ne sont pas ceux du SI-RIE.
 ## Avant de commencer
 
 Les fichiers de cette livraison sont disponibles sur GitHub :
-[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz)
-et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz.sha256),
-ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r3.zip).
+[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz)
+et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz.sha256),
+ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip).
 Le déployeur reçoit les fichiers du SI séparément ; les archives ne contiennent pas ses secrets.
+
+### Versions à utiliser pour cette livraison
+
+| Élément | Référence à retenir |
+| --- | --- |
+| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz` et son propre fichier `.sha256` |
+| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip` |
+| Serveur Ubuntu | 24.04 pour la qualification complète ; consulter le bilan daté pour la compatibilité 26.04 |
+| Python des images serveur | 3.12.15, base figée dans `deploy/ubuntu/Dockerfile` ; les commandes hôte demandent Python 3.10 ou plus |
+| NiceGUI | 3.17.1, verrouillé dans `deploy/ubuntu/requirements-portal.lock` |
+| Open WebUI local | Base 0.11.3 **avec l’adaptateur OAuth livré**, puis image approuvée par digest ; ne pas substituer une version différente sans qualification |
+| ITSM-NG | Contrat du connecteur 1.6.17 ; faire confirmer la version réelle et les droits par le responsable ITSM |
+| Rapports de qualification seulement | Allure 3.33.0 et Node.js 24.22.2 ; ces outils ne sont pas des prérequis des moteurs |
+
+La révision **r4 corrige la documentation** de r3, notamment un nom d’archive
+r2 resté dans le complément 01 et l’explication des variables du terminal.
+Le code applicatif et les dépendances sont identiques à r3. Les archives r1,
+r2 et r3 restent conservées pour leur traçabilité ; utiliser r4 pour une nouvelle
+installation, sans mélanger une archive avec le SHA-256 d’une autre révision.
+Les valeurs datées des comptes rendus de qualification décrivent leurs campagnes
+historiques ; elles ne remplacent pas ce tableau ni les références du reçu courant.
 
 Le coordinateur remet au déployeur :
 
@@ -48,8 +69,27 @@ initialisés par ce parcours. Aucun `seed` n'est à lancer en `external`.
 Les lignes `#` expliquent la commande immédiatement suivante. Exécuter une
 commande à la fois, contrôler l'attendu et s'arrêter en cas d'erreur. Les mots
 de passe et tokens ne doivent pas apparaître dans le compte rendu. Les valeurs
-`REPLACE_...` se remplacent avant exécution ; les variables définies au cours
-du guide ne survivent pas à la fermeture du terminal.
+`REPLACE_...` se remplacent avant exécution.
+
+### Variables du terminal et configuration persistante
+
+Les commandes `export` du guide définissent des repères pour **la session de
+terminal courante** : nom de l’archive (`RIE_ARCHIVE`), dossier des sources
+(`RIE_SOURCES`), instance à administrer (`RIE_INSTANCE`) ou compte opérateur
+(`RIE_ADMIN_LDAP`). Ces repères servent aux commandes de déploiement **et de
+maintenance**. Ils sont à redéfinir dans un nouveau terminal si nécessaire.
+
+**La configuration d’exécution reste enregistrée dans l’instance privée** :
+`.env`, `config/` et `secrets/`. Par exemple, le mode choisi avec `RIE_MODE`
+est enregistré lors de `prepare` ; le mode de l’instance ne disparaît pas avec
+l’export du terminal. Les paramètres des sources, images et modèles sont lus
+depuis les fichiers privés pour configurer les conteneurs.
+
+Les services installés avec `manage.py up` conservent leurs paramètres et
+fonctionnent indépendamment de ces exports. Fermer le terminal n’efface ni
+la configuration ni les données. Pour reprendre une commande d’exploitation,
+retrouver les chemins selon la section [Reprendre après une déconnexion SSH](#reprendre-après-une-déconnexion-ssh),
+sans refaire `prepare` ni le raccordement déjà enregistré.
 
 | Étape | Action | Machine | Attendu avant de continuer |
 | --- | --- | --- | --- |
@@ -120,11 +160,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r3"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r4"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.

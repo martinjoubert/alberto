@@ -318,6 +318,12 @@ avec la configuration OAuth du même client.
 Ces actions se font **sur le poste de chaque utilisateur**, avec les droits
 d'administration de son Open WebUI local. Elles complètent les connexions MCP
 du [raccordement du poste utilisateur](01-installation.md#raccorder-le-poste-utilisateur--apr%C3%A8s-a-ou-b).
+Pour le parcours OAuth courant, la base reste **0.11.3**, avec l’adaptateur
+de renouvellement livré dans l’image dérivée approuvée. La preuve stock décrite
+ci-dessous concerne la recette Bearer du 6 novembre ; elle ne désigne pas une
+image de remplacement pour le parcours actuel. Les [versions courantes](../README.md#versions-à-utiliser-pour-cette-livraison)
+et le reçu identifient les fichiers à utiliser pour une nouvelle installation.
+
 Le client qualifié le 6 novembre 2026 est **Open WebUI stock 0.11.3-slim**, sur
 Mac ARM64 avec Colima, et le modèle Albert `gpt-oss-120b`. Le digest de son image
 ARM64 est `sha256:98b795650b5323614d9b1cd7abd20cd1b62245b02fe81671f46f37acea8c6668`.
