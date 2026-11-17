@@ -1,26 +1,59 @@
 {
-  "source_commit": "8affa9b0544a0ed556c8ab0613833a211e9360ef",
+  "source_commit": "1f3af5d2544325b02cd05fcfdd79d5f7566c594d",
   "source_dirty": false,
   "runtime_context": "03763e37a65820d831cc",
   "archives": [
     {
-      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy.tar.gz",
-      "bytes": 10421111,
-      "sha256": "68dbb30597e497ef95d533d1797f4defb96a0c29129cb7068f173633716db1d6"
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz",
+      "bytes": 10420211,
+      "sha256": "4f8ad7d89bda6d143d1a6dde6fb8c01ecb8f941f677b8a249bc74da639ab6319"
     },
     {
-      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy.zip",
-      "bytes": 19815486,
-      "sha256": "bf182a8c34147eaed263f33ad42e6182cdd2503f3754365c0281fb08a46b74bc"
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r2.zip",
+      "bytes": 19800715,
+      "sha256": "3c84534bcc77a27335d883997714557d7f2f1a0d026faf4a679d2242fa3f23f3"
     }
   ],
   "deterministic_tests": {
-    "passed": 1364,
+    "passed": 1367,
     "skipped": 1,
     "failed": 0
   },
   "real_si_reception": "not_qualified",
   "gitlab_history_included": false,
   "private_credentials_included": false,
-  "si_registry_images": "references_and_access_to_be_provided_by_SI"
+  "si_registry_images": "references_and_access_to_be_provided_by_SI",
+  "documentation": {
+    "guide": "README.md",
+    "reference_directory": "reference",
+    "reference_pages": 26,
+    "source_guide": "docs/si-rie/README.md",
+    "old_portal_guide_url_preserved": true
+  },
+  "previous_delivery": {
+    "source_commit": "8affa9b0544a0ed556c8ab0613833a211e9360ef",
+    "source_dirty": false,
+    "runtime_context": "03763e37a65820d831cc",
+    "archives": [
+      {
+        "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy.tar.gz",
+        "bytes": 10421111,
+        "sha256": "68dbb30597e497ef95d533d1797f4defb96a0c29129cb7068f173633716db1d6"
+      },
+      {
+        "file": "rie-si-rie-wikijs-2026-11-17-si-deploy.zip",
+        "bytes": 19815486,
+        "sha256": "bf182a8c34147eaed263f33ad42e6182cdd2503f3754365c0281fb08a46b74bc"
+      }
+    ],
+    "deterministic_tests": {
+      "passed": 1364,
+      "skipped": 1,
+      "failed": 0
+    },
+    "real_si_reception": "not_qualified",
+    "gitlab_history_included": false,
+    "private_credentials_included": false,
+    "si_registry_images": "references_and_access_to_be_provided_by_SI"
+  }
 }
