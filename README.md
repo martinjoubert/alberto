@@ -19,17 +19,17 @@ index, dates et accès Lima/Colima du laboratoire ne sont pas ceux du SI-RIE.
 ## Avant de commencer
 
 Les fichiers de cette livraison sont disponibles sur GitHub :
-[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz)
-et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz.sha256),
-ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip).
+[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz)
+et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz.sha256),
+ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip).
 Le déployeur reçoit les fichiers du SI séparément ; les archives ne contiennent pas ses secrets.
 
 ### Versions à utiliser pour cette livraison
 
 | Élément | Référence à retenir |
 | --- | --- |
-| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz` et son propre fichier `.sha256` |
-| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip` |
+| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz` et son propre fichier `.sha256` |
+| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip` |
 | Serveur Ubuntu | 24.04 pour la qualification complète ; consulter le bilan daté pour la compatibilité 26.04 |
 | Python des images serveur | 3.12.15, base figée dans `deploy/ubuntu/Dockerfile` ; les commandes hôte demandent Python 3.10 ou plus |
 | NiceGUI | 3.17.1, verrouillé dans `deploy/ubuntu/requirements-portal.lock` |
@@ -37,12 +37,13 @@ Le déployeur reçoit les fichiers du SI séparément ; les archives ne contienn
 | ITSM-NG | Contrat du connecteur 1.6.17 ; faire confirmer la version réelle et les droits par le responsable ITSM |
 | Rapports de qualification seulement | Allure 3.33.0 et Node.js 24.22.2 ; ces outils ne sont pas des prérequis des moteurs |
 
-La révision **r5 simplifie l’étape 6 autour de l’assistant NiceGUI** et déplace
-la configuration manuelle dans le complément 02. Elle reprend les corrections
-de versions et de variables de r4. Le code applicatif et les dépendances restent
-identiques à r3. La commande de préparation dispose aussi d’un arrêt Ctrl+C
-propre, limité à son propre conteneur. Les archives précédentes sont conservées pour leur traçabilité ;
-utiliser r5 pour une nouvelle installation, avec son propre fichier SHA-256.
+La révision **r6 précise les images et services à l’étape 7** et corrige
+`manage.py pull` pour récupérer les images du projet en mode `external`.
+Elle conserve le parcours NiceGUI simplifié de r5 et son arrêt Ctrl+C propre.
+Les codes des moteurs et du portail applicatif, ainsi que leurs dépendances,
+restent identiques à r3 ; la documentation embarquée dans NiceGUI est actualisée.
+Les archives précédentes sont conservées pour leur traçabilité ; utiliser r6
+pour une nouvelle installation, avec son propre fichier SHA-256.
 Les valeurs datées des comptes rendus de qualification décrivent leurs campagnes
 historiques ; elles ne remplacent pas ce tableau ni les références du reçu courant.
 
@@ -100,7 +101,7 @@ sans refaire `prepare` ni le raccordement déjà enregistré.
 | 4 | Vérifier les prérequis | Ubuntu | Docker, Compose, Buildx et capacité disponibles |
 | 5 | Préparer l'instance privée | Ubuntu | Permissions privées, aucun service démarré |
 | 6 | Compléter la fiche dans NiceGUI et importer son dossier | Navigateur et Ubuntu | Préparation importée, secrets privés ajoutés |
-| 7 | Valider, récupérer les images et démarrer | Ubuntu | Trois services PoC sains ; catalogue encore à approuver |
+| 7 | Récupérer les deux images et démarrer le PoC | Ubuntu | `pdl`, `incidents`, `portal` sains ; catalogue à approuver |
 | 8 | Revoir et approuver les mappings | Ubuntu et navigateur | Sources requises prêtes, catalogue approuvé |
 | 9 | Raccorder les précédents ITSM-NG | Ubuntu | Identités individuelles et lecture API vérifiée |
 | 10 | Préparer le client puis autoriser les sources | Ubuntu et poste utilisateur | Deux connexions OAuth personnelles disponibles |
@@ -161,11 +162,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r5"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r6"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.
@@ -386,37 +387,64 @@ reste une alternative de référence, à utiliser à la place de l’assistant.
 
 ## 7. Valider, récupérer les images et démarrer
 
-**Où : Ubuntu, `sudo`.** Ne pas lancer `build` dans ce parcours : les images
-approuvées sont préparées en amont pour la registry filtrée.
+**Où : Ubuntu · terminal A**, à la racine des sources, après l’import de l’étape 6.
+NiceGUI a enregistré les deux références approuvées dans le `.env` privé de l’instance :
+
+| Image du projet | Services qui l’utilisent sur Ubuntu |
+| --- | --- |
+| **Image PDL / Incidents / opérateur** → `RIE_IMAGE` | Les moteurs `pdl` et `incidents`, leurs ACL communes et les tâches ponctuelles `initialize` / `operator` |
+| **Image NiceGUI** → `RIE_PORTAL_IMAGE` | Le portail `portal`, qui servira aux mappings, ACL, démos et rapports |
+
+Il y a donc **deux images serveur pour trois services permanents**.
+L’image **Open WebUI** concerne les postes utilisateurs, à l’étape 10.
+Les sources du SI existant — OpenSearch, VictoriaMetrics, LDAP et ITSM-NG —
+restent celles renseignées dans la fiche ; aucun service de simulation n’est démarré ici.
+
+**Avant de continuer :** les deux images doivent avoir été construites et publiées
+par le responsable de la livraison, pour l’architecture du serveur et la version
+du paquet. Le déployeur utilise les références approuvées **par digest** saisies
+dans NiceGUI. La [construction et publication](reference/27-development-and-images.md)
+se font en amont, sur la machine prévue par le SI.
+
+### Vérifier puis récupérer les deux images
+
+L’accès à la registry a déjà servi à récupérer NiceGUI à l’étape 6. Le même
+opérateur **`sudo docker`** doit pouvoir lire l’image commune des moteurs.
+L’exploitant prépare les droits de lecture, le proxy et la CA nécessaires à Docker ;
+les identifiants de la registry sont distincts du compte LDAP du PoC.
 
 ```bash
-# Valide fichiers privés, contrats et paramètres avant toute interruption ; ne génère aucune réponse Albert.
+# Vérifie les paramètres et fichiers privés importés, sans contacter Albert ni démarrer les services.
 sudo python3 deploy/ubuntu/manage.py validate "$RIE_INSTANCE"
-# Lit seulement la référence publique de l'image runtime depuis l'environnement privé.
-export RIE_RUNTIME_IMAGE="$(sudo sed -n 's/^RIE_IMAGE=//p' "$RIE_INSTANCE/.env")"
-# Lit seulement la référence publique de l'image NiceGUI.
-export RIE_PORTAL_IMAGE="$(sudo sed -n 's/^RIE_PORTAL_IMAGE=//p' "$RIE_INSTANCE/.env")"
-# Récupère l'image métier approuvée ; utiliser l'authentification registry préparée pour cet opérateur Docker.
-sudo docker pull "$RIE_RUNTIME_IMAGE"
-# Récupère l'image du portail approuvée de la même version.
-sudo docker pull "$RIE_PORTAL_IMAGE"
-# Démarre uniquement les services du PoC, après validation et disponibilité locale des images.
+# Récupère les images du projet indiquées dans l'instance ; réutilise celles déjà présentes localement.
+sudo python3 deploy/ubuntu/manage.py pull "$RIE_INSTANCE"
+```
+
+**Attendu :** `Private instance configuration validated`, puis récupération ou
+réutilisation des images pour `pdl`, `incidents` et `portal`. Les deux moteurs
+partagent la même image ; ce ne sont pas deux livraisons à télécharger séparément.
+NiceGUI peut déjà être présent depuis l’étape 6. Cette phase ne démarre aucun service.
+Un refus d’accès, une image absente ou une erreur de certificat se résout avec
+le responsable des images avant de poursuivre.
+
+### Démarrer et contrôler les services du PoC
+
+```bash
+# Démarre les deux moteurs et NiceGUI avec les images disponibles, après les contrôles préalables.
 sudo python3 deploy/ubuntu/manage.py up "$RIE_INSTANCE"
-# Affiche l'état des processus sans modifier leurs données.
+# Affiche l'état et les images des services de cette instance, sans afficher de secret.
 sudo python3 deploy/ubuntu/manage.py status "$RIE_INSTANCE"
 ```
 
-**Attendu :** validation réussie, images récupérées avec les digests attendus,
-puis `pdl`, `incidents` et `portal` sains. L'authentification à la registry doit
-être celle utilisée par `sudo docker`, pas seulement celle du compte sans sudo.
-Ne pas passer son mot de passe en argument. Le compte et les droits registry
-viennent du SI. Un refus de récupération se résout avant `up`.
+**Attendu :** `pdl`, `incidents` et `portal` sont **healthy**. Dans la colonne
+`IMAGE`, les deux moteurs utilisent l’image commune attendue et `portal` l’image
+NiceGUI approuvée. `initialize` peut apparaître terminé avec un code `0` : c’est
+la tâche ponctuelle de préparation des fichiers, pas un quatrième service permanent.
 
-Des processus `healthy` ne prouvent pas que le catalogue métier est prêt.
-Avant l'étape 8, son absence est normale : ne pas lancer `seed` pour obtenir
-artificiellement `ready`. La validation locale ne qualifie ni les lectures
-réelles ni la génération Albert. En cas d'erreur, conserver le message sans
-secret et examiner `status`/`logs` ; ne pas relancer `prepare`.
+**Passer à l’étape 8.** La santé des processus précède l’approbation du catalogue
+et les contrôles métier. Un catalogue encore vide est normal à ce stade ;
+les mappings sont examinés ensuite. En cas d’erreur, conserver le message sans
+secret et consulter `status` ou `logs`, sans recréer l’instance.
 
 ## 8. Revoir et approuver les mappings PDL
 

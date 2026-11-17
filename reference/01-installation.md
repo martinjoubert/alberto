@@ -77,11 +77,11 @@ empreinte, choisir une seule fois le nom exact de l'archive reçue :
 # Se place dans le dossier contenant le paquet d'installation et son fichier SHA-256.
 cd "$HOME/deploy"
 # Mémorise le nom exact de l'archive fournie ; adapter cette valeur au fichier effectivement reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz
 # Compare l'empreinte de l'archive au fichier SHA-256 reçu ; attendre OK avant toute extraction.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour extraire les sources ; cette ligne ne crée pas le dossier.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r5"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r6"
 # Crée le dossier d'extraction ; si ce nom existe déjà, choisir un dossier neuf avant de continuer.
 mkdir "$RIE_SOURCES"
 # Décompresse les sources dans le dossier choisi ; n'installe et ne démarre aucun service.
@@ -321,7 +321,7 @@ avant B3 : l'instance vient d'être préparée, donc ne pas rejouer sa commande
 sudo python3 deploy/ubuntu/manage.py validate "$RIE_INSTANCE"
 # Construit les images nécessaires au profil choisi, dont NiceGUI si activé ; ne démarre aucun service.
 sudo python3 deploy/ubuntu/manage.py build "$RIE_INSTANCE"
-# En demo, télécharge les images OpenSearch/VictoriaMetrics ; en external, cette commande ne fait rien.
+# En demo, récupère OpenSearch/VictoriaMetrics ; en external, réutilise les images du projet construites ci-dessus.
 sudo python3 deploy/ubuntu/manage.py pull "$RIE_INSTANCE"
 # Démarre ou relance les services de cette instance et recharge sa configuration en conservant ses données.
 sudo python3 deploy/ubuntu/manage.py up "$RIE_INSTANCE"

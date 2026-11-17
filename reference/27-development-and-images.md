@@ -117,7 +117,9 @@ docker image inspect --format '{{json .RepoDigests}}' "$RIE_IMAGE_PROJECT/rie-po
 
 **Attendu :** chaque push réussit et retourne un digest `sha256:...`. Remettre
 les deux références `chemin@sha256:...`, l’architecture, le commit source, le paquet
-correspondant et les résultats de tests. Le serveur d’installation utilise ces
+correspondant et les résultats de tests. Ces deux références sont saisies dans
+NiceGUI à l’étape 6. À l’étape 7, `manage.py pull` récupère les images absentes
+du serveur ; `pdl` et `incidents` partagent le même runtime, `portal` utilise NiceGUI. Le serveur d’installation utilise ces
 digests ; il n’a besoin que de droits de lecture sur les images.
 
 Pour le **client Open WebUI**, sur une architecture correspondant aux postes :
