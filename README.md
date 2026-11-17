@@ -16,6 +16,10 @@ images approuvées de la registry GitLab et données de recette.
 - [Références de la livraison](DELIVERY.json) : commit source, empreintes et
   résultats déterministes. Les paramètres et secrets réels sont remis séparément.
 
+Ce dépôt distribue des archives : un `git clone` de ce dépôt ne décompresse
+pas les sources. Les commandes `deploy/ubuntu` se trouvent dans l’archive
+source, après extraction.
+
 Déposer l'archive source et son SHA-256 sous `$HOME/deploy` sur Ubuntu, puis
 suivre le guide. Ne pas extraire par-dessus une ancienne installation. Le
 README de l'archive renvoie au même guide ; les autres manuels sont des références.
