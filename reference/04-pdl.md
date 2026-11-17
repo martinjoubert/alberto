@@ -2,6 +2,515 @@
 
 > Complément de référence — le [guide principal](../README.md) reste le seul parcours de déploiement à exécuter.
 
+## Exemple complet illustré : des champs PDL aux accès TACACS
+
+Cet exemple accompagne le formulaire **Mappings PDL** de NiceGUI
+(`/admin-mappings`). Il est placé dans le bloc **« Exemple complet illustré ·
+PFS, Backbone, PFAING et TACACS »**, fermé par défaut, avant la connexion.
+Le consulter n’importe aucun fichier et ne change aucun mapping.
+
+**Cadre des captures : 17 novembre 2026, Ubuntu 24.04 ARM64, instance de
+qualification autonome**, avec son propre LDAP, OpenSearch et catalogue.
+Les comptes, adresses, noms et événements sont fictifs. Les validations et
+approbations visibles sont réelles dans cette instance ; elles ne valent pas
+approbation du SI-RIE. Le mapping est une configuration déterministe : sa
+préparation ne demande aucune génération IA. Les conversations métier avec
+Albert se valident séparément à l’[étape 11](../README.md#11-jouer-les-deux-uc-et-leurs-acl-avec-albert).
+
+### 1. Partir d’une question et des preuves attendues
+
+Nous voulons retrouver les événements de **`edge-a`**, dans **`demo-alpha`**,
+le **12 octobre 2026 de 08:00 à 09:00 UTC** — soit de **10:00 à 11:00 à Paris**.
+Une même machine apparaît sous plusieurs identifiants selon les sources :
+
+| Famille | Informations présentes dans les documents fictifs utiles |
+| --- | --- |
+| PFS | `observer.name = edge-a`, `asset.id = asset-001`, `observer.ip = 10.20.0.1`, `asset.reference = gateway-73` |
+| Backbone | `host.name = edge-a`, même ID `asset-001`, tableau `host.ip = [10.20.0.1, 2001:db8::10]` |
+| PFAING | `gateway.ref = gateway-73` ; ni le nom `edge-a`, ni son ID ne sont nécessaires dans cet événement |
+| TACACS | `log.tacacs.dest = 10.20.0.1` ou `2001:db8::10` ; ni nom d’équipement, ni ID stable dans ces événements |
+
+Le chemin à faire confirmer est donc : **nom → ID stable → IP de gestion →
+événements TACACS**, et **nom → ID stable → référence → événements PFAING**.
+Les relations ne sont pas déduites du nom des champs ou de valeurs identiques.
+Le responsable des sources confirme ce qu’identifient réellement ces champs.
+
+### 2. Découvrir les sources et charger une proposition
+
+1. Se connecter au formulaire avec un **vrai compte LDAP administrateur** du SI.
+   Alice est le compte fictif du laboratoire, pas une valeur à reprendre en production.
+2. Cliquer sur **« Actualiser les sources »**. Les index autorisés et le nombre
+   de champs découverts apparaissent ; cette lecture n’approuve rien.
+3. Si le responsable du SI a fourni un fichier, cliquer sur **« Charger le
+   fichier initial »** pour `config/mappings.yaml`, ou utiliser **« Importer un
+   fichier YAML/JSON »**. Sinon, choisir **« Ajouter un index découvert »**,
+   puis **« Ajouter cet index »**, et ajouter les concepts ci-dessous.
+4. Le champ **« Profil à modifier »** permet de passer d’une source à l’autre.
+   Les noms `pfs`, `bb`, `pfaing` et `tacacs` de l’exemple sont des profils du
+   fichier ; ils ne donnent aucun droit d’accès.
+
+![Sources fictives découvertes, sans mapping actif](../assets/screenshots-2026-11-17/mapping-01-sources.png)
+
+*Les quatre sources de départ sont visibles. « En attente » dans la colonne
+Mapping actif signifie qu’il manque une approbation ; ce n’est pas un défaut
+OpenSearch. Les quatre revues ne seront créées qu’à l’étape 6 de cet exemple.*
+
+### 3. Renseigner les concepts, types et valeurs
+
+Dans chaque profil, ouvrir un concept, sélectionner **« Champ physique »**,
+puis contrôler **« Type détecté »**. Ajouter les concepts manquants avec
+**« Ajouter un concept métier »**. Pour une création manuelle du profil TACACS,
+le concept proposé **« IP de gestion »** (`management_ip`) convient aussi :
+il doit utiliser le même champ, rôle et groupe que `management_destination`
+dans le fichier fourni. Les noms des concepts sont distincts des champs physiques.
+
+| Concept | PFS | Backbone | PFAING | TACACS structuré |
+| --- | --- | --- | --- | --- |
+| `timestamp` — heure de l’événement | `@timestamp` · `date` | identique | identique | identique |
+| `network_scope` — périmètre | `network.scope` · `keyword` | identique | identique | identique |
+| `equipment` — nom | `observer.name` · `keyword` | `host.name` · `keyword` | `observer.hostname` · `keyword`, sans rôle d’identité dans ce corpus | absent |
+| `stable_id` — identifiant stable | `asset.id` · `keyword` | `asset.id` · `keyword` | absent | absent |
+| `management_ip` — IP de gestion | `observer.ip` · `ip` | `host.ip` · `ip`, parfois plusieurs valeurs | absent | voir `management_destination` |
+| `equipment_reference` — référence | `asset.reference` · `keyword` | absent | `gateway.ref` · `keyword` | absent |
+| `equipment_fqdn` — nom DNS complet | `observer.fqdn` · `keyword` | absent | absent | absent |
+| `source_ip` — IP du trafic source | `source.ip` · `ip` | absent | `client.ip` · `ip` | absent |
+| `destination_ip` — IP du trafic destination | `destination.ip` · `ip` | absent | `server.ip` · `ip` | absent |
+| `action` — action réseau | `event.action` · `keyword` | absent | `event.action` · `keyword` | `event.action` · `keyword` |
+| `management_destination` — équipement cible TACACS | absent | absent | absent | `log.tacacs.dest` · `ip` |
+
+Les autres concepts de l’exemple complet — domaine virtuel, règle, gravité,
+domaine web, URL et message — sont conservés dans le YAML de fin d’exemple.
+L’import permet de conserver les concepts personnalisés, y compris ceux dont
+le nom anglais n’a pas de libellé particulier dans le formulaire.
+
+Dans **« Valeurs métier possibles, une par ligne »**, saisir uniquement les
+valeurs confirmées, en respectant leur casse :
+
+| Concept / profil | Valeurs de cet exemple |
+| --- | --- |
+| `network_scope` / tous | `demo-alpha`, puis `demo-beta` sur une autre ligne |
+| `action` / PFS et PFAING | `deny`, puis `allow` |
+| `action` / TACACS | `login`, `logout`, `command` |
+
+Une valeur absente des quelques exemples observés n’est pas forcément impossible.
+Ces listes ne traduisent pas automatiquement `deny` en une autre valeur du SI.
+Le champ doit porter l’heure de l’événement, pas une date d’ingestion choisie
+par commodité. Les fuseaux et valeurs réelles sont à confirmer avec le métier.
+
+### 4. Déclarer l’identité stable et les relations entre sources
+
+Ouvrir **« Identité et lecture avancée »** pour chaque concept d’identité.
+Renseigner le rôle et exactement le même **« Groupe de correspondance entre
+sources »** pour les informations de même sens :
+
+| Groupe à saisir | Membres de l’exemple | Rôle dans le formulaire |
+| --- | --- | --- |
+| `equipment-name` | PFS `equipment` et BB `equipment` | Nom d’équipement |
+| `asset-id` | PFS `stable_id` et BB `stable_id` | Identifiant stable |
+| `management-ip` | PFS `management_ip`, BB `management_ip`, TACACS `management_destination` | IP d’équipement à rapprocher |
+| `asset-reference` | PFS `equipment_reference`, PFAING `equipment_reference` | Référence |
+| `equipment-fqdn` | PFS `equipment_fqdn` | FQDN d’équipement |
+
+**`asset-id` est l’unique groupe d’ancre** : le rôle `id` suffit ici.
+Ne pas cocher en plus le nom comme ancre. Une ancre stable relie les documents
+PFS et BB, puis permet de réunir leurs identifiants sans confondre deux machines.
+Le FQDN reste dans un groupe distinct du nom court.
+
+![ID stable et groupe asset-id dans le formulaire](../assets/screenshots-2026-11-17/mapping-02-stable-identity.png)
+
+*Sur PFS, `stable_id` lit `asset.id`, de type `keyword`, avec le rôle
+Identifiant stable et le groupe `asset-id`. Le profil BB utilise le même groupe.*
+
+![Mapping de l’IP de gestion TACACS](../assets/screenshots-2026-11-17/mapping-03-tacacs-ip.png)
+
+*Le concept personnalisé `management_destination` lit `log.tacacs.dest`, de type
+`ip`. Son rôle est IP d’équipement à rapprocher et son groupe `management-ip`.
+Une IPv6 n’exige pas de second concept : le type `ip` et la normalisation du
+moteur couvrent IPv4 et IPv6. Le tableau BB n’est pas une chaîne à découper.*
+
+**Ne pas ajouter** `source.ip`, `destination.ip`, `client.ip` ou `server.ip`
+à `management-ip` au seul motif qu’ils ont le type `ip`. Dans ce corpus, ce
+sont des adresses de trafic. Les y ajouter ferait entrer des événements leurres.
+Dans **« Rapprochements prévus entre sources »**, vérifier les membres avant
+la validation : un groupe cohérent n’associe pas des rôles différents.
+
+![Tableau des groupes et correspondances entre sources](../assets/screenshots-2026-11-17/mapping-04-relations.png)
+
+### 5. Vérifier et corriger avant toute approbation
+
+Cliquer sur **« Vérifier la proposition »**. Le résultat attendu est
+**« Proposition valide techniquement »**. Cette vérification confronte les
+champs, types, dates et relations à l’inventaire ; elle ne confirme pas leur
+signification métier et ne rend pas le mapping actif.
+
+![Valeur numérique invalide refusée avant enregistrement](../assets/screenshots-2026-11-17/mapping-05-validation-error.png)
+
+*Erreur volontaire du laboratoire : une chaîne dans le concept de gravité BB,
+qui attend un nombre. Le formulaire bloque la vérification et aucune revue
+n’est créée. Corriger ou vider la valeur fautive, puis vérifier de nouveau.*
+
+| Problème | Correction / contrôle à réaliser |
+| --- | --- |
+| Champ absent ou mauvais type | Actualiser ; sélectionner le vrai champ du bon profil. Un autre champ de même type peut malgré tout porter un sens erroné. |
+| Valeur incompatible | Respecter le type : nombre pour `long`, `true` / `false` pour un booléen ; pas un libellé arbitraire. |
+| Identité incohérente | Vérifier rôles, groupes et ancre commune. Ne pas fusionner nom, IP et référence dans un groupe unique. |
+| Schéma changé entre deux actions | Actualiser, vérifier de nouveau et examiner la nouvelle revue. L’ancienne décision ne se réutilise pas automatiquement. |
+| Index non visible ou refusé | Faire vérifier les droits LDAP/ACL et les motifs de découverte. Le mapping n’accorde aucun accès. |
+
+**« Exporter le YAML »** télécharge la proposition courante. Cela ne l’approuve
+pas et ne réécrit pas automatiquement le fichier initial côté serveur.
+Conserver l’export approuvé dans le dossier de configuration géré par l’équipe,
+selon sa procédure de mise à jour ; le catalogue reste la référence d’exécution.
+
+### 6. Examiner les différences et approuver chaque index
+
+1. Renseigner **« Motif de la proposition »**, puis cliquer sur **« Enregistrer
+   une proposition »**. Une première proposition pour les quatre index crée
+   **quatre revues en attente**, sans activation.
+2. Choisir une entrée dans **« Revue à examiner »**, puis **« Examiner cette
+   revue »**. Contrôler le vrai nom d’index, les champs et les différences.
+3. Pour TACACS, retrouver le champ `log.tacacs.dest`, le rôle IP et le groupe
+   `management-ip`. Si le tableau montre une adresse cliente ou un mauvais rôle,
+   corriger la proposition et la faire vérifier de nouveau.
+4. Après confirmation par le responsable des sources, cocher **« Je confirme
+   le sens des champs et des relations avec le responsable des sources »**,
+   renseigner **« Justification de l’approbation »**, puis **« Approuver ce mapping »**.
+5. Recommencer pour les autres index. Une approbation concerne **un index
+   physique**, pas toute une famille, un joker ou la totalité du fichier.
+
+![Différences TACACS à examiner avant approbation](../assets/screenshots-2026-11-17/mapping-06-review.png)
+
+![Quatre mappings actifs après quatre approbations explicites](../assets/screenshots-2026-11-17/mapping-07-approved.png)
+
+*Les quatre lignes sont actives et il ne reste aucune revue en attente pour
+ce premier parcours. Le bouton de vérification seul n’aurait pas produit cet état.*
+
+### 7. Cas avancé et limite actuelle : TACACS ne fournit qu’un message texte
+
+**Pour publier des logs TACACS, fournir un champ `ip` structuré à
+l’ingestion. Le parcours où le texte est le seul lien d’identité de la source
+cible n’est pas pris en charge actuellement.** Le test réel de cet exemple
+retourne `incomplete`, sans logs publiés : « Aucune relation d’identité
+compatible avec l’index rie-tacacs-raw-fixture ».
+
+L’option visible dans le formulaire sert une compatibilité textuelle temporaire
+pour la résolution d’identité, sur un format précis, par exemple :
+
+```text
+TACACS access from '10.20.0.1'
+TACACS access from "2001:db8::10"
+```
+
+Le responsable doit confirmer que l’IP après `from` identifie bien l’équipement
+à rapprocher dans **ce** flux, et non l’utilisateur ou un autre pair réseau.
+Le parseur enregistré **`quoted_from_ip_v1`** ne sait pas interpréter n’importe
+quel message TACACS. Il attend `from` suivi d’une IPv4/IPv6 entre guillemets
+appariés. Il ne crée pas de champ physique dans OpenSearch.
+
+Pour comprendre et tester cette limite **dans le laboratoire uniquement**,
+un index distinct `rie-tacacs-raw-fixture` a été créé avec des messages
+fictifs. Sa proposition remplace la cible TACACS du fichier d’exemple et sa
+correspondance :
+
+```yaml
+  tacacs:
+    match: rie-tacacs-raw-fixture
+    concepts:
+      timestamp:
+        field: '@timestamp'
+        type: date
+      network_scope:
+        field: network.scope
+        type: keyword
+        values: [demo-alpha, demo-beta]
+      management_destination:
+        field: message
+        type: text
+        identity_role: ip
+        identity_extractor: quoted_from_ip_v1
+      action:
+        field: event.action
+        type: keyword
+        values: [login, logout, command]
+      message:
+        field: message
+        type: text
+```
+
+Cet extrait **remplace le profil TACACS**, ce n’est pas un fichier autonome :
+conserver `version`, les profils d’identité PFS/BB, PFAING et les relations du
+fichier complet ci-dessous. En particulier, `management_destination` reste
+membre de `relations.management-ip.tacacs`.
+
+Dans le formulaire : choisir **Champ physique = `message`**, contrôler le type
+`text`, ouvrir **Identité et lecture avancée**, garder le rôle IP et le groupe
+`management-ip`, puis choisir **Extraction textuelle approuvée =
+`quoted_from_ip_v1`**. Dans le laboratoire, la proposition a été vérifiée,
+exportée, examinée et approuvée pour constater la limite de bout en bout.
+**Ne pas reproduire cette approbation comme une solution opérationnelle dans
+le SI** : la validation technique ne vérifie pas à elle seule que le parcours
+de recherche visé est pris en charge. Les mappings actifs identiques ne sont
+pas recréés par le formulaire ; le nouvel index reçoit sa propre revue.
+
+![Extraction IP explicitement configurée sur un message TACACS](../assets/screenshots-2026-11-17/mapping-08-tacacs-text.png)
+
+*Variante de laboratoire avec des messages fabriqués pour ce format. Elle ne
+modifie pas l’index TACACS structuré du premier parcours. Le parseur extrait
+bien les deux adresses IPv4/IPv6 de ces messages ; la recherche de logs sur
+cette cible textuelle seule reste incomplète. Cette capture montre une option
+de configuration et sa limite, pas un résultat métier validé.*
+
+Le scan reste borné : 16 Kio de texte et 32 fragments/candidats par extraction,
+puis budgets de documents, de période et de réponse OpenSearch. Des IP candidates
+invalides sont ignorées ; trop de texte ou de candidats déclenche une erreur.
+Une troncature, une identité partagée ou un budget dépassé doit donner un état
+incomplet/ambigu, pas une recherche annoncée exhaustive. Avant le SI réel,
+recevoir ce format sur ses messages représentatifs et ses volumes ; un autre
+format demande une normalisation à l’ingestion ou une évolution du parseur.
+Pour le parcours TACACS de ce PoC, faire fournir un champ de gestion `ip`
+compatible, puis reprendre l’étape 4 et rejouer les exclusions. Si le SI ne peut
+le fournir, traiter le raccordement de ce flux comme **non qualifié**, avec une
+évolution à prévoir ; ne pas annoncer que le réglage du formulaire suffit.
+
+### 8. Autres options avancées : quand les utiliser
+
+| Situation du SI | Saisie à faire confirmer | Limite à connaître |
+| --- | --- | --- |
+| Champ `text` avec sous-champ exact `.keyword` | Sélectionner le sous-champ `keyword` pour chercher ; le **Champ de lecture dans le document source** doit désigner le parent réellement présent dans `_source`. | Exemple : recherche `host.name.keyword`, lecture `host.name`. Le sous-champ doit être découvert et compatible ; ne pas l’inventer. |
+| Uniquement un FQDN stable, sans ID métier | Rôle FQDN, groupe dédié, case **Nom/FQDN confirmé comme point de départ de l’identité**, après preuve d’unicité. | Un seul groupe d’ancre commun. Il s’agit d’une alternative à l’ancre `asset-id`, pas d’un ajout à cocher dans cet exemple. |
+| Nom court à rapprocher d’un FQDN | Pour un rôle FQDN, choisir **Rapprochement FQDN → Préfixe de nom court confirmé**. | Un préfixe partagé ou ambigu reste à clarifier. Un rapprochement approuvé ne prouve pas la stabilité d’un nom. |
+| Rollover ou plusieurs index d’une famille | Préparer le sélecteur borné dans le YAML, puis vérifier chaque index physique résolu. | Chaque index reçoit son propre mapping et sa revue. La validation métier d’une famille n’approuve pas ses futurs index. |
+
+Ces options sont conditionnelles. Les captures du parcours principal montrent
+les champs du corpus structuré ; elles ne démontrent pas la compatibilité
+avec un schéma réel différent.
+
+### 9. Recette de la correspondance approuvée
+
+Pour le corpus structuré de départ, la recherche croisée doit retenir
+**six documents** :
+
+| Index | Documents attendus |
+| --- | --- |
+| `rie-pfs-fixture` | `pfs-a-1`, `pfs-a-2` |
+| `rie-bb-fixture` | `bb-a-1` |
+| `rie-pfaing-fixture` | `pfaing-reference-only` |
+| `rie-tacacs-fixture` | `tacacs-ipv4-only`, `tacacs-ipv6-only` |
+
+Les événements `tacacs-client-ip-decoy`, `tacacs-unrelated`,
+`tacacs-other-scope` et `tacacs-other-day` doivent rester exclus. Une recherche
+limitée à TACACS doit utiliser les sources PFS/BB nécessaires à l’identité,
+mais ne publier que les deux événements TACACS demandés.
+
+Dans une conversation PDL avec Albert, par exemple :
+
+```text
+Retrouve les logs de edge-a dans demo-alpha, le 12 octobre 2026 de 08:00 à 09:00 UTC, dans PFS, Backbone, PFAING et TACACS.
+```
+
+Puis, pour contrôler la restriction des sources :
+
+```text
+Même équipement, même période et même périmètre : garde seulement TACACS.
+```
+
+Contrôler les index réellement lus, les preuves de résolution, la période,
+le périmètre et les exclusions ; ne pas se fier uniquement à la prose générée.
+Un compte sans droit sur une source nécessaire doit être refusé avant lecture.
+La réception SI utilise ses vrais identifiants et événements de référence,
+pas les noms et les nombres de cet exemple.
+
+### Fichier YAML complet du parcours structuré
+
+Ce fichier est l’exemple synthétique livré sous
+`deploy/ubuntu/examples/pdl-demo-mappings.yaml`. Il peut être importé dans
+le laboratoire correspondant. Pour le SI réel, les champs, valeurs, sélecteurs
+et relations sont à renseigner d’après son inventaire et à faire confirmer.
+
+```yaml
+# Operator mapping file: synthetic demonstration only, never a production template.
+# Change match to an allowed physical index name or a bounded wildcard selector.
+# field/type must match the current inventory; preserve business value casing.
+# Loading creates pending reviews. A human must approve every physical index.
+# Relations declare business equivalence; an IP type alone proves no equipment identity.
+# Client traffic IPs are intentionally absent from management-ip.
+# One anchor namespace (asset-id here) joins the identity sources.
+# Names, FQDNs, stable IDs, management IPs and references remain distinct namespaces.
+version: 1
+indices:
+  pfs:
+    match: rie-pfs-fixture
+    concepts:
+      timestamp:
+        field: '@timestamp'
+        type: date
+      network_scope:
+        field: network.scope
+        type: keyword
+        values:
+        - demo-alpha
+        - demo-beta
+      equipment:
+        field: observer.name
+        type: keyword
+        identity_role: name
+      stable_id:
+        field: asset.id
+        type: keyword
+        identity_role: id
+      management_ip:
+        field: observer.ip
+        type: ip
+        identity_role: ip
+      equipment_reference:
+        field: asset.reference
+        type: keyword
+        identity_role: reference
+      source_ip:
+        field: source.ip
+        type: ip
+      destination_ip:
+        field: destination.ip
+        type: ip
+      virtual_domain:
+        field: observer.virtual_domain
+        type: keyword
+      rule:
+        field: rule.id
+        type: keyword
+      action:
+        field: event.action
+        type: keyword
+        values:
+        - deny
+        - allow
+      equipment_fqdn:
+        field: observer.fqdn
+        type: keyword
+        identity_role: fqdn
+  bb:
+    match: rie-bb-fixture
+    concepts:
+      timestamp:
+        field: '@timestamp'
+        type: date
+      network_scope:
+        field: network.scope
+        type: keyword
+        values:
+        - demo-alpha
+        - demo-beta
+      equipment:
+        field: host.name
+        type: keyword
+        identity_role: name
+      stable_id:
+        field: asset.id
+        type: keyword
+        identity_role: id
+      management_ip:
+        field: host.ip
+        type: ip
+        identity_role: ip
+      event_type:
+        field: event.code
+        type: keyword
+      severity:
+        field: event.severity
+        type: long
+  pfaing:
+    match: rie-pfaing-fixture
+    concepts:
+      timestamp:
+        field: '@timestamp'
+        type: date
+      network_scope:
+        field: network.scope
+        type: keyword
+        values:
+        - demo-alpha
+        - demo-beta
+      equipment_reference:
+        field: gateway.ref
+        type: keyword
+        identity_role: reference
+      equipment:
+        field: observer.hostname
+        type: keyword
+      source_ip:
+        field: client.ip
+        type: ip
+      destination_ip:
+        field: server.ip
+        type: ip
+      domain:
+        field: url.domain
+        type: keyword
+      url:
+        field: url.original
+        type: keyword
+      action:
+        field: event.action
+        type: keyword
+        values:
+        - deny
+        - allow
+  tacacs:
+    match: rie-tacacs-fixture
+    concepts:
+      timestamp:
+        field: '@timestamp'
+        type: date
+      network_scope:
+        field: network.scope
+        type: keyword
+        values:
+        - demo-alpha
+        - demo-beta
+      management_destination:
+        field: log.tacacs.dest
+        type: ip
+        identity_role: ip
+      action:
+        field: event.action
+        type: keyword
+        values:
+        - login
+        - logout
+        - command
+      message:
+        field: message
+        type: text
+relations:
+  equipment-name:
+    pfs:
+    - equipment
+    bb:
+    - equipment
+  asset-id:
+    pfs:
+    - stable_id
+    bb:
+    - stable_id
+  management-ip:
+    pfs:
+    - management_ip
+    bb:
+    - management_ip
+    tacacs:
+    - management_destination
+  asset-reference:
+    pfs:
+    - equipment_reference
+    pfaing:
+    - equipment_reference
+  equipment-fqdn:
+    pfs:
+    - equipment_fqdn
+```
+
+## Référence technique du moteur
+
 Le moteur portable transforme une question métier en lectures bornées. Le
 contrat MCP est `investigate_pdl(question, continuation_token='')` : aucun DSL,
 nom de champ arbitraire, email ou rôle n'est transmis comme autorisation.

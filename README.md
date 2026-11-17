@@ -19,17 +19,17 @@ index, dates et accès Lima/Colima du laboratoire ne sont pas ceux du SI-RIE.
 ## Avant de commencer
 
 Les fichiers de cette livraison sont disponibles sur GitHub :
-[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz)
-et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz.sha256),
-ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip).
+[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz)
+et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz.sha256),
+ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip).
 Le déployeur reçoit les fichiers du SI séparément ; les archives ne contiennent pas ses secrets.
 
 ### Versions à utiliser pour cette livraison
 
 | Élément | Référence à retenir |
 | --- | --- |
-| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz` et son propre fichier `.sha256` |
-| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip` |
+| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz` et son propre fichier `.sha256` |
+| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip` |
 | Serveur Ubuntu | 24.04 pour la qualification complète ; consulter le bilan daté pour la compatibilité 26.04 |
 | Python des images serveur | 3.12.15, base figée dans `deploy/ubuntu/Dockerfile` ; les commandes hôte demandent Python 3.10 ou plus |
 | NiceGUI | 3.17.1, verrouillé dans `deploy/ubuntu/requirements-portal.lock` |
@@ -37,12 +37,11 @@ Le déployeur reçoit les fichiers du SI séparément ; les archives ne contienn
 | ITSM-NG | Contrat du connecteur 1.6.17 ; faire confirmer la version réelle et les droits par le responsable ITSM |
 | Rapports de qualification seulement | Allure 3.33.0 et Node.js 24.22.2 ; ces outils ne sont pas des prérequis des moteurs |
 
-La révision **r6 précise les images et services à l’étape 7** et corrige
-`manage.py pull` pour récupérer les images du projet en mode `external`.
-Elle conserve le parcours NiceGUI simplifié de r5 et son arrêt Ctrl+C propre.
-Les codes des moteurs et du portail applicatif, ainsi que leurs dépendances,
-restent identiques à r3 ; la documentation embarquée dans NiceGUI est actualisée.
-Les archives précédentes sont conservées pour leur traçabilité ; utiliser r6
+La révision **r7 ajoute l’exemple illustré des mappings PDL** dans un bloc
+fermé par défaut au début du formulaire NiceGUI. Elle conserve les corrections
+d’images de r6 et le sommaire cliquable. Les moteurs et leurs dépendances restent
+identiques ; le portail présente le guide et ses nouvelles captures fictives.
+Les archives précédentes sont conservées pour leur traçabilité ; utiliser r7
 pour une nouvelle installation, avec son propre fichier SHA-256.
 Les valeurs datées des comptes rendus de qualification décrivent leurs campagnes
 historiques ; elles ne remplacent pas ce tableau ni les références du reçu courant.
@@ -162,11 +161,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r6"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r7"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.
@@ -447,6 +446,12 @@ les mappings sont examinés ensuite. En cas d’erreur, conserver le message san
 secret et consulter `status` ou `logs`, sans recréer l’instance.
 
 ## 8. Revoir et approuver les mappings PDL
+
+Au début de **Mappings PDL**, ouvrir si nécessaire le bloc replié
+**« Exemple complet illustré · PFS, Backbone, PFAING et TACACS »**.
+Il montre le parcours avec captures, les IP de gestion IPv4/IPv6, les relations
+et la variante TACACS textuelle. Le [même exemple exportable](reference/04-pdl.md#exemple-complet-illustré--des-champs-pdl-aux-accès-tacacs)
+se trouve dans la documentation ; ses données fictives sont à adapter au SI.
 
 **Où : navigateur du poste et terminal Ubuntu.** Faire relire le sens des
 champs et des rapprochements par le responsable métier, pas seulement leur type.

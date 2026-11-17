@@ -1160,3 +1160,35 @@ conversationnels, endurance et compatibilité antérieurs gardent leur date et
 leur version. La revue sémantique des vrais champs, valeurs et relations reste
 à faire avec les responsables du SI-RIE. Les quatre revues de la recette humaine
 ne sont pas approuvées par ces essais.
+
+## Exemple illustré des mappings — 17 novembre 2026
+
+Le formulaire NiceGUI place désormais son exemple complet dans un bloc replié
+avant la connexion. Le même contenu est exportable dans la
+[référence PDL](04-pdl.md#exemple-complet-illustré--des-champs-pdl-aux-accès-tacacs).
+Huit nouvelles captures datées illustrent les quatre familles, l’ancre stable,
+les relations, les erreurs, les revues et TACACS IPv4/IPv6.
+
+Les captures et décisions ont été rejouées dans une **nouvelle instance de
+démonstration autonome** sur Ubuntu 24.04 ARM64 : LDAP, OpenSearch et catalogue
+propres, comptes et événements fictifs, sans copie des secrets de l’instance
+active. Douze contrôles navigateur couvrent le parcours structuré, six la
+variante textuelle et les droits ; sept contrôles natifs lisent réellement
+OpenSearch avec l’identité LDAP et vérifient les résultats et les refus.
+
+Les six documents attendus sur les quatre familles sont retrouvés ; une cible
+TACACS seule restitue ses deux événements IPv4/IPv6 et ajoute Backbone pour
+résoudre l’identité, sans publier ses logs. Les leurres d’équipement, périmètre,
+IP de trafic et date sont exclus.
+
+**Limite constatée et conservée explicitement :** `quoted_from_ip_v1` extrait
+bien les IP des messages fictifs, mais une source cible TACACS dont le seul
+lien d’identité est ce texte retourne `incomplete`, sans logs publiés. La
+validation technique et l’approbation du mapping ne rendent pas ce parcours
+opérationnel. Le SI doit fournir un champ `ip` structuré à l’ingestion ou
+conserver ce flux non qualifié en attendant une évolution. Le contrôle du
+refus fermé passe ; la recherche métier textuelle seule reste non qualifiée.
+
+Cette campagne qualifie la configuration et la résolution déterministe, pas
+une nouvelle conversation Albert, une charge, une endurance ou des données du
+SI réel. Les anciennes campagnes datées restent distinctes.
