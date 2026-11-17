@@ -1,0 +1,12 @@
+flowchart TB
+    Q["Client MCP · OpenWebUI ou autre<br/>Question et jeton de reprise"]
+    Q <-->|Question et outil disponible / appel proposé| A1["Modèle du client<br/>Albert dans OpenWebUI"]
+    Q -->|diagnose_observability| M["Serveur MCP diagnostic<br/>Question + continuation_token"]
+    M --> B["Assistant Python côté serveur<br/>Clarifier, reprendre le dialogue<br/>Valider le périmètre et les dates"]
+    I["Inventaire et mapping des mesures<br/>Équipements autorisés et séries associées"] --> B
+    B --> L["Lectures des sources<br/>Mesures VictoriaMetrics · logs PDL<br/>Tickets ITSM simulés"]
+    L -->|Mots-clés des signaux| D["Documentation OpenSearch<br/>Fiches techniques et incidents passés<br/>RAG lexical"]
+    L --> S["Backend Python<br/>Calculs, chronologie et preuves"]
+    D -->|Extraits cités| S
+    S <-->|Preuves / synthèse et relecture| A2["Albert API<br/>Formuler et relire le diagnostic"]
+    S -->|Rapport structuré et reprise par MCP| O["Client MCP<br/>Diagnostic sourcé et liens Grafana"]

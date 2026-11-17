@@ -1,0 +1,21 @@
+sequenceDiagram
+    autonumber
+    participant C as Open WebUI local
+    participant M as Backend MCP
+    participant T as Registre des jetons
+    participant L as Annuaire LDAPS
+    participant P as Politique des index et sources
+    participant S as Source en lecture
+    C->>M: Question et Bearer individuel
+    M->>T: Vérifier empreinte, expiration et révocation
+    T-->>M: Identité stable liée au jeton
+    M->>L: Relire objet et groupes actuels
+    L-->>M: Identité classée ou refus
+    M->>P: Autoriser chaque index et source nécessaires
+    alt Tous les droits nécessaires sont accordés
+        M->>S: Requête contrôlée et bornée
+        S-->>M: Preuves courantes
+        M-->>C: Résultat et limites
+    else Identité, annuaire, index ou source refusé
+        M-->>C: Refus sans preuve interdite
+    end

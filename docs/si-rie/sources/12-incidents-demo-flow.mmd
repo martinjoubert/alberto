@@ -1,0 +1,40 @@
+flowchart TD
+    A["Opérateur : configurer inventaire, mesures et accès aux sources"]
+    B["Opérateur : associer le modèle et la connexion MCP dans le client"]
+    C["Utilisateur : poser sa question"]
+    D["Serveur : vérifier le jeton de reprise et retrouver la demande confirmée"]
+    E["Modèle du client : appeler diagnose_observability<br/>Question courante et continuation_token"]
+    E2["Serveur : extraire les identités et dates des messages utilisateur"]
+    F["Appel MCP : diagnose_observability"]
+    G["Python : résoudre les identités et valider la période"]
+    H{"Contexte complet et autorisé ?"}
+    I["Champ manquant : retourner une question de clarification"]
+    J["Hors périmètre : retourner un refus sans lire les sources"]
+    K["Construire les sélecteurs et les requêtes bornées"]
+    L["Lire mesures, tickets et logs autorisés"]
+    M["Calculer couverture, maxima, moyennes et chronologie"]
+    M2["Rechercher les fiches historiques à partir des signaux observés"]
+    N["Assembler les preuves du tour et leurs identifiants S1, S2…"]
+    O["Albert backend : rédiger une synthèse JSON"]
+    P{"Contraintes Python respectées ?"}
+    Q["Une seule nouvelle tentative de synthèse avec consignes correctives"]
+    R{"Synthèse désormais conforme ?"}
+    S["Albert backend : relire preuves et rapport visible"]
+    T{"Verdict valid = true ?"}
+    U["Python : conserver les faits et signaler la synthèse non validée"]
+    V["Python : produire la réponse, les tableaux et les liens de preuve"]
+    W["Client : afficher le rapport serveur ; filtre de mise en forme facultatif"]
+    X["Utilisateur : ouvrir les courbes Grafana ou les sources citées"]
+    A --> B --> C --> E --> F --> D --> E2 --> G --> H
+    H -->|incomplet| I
+    I -->|réponse utilisateur et nouveau jeton| E
+    H -->|interdit| J
+    H -->|oui| K --> L --> M --> M2 --> N --> O --> P
+    P -->|oui| S
+    P -->|non| Q --> R
+    R -->|oui| S
+    R -->|non| U
+    S --> T
+    T -->|oui| V
+    T -->|non ou erreur| U --> V
+    V --> W --> X

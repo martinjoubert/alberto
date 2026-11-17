@@ -1,0 +1,38 @@
+@startuml mapping-workflow
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 13
+skinparam ArrowColor #35557D
+skinparam ActivityBackgroundColor #F4F7FB
+skinparam ActivityBorderColor #35557D
+start
+:Faire vérifier l'identité LDAP
+habilitée via manage.py pdl;
+:Découvrir les champs physiques autorisés;
+:Configurer concepts et relations dans le YAML;
+:validate-mappings\nRafraîchir l'inventaire et valider le fichier;
+if (Document compatible ?) then (non)
+  :Corriger le fichier ; aucune revue importée;
+  stop
+else (oui)
+endif
+:load-mappings\nCréer une revue pending par index physique;
+:Inspecter le sens métier et les relations;
+if (Proposition incorrecte ?) then (oui)
+  :Ne pas approuver cet identifiant\nCorriger le YAML puis valider et recharger;
+  :Conserver l'approbation active éventuelle;
+  stop
+else (non)
+endif
+:approve-review ID_REVUE --reason MOTIF\nRevalider le schéma et les ACL;
+if (Schéma courant et mapping compatibles ?) then (non)
+  :Recommencer la revue sur le schéma courant;
+  stop
+else (oui)
+endif
+:Créer vN active pour cet index\nConserver vN-1 inactive et les autres index;
+:Vérifier le catalogue puis rejouer les cas;
+stop
+@enduml

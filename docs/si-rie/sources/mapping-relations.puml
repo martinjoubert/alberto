@@ -1,0 +1,42 @@
+@startuml mapping-relations
+!pragma layout smetana
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 13
+skinparam ArrowColor #35557D
+skinparam ObjectBorderColor #35557D
+skinparam ObjectBackgroundColor #F4F7FB
+top to bottom direction
+object "PFS : source d'identité" as PFS {
+  observer.name = edge-a
+  asset.id = asset-001
+  observer.ip = 10.20.0.1
+  asset.reference = gateway-73
+}
+object "BB : source d'identité" as BB {
+  host.name = edge-a
+  asset.id = asset-001
+  host.ip = IPv4 et IPv6
+}
+object "TACACS : cible de logs" as TACACS {
+  log.tacacs.dest = 10.20.0.1
+  ou 2001:db8::10
+  ni nom ni asset.id nécessaires
+}
+object "PFAING : cible de logs" as PFAING {
+  gateway.ref = gateway-73
+  client.ip = IP cliente de trafic
+  server.ip = IP serveur de trafic
+}
+PFS -- BB : asset-id (ancre)\nequipment-name
+PFS --> TACACS : management-ip
+BB --> TACACS : management-ip
+PFS --> PFAING : asset-reference
+note bottom of PFAING
+  client.ip et server.ip n'appartiennent
+  pas au namespace management-ip.
+  Seules les cibles demandées sont lues
+  pendant la phase finale de logs.
+end note
+@enduml

@@ -1,0 +1,26 @@
+{
+  "source_commit": "8affa9b0544a0ed556c8ab0613833a211e9360ef",
+  "source_dirty": false,
+  "runtime_context": "03763e37a65820d831cc",
+  "archives": [
+    {
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy.tar.gz",
+      "bytes": 10421111,
+      "sha256": "68dbb30597e497ef95d533d1797f4defb96a0c29129cb7068f173633716db1d6"
+    },
+    {
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy.zip",
+      "bytes": 19815486,
+      "sha256": "bf182a8c34147eaed263f33ad42e6182cdd2503f3754365c0281fb08a46b74bc"
+    }
+  ],
+  "deterministic_tests": {
+    "passed": 1364,
+    "skipped": 1,
+    "failed": 0
+  },
+  "real_si_reception": "not_qualified",
+  "gitlab_history_included": false,
+  "private_credentials_included": false,
+  "si_registry_images": "references_and_access_to_be_provided_by_SI"
+}

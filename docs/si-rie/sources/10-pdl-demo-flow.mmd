@@ -1,0 +1,42 @@
+flowchart TD
+    A["Opérateur : configurer le catalogue et les relations entre index"]
+    B["Opérateur : associer preset, connexion MCP et filtre dans OpenWebUI"]
+    C["Utilisateur : poser sa question en langage naturel"]
+    D["Filtre : conserver la demande et les précisions du dialogue"]
+    E["Albert côté OpenWebUI : proposer l'appel investigate_pdl"]
+    F["Filtre : réappliquer la question effective avant l'appel MCP"]
+    G["Python : vérifier source, période et objet recherché"]
+    H{"Demande suffisamment précisée ?"}
+    I["Retourner une clarification"]
+    J["Albert backend : produire un plan JSON en concepts métier"]
+    K["Python : valider le plan et vérifier les mappings physiques"]
+    L{"Contrôles réussis ?"}
+    M["Retourner la limite ou l'erreur sans rechercher les logs"]
+    N{"Recherche d'identité équipement ?"}
+    O["Traduire les concepts en champs et compiler le DSL"]
+    P["Exécuter les recherches OpenSearch prévues par le plan"]
+    Q["Résoudre nom, FQDN et IP ; vérifier leur association"]
+    Q2{"Identité unique et complète ?"}
+    R["Construire et exécuter les recherches système et TACACS par ces identifiants"]
+    S["Normaliser les preuves : lignes, totaux, période, requêtes et limites"]
+    T{"Lectures réussies ?"}
+    U["Conserver les preuves disponibles et signaler les limites"]
+    V["Albert backend : rédiger la synthèse puis effectuer une critique"]
+    W["Python : contrôler la réponse ; corriger et relire si nécessaire"]
+    X["Enregistrer le rapport et retourner réponse, preuves et liens"]
+    Y["Filtre OpenWebUI : afficher la réponse contrôlée et ses sources"]
+    Z["Utilisateur : consulter les logs et les requêtes dans Dev Tools"]
+    A --> B --> C --> D --> E --> F --> G --> H
+    H -->|non| I
+    I -->|précision de l'utilisateur| D
+    H -->|oui| J --> K --> L
+    L -->|non| M
+    L -->|oui| N
+    N -->|non| O --> P --> S
+    N -->|oui| Q --> Q2
+    Q2 -->|oui| R --> S
+    Q2 -->|non : limite de résolution| S
+    S --> T
+    T -->|non| U --> X
+    T -->|oui| V --> W --> X
+    X --> Y --> Z

@@ -1,0 +1,40 @@
+flowchart TB
+    subgraph CFG["Configuration opérateur"]
+        CATALOG["Catalogue YAML<br/>Concepts métier → index et champs"]
+        ADMIN["Administration des équipements<br/>Tester puis activer les relations"]
+        PROFILE["Profil JSON versionné<br/>Identité → système et TACACS"]
+        ADMIN --> PROFILE
+    end
+    subgraph UI["OpenWebUI"]
+        CHAT["Question et dialogue<br/>Preset Albert PDL"]
+        GUARD["Filtre pdl_evidence_guard<br/>Demande effective et restitution"]
+        CHAT --> GUARD
+    end
+    subgraph PY["Serveur Python PDL"]
+        MCP["MCP :9910/mcp<br/>investigate_pdl"]
+        ROUTER["Cadrage de la demande"]
+        SERVICE["Pilotage de l'investigation<br/>Planification, contrôles et synthèse"]
+        ORCH["Exécution des étapes"]
+        ADAPTER["Adaptateur OpenSearch<br/>Compilation du DSL métier"]
+        EQUIP["Adaptateur équipement<br/>Résolution et lectures inter-index"]
+        MCP --> ROUTER --> SERVICE --> ORCH
+        ORCH --> ADAPTER
+        ORCH --> EQUIP
+    end
+    ALBERT["Albert API"]
+    OS["OpenSearch PDL<br/>Schémas et logs de démonstration"]
+    REPORT["Rapport JSON local<br/>Plan, preuves et requêtes exécutées"]
+    DEVTOOLS["OpenSearch Dashboards<br/>Dev Tools et inspection des logs"]
+    CATALOG -. configuration .-> ADAPTER
+    PROFILE -. configuration .-> EQUIP
+    ADMIN -->|prévisualisation en lecture| OS
+    GUARD -->|appel MCP natif| MCP
+    CHAT <-->|préparation de l'appel d'outil| ALBERT
+    SERVICE <-->|plan métier, synthèse et critique| ALBERT
+    ADAPTER <-->|HTTP : schémas et recherches| OS
+    EQUIP <-->|HTTP : identité, système et TACACS| OS
+    SERVICE --> REPORT
+    SERVICE -->|réponse structurée| GUARD
+    GUARD -->|affichage contrôlé| CHAT
+    CHAT -->|liens et requêtes reproductibles| DEVTOOLS
+    DEVTOOLS -->|recherches| OS
