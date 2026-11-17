@@ -19,17 +19,17 @@ index, dates et accès Lima/Colima du laboratoire ne sont pas ceux du SI-RIE.
 ## Avant de commencer
 
 Les fichiers de cette livraison sont disponibles sur GitHub :
-[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz)
-et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz.sha256),
-ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip).
+[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz)
+et [son SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz.sha256),
+ainsi que le [paquet Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip).
 Le déployeur reçoit les fichiers du SI séparément ; les archives ne contiennent pas ses secrets.
 
 ### Versions à utiliser pour cette livraison
 
 | Élément | Référence à retenir |
 | --- | --- |
-| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz` et son propre fichier `.sha256` |
-| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip` |
+| Paquet source courant | `rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz` et son propre fichier `.sha256` |
+| Documentation Wiki.js correspondante | `rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip` |
 | Serveur Ubuntu | 24.04 pour la qualification complète ; consulter le bilan daté pour la compatibilité 26.04 |
 | Python des images serveur | 3.12.15, base figée dans `deploy/ubuntu/Dockerfile` ; les commandes hôte demandent Python 3.10 ou plus |
 | NiceGUI | 3.17.1, verrouillé dans `deploy/ubuntu/requirements-portal.lock` |
@@ -37,11 +37,12 @@ Le déployeur reçoit les fichiers du SI séparément ; les archives ne contienn
 | ITSM-NG | Contrat du connecteur 1.6.17 ; faire confirmer la version réelle et les droits par le responsable ITSM |
 | Rapports de qualification seulement | Allure 3.33.0 et Node.js 24.22.2 ; ces outils ne sont pas des prérequis des moteurs |
 
-La révision **r4 corrige la documentation** de r3, notamment un nom d’archive
-r2 resté dans le complément 01 et l’explication des variables du terminal.
-Le code applicatif et les dépendances sont identiques à r3. Les archives r1,
-r2 et r3 restent conservées pour leur traçabilité ; utiliser r4 pour une nouvelle
-installation, sans mélanger une archive avec le SHA-256 d’une autre révision.
+La révision **r5 simplifie l’étape 6 autour de l’assistant NiceGUI** et déplace
+la configuration manuelle dans le complément 02. Elle reprend les corrections
+de versions et de variables de r4. Le code applicatif et les dépendances restent
+identiques à r3. La commande de préparation dispose aussi d’un arrêt Ctrl+C
+propre, limité à son propre conteneur. Les archives précédentes sont conservées pour leur traçabilité ;
+utiliser r5 pour une nouvelle installation, avec son propre fichier SHA-256.
 Les valeurs datées des comptes rendus de qualification décrivent leurs campagnes
 historiques ; elles ne remplacent pas ce tableau ni les références du reçu courant.
 
@@ -98,7 +99,7 @@ sans refaire `prepare` ni le raccordement déjà enregistré.
 | 3 | Choisir l'instance et le compte administrateur | Ubuntu | Mode `external`, vrai compte LDAP habilité |
 | 4 | Vérifier les prérequis | Ubuntu | Docker, Compose, Buildx et capacité disponibles |
 | 5 | Préparer l'instance privée | Ubuntu | Permissions privées, aucun service démarré |
-| 6 | Renseigner sources, droits, Albert et images | Ubuntu | Paramètres revus, secrets privés |
+| 6 | Compléter la fiche dans NiceGUI et importer son dossier | Navigateur et Ubuntu | Préparation importée, secrets privés ajoutés |
 | 7 | Valider, récupérer les images et démarrer | Ubuntu | Trois services PoC sains ; catalogue encore à approuver |
 | 8 | Revoir et approuver les mappings | Ubuntu et navigateur | Sources requises prêtes, catalogue approuvé |
 | 9 | Raccorder les précédents ITSM-NG | Ubuntu | Identités individuelles et lecture API vérifiée |
@@ -160,11 +161,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r4"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r5"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.
@@ -258,218 +259,130 @@ sudo stat -c '%a %n' "$RIE_INSTANCE" "$RIE_INSTANCE/secrets" "$RIE_INSTANCE/.env
 permissions `700`, `700`, `600`. Ne pas réexécuter `prepare` pour corriger une
 instance existante. Conserver les clés de session et de service générées.
 
-## 6. Renseigner les sources, droits et Albert
+<a id="6-renseigner-les-sources-droits-et-albert"></a>
+<a id="préparer-avec-nicegui"></a>
+<a id="copier-les-modèles-et-les-fichiers-remis"></a>
+<a id="définir-les-paramètres-de-connexion"></a>
+<a id="définir-les-index-pdl-et-le-ldap"></a>
+<a id="comprendre-les-noms-ldap"></a>
+<a id="choisir-explicitement-les-droits-initiaux"></a>
 
-**Où : Ubuntu, `sudo`.** Les paramètres viennent de la fiche complétée. Les
-trois fichiers Incidents ci-dessous doivent avoir été préparés au format du
-PoC à partir des données et contrats réels, puis relus avec leurs responsables.
+## 6. Préparer le raccordement avec NiceGUI
 
-### Préparer avec NiceGUI
+**But :** saisir les paramètres du SI dans NiceGUI, puis importer les fichiers
+qu’il génère dans l’instance neuve de l’étape 5. La
+[fiche de raccordement](reference/26-si-connection-sheet.md) sert à recueillir
+les informations auprès des responsables du SI ; il n’est pas nécessaire de
+recopier ses tableaux dans un autre document avant de remplir l’assistant.
 
-L’espace **Déploiement** prépare la fiche et les fichiers du PoC avec une saisie
-guidée. Il ne lit aucune configuration existante, ne contacte aucune source et
-ne remplace pas les tests de connexion des étapes suivantes. Il n’exige pas LDAP :
-il ne donne accès à aucune donnée métier. Les mots de passe, tokens et clés privées
-restent hors du formulaire et du ZIP.
+Cette étape concerne une **nouvelle installation**. Une instance déjà raccordée
+se reprend selon la section de reprise du guide, sans nouvel import.
 
-Si le portail est déjà disponible, ouvrir son menu **Déploiement**. Pour une
-première installation, lancer la **même application NiceGUI en mode préparation**,
-avec l’image approuvée fournie par le responsable de la livraison :
+### Ouvrir l’assistant
+
+**Ubuntu · terminal A**, à la racine des sources, avec les variables des étapes
+précédentes. Remplacer le marqueur par l’image NiceGUI approuvée remise par le SI.
 
 ```bash
-# Mémorise la référence exacte de l'image NiceGUI approuvée ; remplacer ce marqueur par la valeur fournie par le SI.
+# Désigne l'image NiceGUI approuvée pour cette livraison, avec son digest complet.
 export RIE_SETUP_IMAGE=REPLACE_APPROVED_PORTAL_IMAGE
-# Récupère cette seule image depuis la registry autorisée, avant de configurer l'instance.
+# Récupère cette image depuis la registry autorisée.
 sudo docker pull "$RIE_SETUP_IMAGE"
-# Lance NiceGUI sans montage d'instance, sans LDAP et sans service métier ; garde ce terminal ouvert.
+# Ouvre l'assistant de préparation sans dépendre de LDAP ; garde ce terminal ouvert.
 sudo python3 deploy/ubuntu/manage.py deployment-ui --image "$RIE_SETUP_IMAGE"
 ```
 
-**Attendu :** `http://127.0.0.1:18091/deployment`. Sur un serveur distant,
-ouvrir dans un second terminal du poste un tunnel SSH vers le port Ubuntu 18091,
-suivant les accès fournis par le SI. Par exemple, remplacer `USER@UBUNTU_HOST` :
+**Attendu :** l’assistant annonce le port **18091**. Il prépare les fichiers ;
+il ne démarre aucun moteur et ne lit pas l’instance existante.
+
+**Poste du déployeur · terminal B** : ouvrir le tunnel ci-dessous en remplaçant
+`SSH_LOGIN@UBUNTU_HOST` par l’accès fourni par le SI. Garder aussi ce terminal ouvert.
 
 ```bash
-# Transmet le port de préparation Ubuntu vers le poste, uniquement sur sa boucle locale ; garde ce second terminal ouvert.
-ssh -N -L 18091:127.0.0.1:18091 USER@UBUNTU_HOST
+# Rend le port de préparation Ubuntu accessible uniquement sur la boucle locale de ce poste.
+ssh -o ExitOnForwardFailure=yes -N -L 127.0.0.1:18091:127.0.0.1:18091 SSH_LOGIN@UBUNTU_HOST
 ```
 
-Dans le navigateur du poste, ouvrir <http://127.0.0.1:18091/deployment>, puis :
+**Navigateur du poste :** ouvrir <http://127.0.0.1:18091/deployment>.
+Le portail permanent démarrera à l’étape 7. Pour simplement relire l’assistant
+sur notre sandbox déjà installée, utiliser [Déploiement NiceGUI](http://127.0.0.1:28090/deployment),
+sans relancer cette installation ni importer sur l’instance active.
 
-1. Renseigner la cible, les images, LDAP, les sources, les droits, Albert et,
-   si disponibles, les paramètres OAuth Open WebUI. Les règles commencent à `blocked`.
-2. Déposer la CA LDAP, les trois fichiers Incidents relus et, si nécessaire,
-   le bundle de CA des sources. Aucun nom de fichier déposé ne choisit un chemin serveur.
-3. Confirmer la revue avec leurs responsables, cliquer **Vérifier le dossier**,
-   corriger les erreurs, puis **Télécharger le dossier privé**.
-4. Transférer `rie-connection.zip` dans le dossier privé `RIE_SI` du serveur par
-   le canal SI prévu. Les paramètres internes et snapshots ne doivent pas être
-   publiés dans le dépôt public. Un brouillon JSON permet de reprendre la saisie ;
-   les fichiers déposés doivent être ajoutés à nouveau après fermeture de la page.
-5. Sur Ubuntu, dans un terminal qui conserve les variables des étapes 1 à 5 :
+### Compléter la fiche dans NiceGUI
+
+Suivre les **cinq écrans** de l’assistant avec les valeurs validées par le SI :
+
+| Écran | Ce qu’il faut renseigner |
+| --- | --- |
+| **1. Cible et images** | Environnement, contact, vrai compte LDAP administrateur et références des deux images serveur |
+| **2. Annuaire LDAP** | Serveur, lecteur technique, base, attributs et groupes réels |
+| **3. Sources et droits initiaux** | OpenSearch, VictoriaMetrics, index et droits approuvés ; les règles commencent à `Interdit` |
+| **4. Albert et Open WebUI** | URL et modèles Albert ; laisser les champs OAuth vides si leur préparation est reportée à l’étape 10 |
+| **5. Fichiers, vérification et export** | Déposer les fichiers ci-dessous, confirmer la revue, vérifier puis télécharger |
+
+Fichiers à déposer : **`ldap-ca.crt`**, **`incidents-corpus.json`**,
+**`metric-mapping.json`**, **`itsm-tickets.json`**, et **`ca-sources.pem`** si le SI
+utilise une CA qui n’est pas déjà reconnue. Les trois JSON sont des contrats
+préparés avec les responsables des données, au format du PoC ; voir le
+[détail des fichiers](reference/02-configuration.md#répartition-des-fichiers-privés).
+Les mots de passe, tokens et clés privées sont remis séparément, hors formulaire.
+
+Cliquer **Vérifier le dossier**. Corriger les messages jusqu’à obtenir
+**« Préparation locale vérifiée »**, puis cliquer **Télécharger le dossier privé**.
+
+**Attendu :** le navigateur télécharge **`rie-connection.zip`**, contenant la
+fiche technique, les paramètres et les fichiers déposés. Ce contrôle est local :
+les connexions au SI et les appels Albert seront vérifiés dans les étapes suivantes.
+
+### Transférer le dossier vers Ubuntu
+
+Une fois le ZIP enregistré, arrêter l’assistant avec **Ctrl+C dans le terminal A**,
+puis arrêter le tunnel avec **Ctrl+C dans le terminal B**. Garder les deux
+terminaux ouverts : les variables du terminal A restent disponibles.
+
+**Poste du déployeur · terminal B** : transférer le fichier téléchargé.
+Adapter le chemin si le navigateur utilise un autre dossier que `Downloads`.
+Le dossier Ubuntu `deploy` existe déjà depuis l’étape 2.
 
 ```bash
-# Rend l'archive de raccordement lisible uniquement par son propriétaire.
-chmod 600 "$RIE_SI/rie-connection.zip"
-# Importe les paramètres revus dans l'instance externe neuve de l'étape 5, avant toute commande manage.py pull/build/up sur cette instance.
-sudo python3 deploy/ubuntu/manage.py configure-connection "$RIE_INSTANCE" --input "$RIE_SI/rie-connection.zip"
-# Installe le secret du seul lecteur LDAP, fourni séparément par le SI.
+# Rend le ZIP de raccordement téléchargé lisible uniquement par son propriétaire.
+chmod 600 "$HOME/Downloads/rie-connection.zip"
+# Transfère le ZIP en conservant ses permissions privées ; remplacer l'accès SSH par celui du SI.
+scp -p "$HOME/Downloads/rie-connection.zip" SSH_LOGIN@UBUNTU_HOST:deploy/rie-connection.zip
+```
+
+**Attendu :** transfert réussi ; le ZIP est maintenant dans `$HOME/deploy` sur
+Ubuntu. Il contient des informations internes : le conserver dans le circuit SI.
+
+### Importer et ajouter les secrets
+
+**Ubuntu · terminal A**, toujours à la racine des sources. Les quatre fichiers
+privés ci-dessous sont ceux fournis séparément dans `RIE_SI`. Si OpenSearch ou
+VictoriaMetrics n’exige pas de secret, le responsable fournit le fichier correspondant vide.
+
+```bash
+# Importe le dossier vérifié dans l'instance externe neuve de l'étape 5 ; ne démarre aucun service.
+sudo python3 deploy/ubuntu/manage.py configure-connection "$RIE_INSTANCE" --input "$HOME/deploy/rie-connection.zip"
+# Installe le secret du seul lecteur LDAP, sans l'afficher.
 sudo install -m 600 "$RIE_SI/private/ldap-reader.password" "$RIE_INSTANCE/secrets/reader.password"
-# Installe le secret lecteur OpenSearch, fourni séparément.
+# Installe le secret lecteur OpenSearch fourni par le SI, éventuellement vide selon son authentification.
 sudo install -m 600 "$RIE_SI/private/opensearch.password" "$RIE_INSTANCE/secrets/opensearch_password"
-# Installe le token lecteur VictoriaMetrics, fourni séparément.
+# Installe le token lecteur VictoriaMetrics fourni par le SI, éventuellement vide selon son authentification.
 sudo install -m 600 "$RIE_SI/private/victoria.token" "$RIE_INSTANCE/secrets/victoria_token"
-# Installe la clé Albert autorisée, fournie séparément.
+# Installe la clé Albert autorisée pour le serveur, sans l'afficher.
 sudo install -m 600 "$RIE_SI/private/albert.key" "$RIE_INSTANCE/secrets/albert_key"
 ```
 
-**Attendu :** `prepared: true`, `secrets_changed: false`, `services_started: false`.
-Le ZIP est contrôlé avant écriture ; les clés internes générées à l’étape 5 sont
-conservées. Une instance déjà raccordée ou attachée à Docker est refusée.
-Arrêter le seul assistant avec **Ctrl+C**, fermer son tunnel, puis **passer
-directement à l’étape 7**. Ne pas rejouer les copies et éditions manuelles ci-dessous.
-Si OAuth a été renseigné, sa proposition est déjà présente dans `config/oauth-candidate.json` ;
-sa revue à l’étape 10 et la préparation de chaque client restent nécessaires.
+**Attendu :** l’import affiche `prepared: true`, `secrets_changed: false` et
+`services_started: false` ; les copies des secrets ne produisent aucune sortie
+si elles réussissent. Les clés internes de l’instance sont conservées.
 
-<details>
-<summary>Alternative sans formulaire : préparer les fichiers manuellement</summary>
+**L’étape 6 est terminée : passer à l’étape 7.** Les configurations `.env`,
+`pdl.yaml`, `access.json` et la politique initiale ont été préparées par l’assistant.
+Les mappings seront approuvés à l’étape 8 et les précédents ITSM raccordés à l’étape 9.
 
-Les sections suivantes remplacent l’assistant pour cette seule étape 6.
-Ne pas cumuler les deux méthodes sur la même instance.
-
-### Copier les modèles et les fichiers remis
-
-```bash
-# Installe le modèle du moteur PDL ; il ne configure pas le serveur OpenSearch.
-sudo install -m 600 deploy/ubuntu/examples/pdl.json "$RIE_INSTANCE/config/pdl.yaml"
-# Installe le modèle d'identité du PoC ; il ne configure pas le serveur LDAP.
-sudo install -m 600 deploy/ubuntu/examples/access.json "$RIE_INSTANCE/config/access.json"
-# Installe les règles initialement fermées, à personnaliser avant démarrage.
-sudo install -m 600 deploy/ubuntu/examples/policy.json "$RIE_INSTANCE/access/policy.json"
-# Copie l'inventaire, les fenêtres et champs Incidents relus pour ce SI.
-sudo install -m 600 "$RIE_SI/incidents-corpus.json" "$RIE_INSTANCE/config/incidents-corpus.json"
-# Copie le contrat validé des séries, labels et unités.
-sudo install -m 600 "$RIE_SI/metric-mapping.json" "$RIE_INSTANCE/config/metric-mapping.json"
-# Copie le snapshot autorisé des alertes et traitements courants, distinct des précédents par API.
-sudo install -m 600 "$RIE_SI/itsm-tickets.json" "$RIE_INSTANCE/config/itsm-tickets.json"
-# Installe la CA approuvée de l'annuaire.
-sudo install -m 600 "$RIE_SI/ldap-ca.crt" "$RIE_INSTANCE/config/ldap-ca.crt"
-# Installe le bundle de confiance des sources et d'Albert.
-sudo install -m 600 "$RIE_SI/ca-sources.pem" "$RIE_INSTANCE/config/ca-sources.pem"
-# Installe le secret du lecteur annuaire sans l'afficher.
-sudo install -m 600 "$RIE_SI/private/ldap-reader.password" "$RIE_INSTANCE/secrets/reader.password"
-# Installe le secret du lecteur OpenSearch sans l'afficher.
-sudo install -m 600 "$RIE_SI/private/opensearch.password" "$RIE_INSTANCE/secrets/opensearch_password"
-# Installe le token lecteur des mesures sans l'afficher.
-sudo install -m 600 "$RIE_SI/private/victoria.token" "$RIE_INSTANCE/secrets/victoria_token"
-# Installe la clé Albert autorisée pour le serveur ; le client local a sa configuration propre.
-sudo install -m 600 "$RIE_SI/private/albert.key" "$RIE_INSTANCE/secrets/albert_key"
-```
-
-**Attendu :** aucune sortie en cas de succès. Ces copies ne doivent pas être
-rejouées sur une instance déjà personnalisée. Les exemples complets sont dans
-`deploy/ubuntu/examples/`. Le marqueur `requires_operator_configuration` impose
-une revue : le **supprimer après personnalisation**, pas le mettre à `false`.
-Les fichiers restent privés et distincts des sources extraites.
-
-### Définir les paramètres de connexion
-
-```bash
-# Ouvre l'environnement privé pour renseigner les seules lignes de la fiche, sans dupliquer les clés.
-sudoedit "$RIE_INSTANCE/.env"
-```
-
-| Clé à renseigner | Valeur provenant de la fiche |
-| --- | --- |
-| `RIE_IMAGE`, `RIE_PORTAL_IMAGE` | Les deux références approuvées avec digest de la registry GitLab ; même version des sources |
-| `OPENSEARCH_URL`, `OPENSEARCH_USER` | URL HTTPS du cluster et compte lecteur |
-| `VICTORIAMETRICS_URL` | URL HTTPS des mesures ; son token est dans le fichier privé |
-| `INCIDENTS_LOGS_INDEX`, `INCIDENTS_DOCS_INDEX` | Index physiques réels des logs et fiches Incidents |
-| `INCIDENTS_MANIFEST` | `/data/config/incidents-corpus.json` |
-| `SOURCE_CA_FILE` | `/data/config/ca-sources.pem` |
-| `ALBERT_URL`, `ALBERT_MODEL` | API et modèle de planification PDL approuvés et disponibles |
-| `OBS_MODEL_GPTOSS` | Modèle de rédaction Incidents ; le nom technique de ce preset n'impose pas la famille du modèle |
-| `OBS_DIALOGUE_MODEL`, `OBS_REVIEW_MODEL` | Modèles d'interprétation et de relecture qualifiés |
-
-Conserver `RIE_MODE=external`, les identifiants générés `RIE_PROJECT`,
-`RIE_INSTANCE_ID`, `RIE_INSTANCE_DIR`, les chemins internes, ports et budgets.
-Ne pas recopier le `.env` d'une autre instance. Ne pas mettre de secret dans
-les URL. Le laboratoire utilise Gemma 4 pour PDL/rédaction et GPT-OSS pour
-dialogue/relecture ; ces disponibilités et quotas restent à confirmer dans le SI.
-
-### Définir les index PDL et le LDAP
-
-**`config/pdl.yaml` est propre au PoC**, lu par le moteur PDL ; le fichier natif
-du serveur OpenSearch est `opensearch.yml`, géré par son administrateur.
-**`config/access.json` est également propre au PoC**, commun aux deux UC ;
-son objet `ldap` explique comment interroger l'annuaire existant. Il ne crée
-ni serveur LDAP, ni comptes ni groupes.
-
-```bash
-# Ouvre la configuration PDL pour renseigner les index et retirer le marqueur après revue.
-sudoedit "$RIE_INSTANCE/config/pdl.yaml"
-# Ouvre la configuration d'identité pour reporter annuaire et groupes réels.
-sudoedit "$RIE_INSTANCE/config/access.json"
-# Ouvre les ACL initiales pour décider chaque droit, puis retirer le marqueur après revue.
-sudoedit "$RIE_INSTANCE/access/policy.json"
-```
-
-Dans `pdl.yaml`, renseigner `discovery.allowed_index_patterns` et
-`required_index_patterns` avec les index réels des familles retenues. Le premier
-limite la découverte ; le second impose leur présence avant `ready`. Les
-concepts/champs seront revus à l'étape 8. Conserver TLS, chemins `/data`,
-variables `${...}` et limites du modèle. Le fichier contient du JSON valide,
-accepté comme YAML ; respecter les virgules.
-
-| Champ de `access.json`, objet `ldap` | Valeur à renseigner et sens |
-| --- | --- |
-| `host`, `port` | DNS et port LDAPS réels, couverts par le certificat |
-| `use_tls`, `validate_cert` | Conserver `true`, connexion chiffrée et certificat vérifié |
-| `ca_file` | `/data/config/ldap-ca.crt`, vu depuis les conteneurs |
-| `app_dn` | DN du seul lecteur technique de l'annuaire |
-| `bind_password_file` | `/data/secrets/reader.password`, distinct du mot de passe utilisateur |
-| `search_base` | DN de la branche contenant les utilisateurs à rechercher |
-| `attribute_for_username`, `attribute_for_mail` | Noms des attributs de connexion et courriel ; pas les valeurs d'un utilisateur |
-| `attribute_for_groups`, `attribute_for_subject` | Attribut des groupes et attribut stable unique ; noms à confirmer dans l'annuaire |
-| `group_dns.internal`, `group_dns.external` | DN réels des groupes de classification |
-| `administrator_group_dns` | Liste des DN administrateurs des accès du PoC ; appartenance directe d'un interne |
-
-Conserver `allow_webui_assertions: false`. Un en-tête provenant du client ne
-remplace pas une authentification LDAP. Les groupes imbriqués ne sont pas
-développés automatiquement ; un compte non classé ou classé interne **et**
-externe est refusé.
-
-#### Comprendre les noms LDAP
-
-`cn` nomme une entrée, `ou` une branche et `dc` un composant de la racine.
-Un DN est leur chemin complet, par exemple le **fictif**
-`cn=reader,ou=services,dc=example,dc=invalid`. Ce chemin est distinct du DNS
-du serveur. Les DN du SI viennent de son administrateur ; ils ne se déduisent
-pas de l'adresse électronique. Le lecteur recherche le compte, le PoC vérifie
-le mot de passe de l'utilisateur, relit son identité stable et ses groupes,
-puis applique les règles. Les mots de passe utilisateurs ne sont pas stockés.
-La [fiche de raccordement](reference/26-si-connection-sheet.md#identités-et-droits)
-et le [glossaire](reference/23-glossary.md) explicitent ces termes.
-
-### Choisir explicitement les droits initiaux
-
-Dans la politique, conserver `version: 1`, une révision initiale `1` et
-`default: blocked`. Déclarer les **noms exacts** des index PDL, de logs et de
-documents Incidents. Décider séparément `incidents.metrics` et
-`incidents.tickets` dans `resources` :
-
-| Valeur | Lecture autorisée |
-| --- | --- |
-| `blocked` | Personne, administrateur compris |
-| `internal` | Comptes classés internes |
-| `authenticated` | Comptes classés internes ou externes ; pas d'accès anonyme |
-
-Un diagnostic complet exige les deux index Incidents **et** les deux ressources.
-Les droits natifs ITSM s'ajoutent aux règles du PoC. Après cette préparation,
-les modifications passent par l'administration ACL ; ne pas écraser les
-révisions/audits actifs avec un ancien fichier de politique.
-
-</details>
+La [configuration manuelle](reference/02-configuration.md#raccorder-des-sources-externes)
+reste une alternative de référence, à utiliser à la place de l’assistant.
 
 ## 7. Valider, récupérer les images et démarrer
 

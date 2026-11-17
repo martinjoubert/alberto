@@ -27,9 +27,12 @@ permet de reconnaître les limites de la recette.
 
 ## Raccorder des sources externes
 
-Ce parcours concerne **une instance externe neuve**, sur le serveur Ubuntu,
-avec l'opérateur `sudo` retenu à l'installation. Il ne modifie aucune source du
-SI : seuls des fichiers locaux et le catalogue applicatif sont préparés.
+Cette section est l’**alternative manuelle** à l’assistant NiceGUI de
+l’[étape 6 du guide](../README.md#6-préparer-le-raccordement-avec-nicegui).
+La destination doit être l’instance externe neuve déjà préparée à l’étape 5 ;
+ne pas rejouer `prepare`. Utiliser l’opérateur `sudo` retenu à l’installation.
+Cette préparation ne modifie aucune source du SI ; seuls les fichiers locaux
+sont renseignés à ce stade.
 
 **`config/pdl.yaml` configure le moteur PDL du PoC** : accès lecteur à OpenSearch,
 index à découvrir, limites de recherche et appels Albert. Il est issu du modèle
@@ -41,8 +44,8 @@ rôles distincts. Les commandes de ce parcours modifient la configuration du PoC
 `deploy/ubuntu/examples/access.json`. Il configure le composant d’identité et
 d’accès commun aux deux UC. Son objet `ldap` indique comment interroger
 l’annuaire existant ; il ne configure pas le serveur LDAP et ne crée ni comptes
-ni groupes. Le [tableau commenté du guide](../README.md#définir-les-index-pdl-et-le-ldap)
-explique les valeurs, puis les [noms LDAP et le fonctionnement de la connexion](../README.md#comprendre-les-noms-ldap).
+ni groupes. Le [tableau commenté de ce complément](02-configuration.md#définir-les-index-pdl-et-le-ldap)
+explique les valeurs, puis les [noms LDAP et le fonctionnement de la connexion](02-configuration.md#comprendre-les-noms-ldap).
 
 Les responsables des services fournissent une **fiche de raccordement** :
 adresses, ports, certificats, comptes, groupes et contrats de données. Elle
@@ -52,63 +55,53 @@ transmis par le canal privé prévu. Voir sa
 le [glossaire](23-glossary.md#fiche-de-raccordement) et les
 [valeurs de la sandbox](22-external-sandbox.md#fiche-de-raccordement-de-cet-exercice).
 
-1. Faire fournir par les responsables les URLs, CA, comptes lecteurs, groupes,
-   index physiques, schémas, séries et export de tickets autorisés.
-2. Préparer un nouveau dossier, puis copier les modèles publics livrés :
+Ne pas exécuter cette alternative après un import `configure-connection`.
+
+### Copier les modèles et les fichiers remis
 
 ```bash
-# Crée le dossier privé, la configuration initiale et les secrets du PoC ; ne démarre aucun service.
-sudo python3 deploy/ubuntu/manage.py prepare "$RIE_INSTANCE" --mode external
-# Copie le modèle à adapter pour sources, périmètres et budgets PDL ; à faire sur l'instance neuve avant personnalisation.
-sudo cp deploy/ubuntu/examples/pdl.json "$RIE_INSTANCE/config/pdl.yaml"
-# Copie le modèle à adapter pour LDAP et identité des utilisateurs ; à faire sur l'instance neuve avant personnalisation.
-sudo cp deploy/ubuntu/examples/access.json "$RIE_INSTANCE/config/access.json"
-# Copie le modèle à adapter pour règles ACL initiales ; à faire sur l'instance neuve avant personnalisation.
-sudo cp deploy/ubuntu/examples/policy.json "$RIE_INSTANCE/access/policy.json"
-# Copie le modèle à adapter pour équipements, fenêtres et provenance Incidents ; à faire sur l'instance neuve avant personnalisation.
-sudo cp deploy/ubuntu/examples/incidents-corpus.json "$RIE_INSTANCE/config/incidents-corpus.json"
-# Copie le modèle à adapter pour séries et unités des mesures ; à faire sur l'instance neuve avant personnalisation.
-sudo cp deploy/ubuntu/examples/metric-mapping.json "$RIE_INSTANCE/config/metric-mapping.json"
-# Copie le modèle à adapter pour export des alertes et traitements courants ; à faire sur l'instance neuve avant personnalisation.
-sudo cp deploy/ubuntu/examples/itsm-tickets.json "$RIE_INSTANCE/config/itsm-tickets.json"
-# Copie le modèle à adapter pour propositions de correspondance entre concepts PDL et champs physiques ; à faire sur l'instance neuve avant personnalisation.
-sudo cp deploy/ubuntu/examples/mappings.yaml "$RIE_INSTANCE/config/mappings.yaml"
+# Installe le modèle du moteur PDL ; il ne configure pas le serveur OpenSearch.
+sudo install -m 600 deploy/ubuntu/examples/pdl.json "$RIE_INSTANCE/config/pdl.yaml"
+# Installe le modèle d'identité du PoC ; il ne configure pas le serveur LDAP.
+sudo install -m 600 deploy/ubuntu/examples/access.json "$RIE_INSTANCE/config/access.json"
+# Installe les règles initialement fermées, à personnaliser avant démarrage.
+sudo install -m 600 deploy/ubuntu/examples/policy.json "$RIE_INSTANCE/access/policy.json"
+# Copie l'inventaire, les fenêtres et champs Incidents relus pour ce SI.
+sudo install -m 600 "$RIE_SI/incidents-corpus.json" "$RIE_INSTANCE/config/incidents-corpus.json"
+# Copie le contrat validé des séries, labels et unités.
+sudo install -m 600 "$RIE_SI/metric-mapping.json" "$RIE_INSTANCE/config/metric-mapping.json"
+# Copie le snapshot autorisé des alertes et traitements courants, distinct des précédents par API.
+sudo install -m 600 "$RIE_SI/itsm-tickets.json" "$RIE_INSTANCE/config/itsm-tickets.json"
+# Installe la CA approuvée de l'annuaire.
+sudo install -m 600 "$RIE_SI/ldap-ca.crt" "$RIE_INSTANCE/config/ldap-ca.crt"
+# Installe le bundle de confiance des sources et d'Albert.
+sudo install -m 600 "$RIE_SI/ca-sources.pem" "$RIE_INSTANCE/config/ca-sources.pem"
+# Installe le secret du lecteur annuaire sans l'afficher.
+sudo install -m 600 "$RIE_SI/private/ldap-reader.password" "$RIE_INSTANCE/secrets/reader.password"
+# Installe le secret du lecteur OpenSearch sans l'afficher.
+sudo install -m 600 "$RIE_SI/private/opensearch.password" "$RIE_INSTANCE/secrets/opensearch_password"
+# Installe le token lecteur des mesures sans l'afficher.
+sudo install -m 600 "$RIE_SI/private/victoria.token" "$RIE_INSTANCE/secrets/victoria_token"
+# Installe la clé Albert autorisée pour le serveur ; le client local a sa configuration propre.
+sudo install -m 600 "$RIE_SI/private/albert.key" "$RIE_INSTANCE/secrets/albert_key"
 ```
 
-Les fichiers cibles existent déjà, à l'exception du mapping opérateur : leur
-mode privé est conservé. Pour le nouveau mapping, appliquer
-`sudo chmod 600 "$RIE_INSTANCE/config/mappings.yaml"`.
-Le guide `deploy/ubuntu/examples/README.md` explique chaque champ et le format
-exact du snapshot. Ces exemples sont dans le paquet source, pas dans l'image.
-
-3. Adapter les fichiers avec `sudoedit`. Remplacer chaque `REPLACE_...` et
-   `replace-...`, retirer `requires_operator_configuration` **après revue**,
-   déclarer les index exacts et choisir les visibilités des deux ressources UC2.
-   Conserver `default: blocked`. Un droit absent reste refusé.
-4. Renseigner `.env` et les secrets selon les tableaux ci-dessous. Ne pas
-   remplacer les clés de session et de service générées par `prepare`.
-5. Lancer `validate`, puis le parcours scripté externe ou les phases manuelles
-   `build`, `pull`, `up`. Aucun seed ni recette fictive sur cette instance.
-6. Faire le `refresh` et la [revue des mappings](04-pdl.md#revoir-puis-approuver-les-mappings),
-   puis `check --username LDAP_ADMIN_USERNAME`. Le catalogue vide est attendu
-   avant cette revue ; ne pas annoncer `ready` pour le contourner.
-
-Le diagnostic Incidents complet nécessite les deux index configurés **et**
-`incidents.metrics` et `incidents.tickets`. Les quatre décisions se configurent
-indépendamment. Le mode `external` n'ouvre pas automatiquement ces droits.
-
-La [revue des écarts externes](14-si-rie-acceptance.md#écarts-concrets-à-lever-ou-à-accepter-explicitement)
-fait partie de ce raccordement. Le manifeste Incidents fournit `anchor_date`,
-`timezone`, `start`, `end` et `interval_seconds`. Adapter sa fenêtre de contrôle
-aux données réellement présentes, avec bornes ISO et fuseau ; ne pas conserver
-les dates fictives du modèle. Le validateur local contrôle ce contrat avant
-l'arrêt des services. La présence des données se vérifie ensuite par `check`
-et par les questions métier de la matrice.
+**Attendu :** aucune sortie en cas de succès. Ces copies ne doivent pas être
+rejouées sur une instance déjà personnalisée. Les exemples complets sont dans
+`deploy/ubuntu/examples/`. Le marqueur `requires_operator_configuration` impose
+une revue : le **supprimer après personnalisation**, pas le mettre à `false`.
+Les fichiers restent privés et distincts des sources extraites.
 
 ### Paramètres de raccordement dans `.env`
 
+```bash
+# Ouvre l'environnement privé pour reporter les paramètres de la fiche, en conservant les identifiants générés.
+sudoedit "$RIE_INSTANCE/.env"
+```
+
 | Paramètre | Valeur à fournir |
 | --- | --- |
+| `RIE_IMAGE`, `RIE_PORTAL_IMAGE` | Références par digest de la registry approuvée, de la même livraison |
 | `OPENSEARCH_URL` | URL HTTP(S) du cluster approuvé, sans identifiants dans l'URL |
 | `OPENSEARCH_USER` | Compte lecteur limité aux index utiles, ou vide si le mécanisme autorisé n'en utilise pas |
 | `VICTORIAMETRICS_URL` | URL HTTP(S) du fournisseur de métriques |
@@ -135,6 +128,82 @@ peuvent changer en conservant trois valeurs distinctes si NiceGUI est activé.
 Éditer ces fichiers avec `sudoedit`, sans placer leurs valeurs dans une commande,
 une URL, le wiki ou une sortie de recette. La CA LDAP se dépose séparément dans
 `config/ldap-ca.crt` et doit correspondre au nom du serveur LDAP.
+
+### Définir les index PDL et le LDAP
+
+**`config/pdl.yaml` est propre au PoC**, lu par le moteur PDL ; le fichier natif
+du serveur OpenSearch est `opensearch.yml`, géré par son administrateur.
+**`config/access.json` est également propre au PoC**, commun aux deux UC ;
+son objet `ldap` explique comment interroger l'annuaire existant. Il ne crée
+ni serveur LDAP, ni comptes ni groupes.
+
+```bash
+# Ouvre la configuration PDL pour renseigner les index et retirer le marqueur après revue.
+sudoedit "$RIE_INSTANCE/config/pdl.yaml"
+# Ouvre la configuration d'identité pour reporter annuaire et groupes réels.
+sudoedit "$RIE_INSTANCE/config/access.json"
+# Ouvre les ACL initiales pour décider chaque droit, puis retirer le marqueur après revue.
+sudoedit "$RIE_INSTANCE/access/policy.json"
+```
+
+Dans `pdl.yaml`, renseigner `discovery.allowed_index_patterns` et
+`required_index_patterns` avec les index réels des familles retenues. Le premier
+limite la découverte ; le second impose leur présence avant `ready`. Les
+concepts/champs seront revus à l'étape 8. Conserver TLS, chemins `/data`,
+variables `${...}` et limites du modèle. Le fichier contient du JSON valide,
+accepté comme YAML ; respecter les virgules.
+
+| Champ de `access.json`, objet `ldap` | Valeur à renseigner et sens |
+| --- | --- |
+| `host`, `port` | DNS et port LDAPS réels, couverts par le certificat |
+| `use_tls`, `validate_cert` | Conserver `true`, connexion chiffrée et certificat vérifié |
+| `ca_file` | `/data/config/ldap-ca.crt`, vu depuis les conteneurs |
+| `app_dn` | DN du seul lecteur technique de l'annuaire |
+| `bind_password_file` | `/data/secrets/reader.password`, distinct du mot de passe utilisateur |
+| `search_base` | DN de la branche contenant les utilisateurs à rechercher |
+| `attribute_for_username`, `attribute_for_mail` | Noms des attributs de connexion et courriel ; pas les valeurs d'un utilisateur |
+| `attribute_for_groups`, `attribute_for_subject` | Attribut des groupes et attribut stable unique ; noms à confirmer dans l'annuaire |
+| `group_dns.internal`, `group_dns.external` | DN réels des groupes de classification |
+| `administrator_group_dns` | Liste des DN administrateurs des accès du PoC ; appartenance directe d'un interne |
+
+Conserver `allow_webui_assertions: false`. Un en-tête provenant du client ne
+remplace pas une authentification LDAP. Les groupes imbriqués ne sont pas
+développés automatiquement ; un compte non classé ou classé interne **et**
+externe est refusé.
+
+#### Comprendre les noms LDAP
+
+`cn` nomme une entrée, `ou` une branche et `dc` un composant de la racine.
+Un DN est leur chemin complet, par exemple le **fictif**
+`cn=reader,ou=services,dc=example,dc=invalid`. Ce chemin est distinct du DNS
+du serveur. Les DN du SI viennent de son administrateur ; ils ne se déduisent
+pas de l'adresse électronique. Le lecteur recherche le compte, le PoC vérifie
+le mot de passe de l'utilisateur, relit son identité stable et ses groupes,
+puis applique les règles. Les mots de passe utilisateurs ne sont pas stockés.
+La [fiche de raccordement](26-si-connection-sheet.md#identités-et-droits)
+et le [glossaire](23-glossary.md) explicitent ces termes.
+
+### Choisir explicitement les droits initiaux
+
+Dans la politique, conserver `version: 1`, une révision initiale `1` et
+`default: blocked`. Déclarer les **noms exacts** des index PDL, de logs et de
+documents Incidents. Décider séparément `incidents.metrics` et
+`incidents.tickets` dans `resources` :
+
+| Valeur | Lecture autorisée |
+| --- | --- |
+| `blocked` | Personne, administrateur compris |
+| `internal` | Comptes classés internes |
+| `authenticated` | Comptes classés internes ou externes ; pas d'accès anonyme |
+
+Un diagnostic complet exige les deux index Incidents **et** les deux ressources.
+Les droits natifs ITSM s'ajoutent aux règles du PoC. Après cette préparation,
+les modifications passent par l'administration ACL ; ne pas écraser les
+révisions/audits actifs avec un ancien fichier de politique.
+
+Une fois les modèles personnalisés et leurs marqueurs retirés après revue,
+continuer à l’[étape 7 du guide](../README.md#7-valider-récupérer-les-images-et-démarrer).
+Les sources, LDAP et Albert seront vérifiés par les contrôles du parcours.
 
 ## Répartition des fichiers privés
 

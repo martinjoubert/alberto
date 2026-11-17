@@ -6,7 +6,7 @@ de leurs numéros et ne constituent pas une deuxième installation.
 
 ## Préparer le raccordement
 
-- Assistant **Déploiement** dans NiceGUI : [préparation guidée du raccordement](../README.md#préparer-avec-nicegui).
+- Assistant **Déploiement** dans NiceGUI : [préparation guidée du raccordement](../README.md#6-préparer-le-raccordement-avec-nicegui).
 - [Fiche de raccordement à compléter avec les responsables du SI](26-si-connection-sheet.md).
 - [Détail des fichiers et contrats de configuration](02-configuration.md).
 - [Glossaire : instance, mapping, LDAP, ACL, jeton et recette](23-glossary.md).
@@ -15,8 +15,8 @@ de leurs numéros et ne constituent pas une deuxième installation.
 
 Elle rassemble les paramètres fournis par les responsables des sources : URLs,
 CA, comptes lecteurs, groupes, index, séries et cas métier. Les secrets sont
-remis séparément. Elle se complète avant le déploiement ; le guide explique
-ensuite où reporter ces valeurs dans les fichiers privés du PoC.
+remis séparément. Les responsables font confirmer ces valeurs avant le démarrage ; l’étape 6
+du guide explique leur saisie dans NiceGUI et l’import des fichiers générés.
 
 ## Comprendre le code, les flux et les accès
 

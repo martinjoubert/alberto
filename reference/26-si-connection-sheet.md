@@ -2,17 +2,17 @@
 
 > Complément de référence — le [guide principal](../README.md) reste le seul parcours de déploiement à exécuter.
 
-Cette fiche rassemble les paramètres à remettre au déployeur pour suivre
-le [guide pas à pas](../README.md). Elle décrit le SI cible ; ce
-n'est ni une configuration LDAP/OpenSearch standard, ni un fichier à exécuter.
-Les responsables des sources renseignent leurs parties et le déployeur prépare
-les fichiers du PoC dans les formats indiqués. L’espace **Déploiement** de
-NiceGUI propose désormais la saisie guidée, le dépôt des CA et des trois fichiers
-Incidents, la vérification locale et l’export de cette préparation. Le
-[guide principal, étape 6](../README.md#préparer-avec-nicegui) explique son lancement
-avant LDAP et l’import dans une instance neuve. Les mots de passe et tokens
-restent remis séparément. L’assistant ne teste pas la disponibilité du SI. Une valeur inconnue reste
-**à fournir** : ne pas la remplacer par celle de la sandbox.
+Cette page est la **liste des informations à obtenir auprès des responsables
+du SI**, avec leurs validations et les cas de recette. Le déployeur saisit les
+paramètres dans l’espace **Déploiement** de NiceGUI, selon l’[étape 6 du guide](../README.md#6-préparer-le-raccordement-avec-nicegui).
+L’assistant produit une fiche technique et les fichiers de configuration du PoC ;
+il n’est pas nécessaire de compléter tous ces tableaux Markdown avant la saisie.
+Les validations de responsabilité et les cas de recette restent à convenir avec le SI.
+
+La fiche décrit le SI cible ; ce n’est ni une configuration LDAP/OpenSearch
+standard, ni un fichier à exécuter. Une valeur inconnue reste **à fournir** ;
+les paramètres fictifs de la sandbox ne remplacent pas ceux du SI réel.
+Les secrets sont remis séparément. Les tests de connexion suivent la préparation.
 
 **Ne mettre aucun secret dans cette page ou le wiki.** Indiquer uniquement
 le nom du fichier privé remis séparément, son propriétaire et sa destination.
