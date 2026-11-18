@@ -13,9 +13,9 @@ auxquels une étape renvoie.
 
 ## Avant de commencer
 
-Télécharger l’[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r9.tar.gz)
-et [son fichier SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-17-si-deploy-r9.tar.gz.sha256).
-Le [paquet documentaire Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-17-si-deploy-r9.zip)
+Télécharger l’[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz)
+et [son fichier SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz.sha256).
+Le [paquet documentaire Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-18-si-deploy-r10.zip)
 permet de conserver les pages et diagrammes hors du dépôt.
 
 <a id="versions-à-utiliser-pour-cette-livraison"></a>
@@ -114,11 +114,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-17-si-deploy-r9.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-17-r9"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-18-r10"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.
@@ -301,7 +301,10 @@ Fichiers à déposer : **`ldap-ca.crt`**, **`incidents-corpus.json`**,
 utilise une CA qui n’est pas déjà reconnue. Les trois JSON sont des contrats
 préparés avec les responsables des données, au format du PoC ; voir le
 [détail des fichiers](reference/02-configuration.md#répartition-des-fichiers-privés).
-Les secrets seront installés après l’import.
+Le responsable des alertes précise l’origine, la date d’export et le périmètre
+du snapshot dans son champ `provenance`. Un export natif non adapté ne suffit
+pas ; le [format du snapshot](reference/02-configuration.md#préparer-le-snapshot-des-alertes-courantes)
+précise les éléments à faire préparer. Les secrets seront installés après l’import.
 
 Cliquer **Vérifier le dossier**. Corriger les messages jusqu’à obtenir
 **« Préparation locale vérifiée »**, puis cliquer **Télécharger le dossier privé**.
@@ -524,8 +527,11 @@ sources publiques de la même version, compte administrateur local et fournisseu
 Albert configuré. Les commandes partent de la racine des sources **sur le poste**,
 pas du terminal SSH Ubuntu.
 
-L’administrateur sauvegarde les données et fichiers de lancement du client,
-puis conserve ses volumes, clés, réseau et réglages en changeant l’image.
+**Si le poste utilise déjà l’image cliente approuvée avec l’adaptateur OAuth**,
+conserver cette installation et passer au contrôle de la connexion Albert
+ci-dessous. Sinon, l’administrateur sauvegarde les données et fichiers de
+lancement du client, puis conserve ses volumes, clés, réseau et réglages en
+changeant l’image.
 Pour un client Docker Compose, reprendre les mêmes fichiers, variables et nom
 de projet. Les commandes ci-dessous supposent un service nommé `openwebui` ;
 un autre lancement se prépare avec le [guide du poste](reference/25-user-access.md#ce-que-prépare-ladministrateur-du-poste).
@@ -544,8 +550,12 @@ et conversations conservés. L’opérateur Docker du poste doit avoir accès à
 registry ; l’accès Ubuntu de l’étape 4 ne remplace pas celui du poste.
 
 Dans Open WebUI, vérifier la connexion Albert et relever l’identifiant complet
-du modèle disponible qui servira de relais. Renseigner ensuite ses URLs et
-cet identifiant dans le terminal du poste :
+du modèle disponible qui servira de relais. Dans les paramètres de partage de
+ce modèle, accorder sa lecture aux utilisateurs prévus pour le PoC, selon les
+droits du poste. Vérifier cet accès avec un compte utilisateur ordinaire : les
+deux modèles PoC ont besoin de ce relais pour fonctionner. Les ACL des sources
+restent vérifiées séparément par les moteurs.
+Renseigner ensuite ses URLs et cet identifiant dans le terminal du poste :
 
 ```bash
 # Désigne l’adresse de base réelle du client, avec le même port que ses URLs de retour.
@@ -695,9 +705,16 @@ valider par un opérateur ; sa confiance est distincte de celle du diagnostic.
 
 Contrôler **rédaction et relecture Albert**, modèle retourné et tokens.
 `partial`, synthèse non validée, appel absent ou fournisseur indisponible ne
-valent pas réussite de la génération. Attendre au moins **60 secondes après
-la réponse** avant toute nouvelle synthèse Incidents ; respecter aussi tout
-délai de limitation annoncé, sans désactiver le budget.
+valent pas réussite de la génération. Le budget IA est partagé par les
+utilisateurs de l’instance. Attendre au moins **60 secondes après la réponse**
+avant un nouveau diagnostic ou un échange de clarification Incidents. Un
+suivi fermé sur un statut et une période déjà confirmée peut relire les faits
+sans nouvel appel IA.
+
+Si **« Budget IA : réessayez dans… »** apparaît, attendre le délai indiqué et
+**renvoyer le même message** avant de poursuivre le dialogue. Ce message
+signifie que la demande n’a pas encore été traitée ; passer directement à la
+précision suivante ferait perdre le contexte de la demande refusée.
 
 **INC-2 — Même fil que INC-1**, même modèle :
 
@@ -707,6 +724,8 @@ délai de limitation annoncé, sans désactiver le budget.
 
 **Attendu :** à midi, l’alerte est résolue et le ticket pas encore clôturé.
 Un statut final `closed` ne doit pas être appliqué rétroactivement à midi.
+Si le rapport complet est replié sous **Détails du diagnostic**, le déplier
+pour consulter les mesures, les précédents et toutes les sources.
 
 **INC-3 — Nouveau fil**, modèle **SI-RIE — INCIDENTS**, pour vérifier aussi
 sa clarification de période :
@@ -716,7 +735,9 @@ Diagnostique OBS-RTR-01 sur le site de Rennes.
 ```
 
 **Attendu :** demande de période, sans diagnostic sur des dates inventées.
-**Dans ce même fil**, répondre :
+**Dans ce même fil, attendre 60 secondes après la demande de période**, puis
+répondre avec le texte ci-dessous. Sa compréhension utilise aussi l’IA et
+partage le même budget.
 
 ```text
 Le 28 septembre 2026 de 10:00 à 12:00, heure de Paris.

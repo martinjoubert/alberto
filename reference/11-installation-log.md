@@ -1,6 +1,6 @@
 # Journal de l'installation humaine sur Ubuntu
 
-> Preuve historique des installations des 6 au 16 novembre 2026. Ses résultats gardent leur version et leur périmètre ; consulter le [bilan de qualification](08-qualification.md) pour les suites et le [guide principal](../README.md) pour déployer.
+> Preuve historique des installations des 6 au 18 novembre 2026. Ses résultats gardent leur version et leur périmètre ; consulter le [bilan de qualification](08-qualification.md) pour les suites et le [guide principal](../README.md) pour déployer.
 
 Le 6 novembre 2026, le parcours manuel a été exécuté sur une VM Ubuntu neuve,
 depuis les seuls paquets sources identifiés par leur manifeste. Des défauts ont
@@ -9,8 +9,7 @@ concernent ces reprises corrigées ; la première tentative complète n'a pas é
 réussie du premier coup.
 
 Ce journal explique les écarts rencontrés et leur résolution. Pour déployer la
-livraison actuelle, suivre [Installation](01-installation.md), puis
-[Configuration](02-configuration.md). Le [bilan de qualification](08-qualification.md)
+livraison actuelle, suivre uniquement le [guide principal](../README.md). Le [bilan de qualification](08-qualification.md)
 reste la référence pour les résultats de charge, de panne et de compatibilité.
 
 ## Cadre de l'essai
@@ -390,3 +389,20 @@ Le contrôle du paquet extrait a aussi repéré l’absence des deux nouvelles
 captures dans la liste explicite de livraison. Cette liste a été complétée et
 le test vérifie désormais leur présence et leurs liens après export Wiki.js
 hors dépôt ; le premier rapport en échec reste conservé.
+
+
+## Répétition du guide sur un serveur neuf — 18 novembre 2026
+
+Les douze étapes ont été exécutées sur une nouvelle VM Ubuntu 24.04 ARM64,
+en mode `external`, avec les services sources sur une autre VM. Les deux UC
+ont utilisé Albert API depuis un Open WebUI local, avec des comptes ordinaires
+et des autorisations LDAP/OAuth individuelles. L’installation initiale r9 a
+nécessité les corrections décrites dans le [rapport complet](28-deployment-rehearsal.md) ;
+les parcours concernés ont ensuite été rejoués. La sauvegarde a réellement été
+restaurée dans une destination neuve ; deux demandes métier et un refus externe
+y ont été vérifiés sans nouvelle autorisation OAuth.
+
+Les essais initiaux et leurs échecs sont conservés séparément des reprises.
+Cette répétition ne réattribue ni les deux heures historiques ni la compatibilité
+26.04 aux images corrigées. Le rapport distingue les preuves obtenues, les
+corrections et les contrôles restant à réaliser dans le SI réel.

@@ -57,6 +57,7 @@ Ces pages conservent les dates, versions, échecs et limites réellement observ�
 Elles ne décrivent pas des commandes supplémentaires à rejouer pour installer.
 
 - [Journal des installations et corrections](11-installation-log.md).
+- [Répétition complète du guide sur Ubuntu neuf — 18 novembre 2026](28-deployment-rehearsal.md).
 - [Campagne initiale de stabilité Open WebUI](18-openwebui-stability.md).
 - [Corrections et conversations requalifiées](19-openwebui-corrections.md).
 - [Remise et qualification Ubuntu du 13 novembre](20-final-ubuntu-qualification.md).

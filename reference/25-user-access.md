@@ -109,13 +109,26 @@ docker compose -f CLIENT_COMPOSE -f deploy/openwebui/compose.override.yaml up -d
 Garder l'overlay dans la commande habituelle de reprise du client. La variable
 `RIE_OPENWEBUI_IMAGE` peut désigner l'image approuvée dans la registry GitLab.
 
+Si l’image cliente approuvée et son adaptateur OAuth sont déjà installés,
+conserver le client et poursuivre avec les contrôles ci-dessous.
+
 Albert doit déjà être disponible dans le client, avec le modèle relais
 `gpt-oss-120b`. Si la connexion fournisseur ajoute un préfixe au nom du modèle,
 passer son identifiant complet à `--base-model`, tel qu'affiché dans Open WebUI.
 Par exemple, le client de développement de cette sandbox expose
 `recette-20261109.gpt-oss-120b` ; les clients neufs de qualification utilisent
 le nom sans préfixe. Le programme refuse un modèle absent avant de modifier
-les réglages. Préparer les deux URL MCP convenues, puis lancer :
+les réglages.
+
+Dans les paramètres de partage des modèles Open WebUI, vérifier aussi que
+les utilisateurs du PoC peuvent lire **le modèle relais lui-même**. Le partage
+des deux profils PoC ne modifie pas les droits d’un relais privé existant.
+Accorder les seuls utilisateurs ou groupes prévus, puis vérifier avec un
+compte local de rôle `user`. Un relais inaccessible peut produire **« Model
+not found »** au premier envoi, même si les deux profils sont visibles. Cette
+autorisation du client est distincte des ACL appliquées aux sources.
+
+Préparer les deux URL MCP convenues, puis lancer :
 
 ```bash
 # Vérifie les arguments publics sans contacter le client ni modifier sa configuration.

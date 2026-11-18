@@ -32,6 +32,7 @@ le nom du fichier privé remis séparément, son propriétaire et sa destination
 | Image commune PDL/Incidents/opérateur | Référence GitLab approuvée `registry/chemin@sha256:...`, architecture et provenance | Responsable des images ; renseigne `RIE_IMAGE` |
 | Image NiceGUI | Référence GitLab approuvée `registry/chemin@sha256:...`, même source | Responsable des images ; renseigne `RIE_PORTAL_IMAGE` |
 | Image cliente Open WebUI | Référence approuvée, basée sur la version qualifiée 0.11.3 et l'adaptateur fourni | Responsable des images ; renseigne `RIE_OPENWEBUI_IMAGE` sur le poste |
+| Modèle relais Albert dans Open WebUI | Identifiant complet, préfixe éventuel et accès en lecture accordé aux utilisateurs du PoC | Administrateur du poste ; vérifier avec un compte ordinaire avant la recette |
 | Réseau, proxy, CA et accès à la registry | À fournir pour le serveur, les conteneurs et les postes | Responsables réseau/PKI/registry |
 | Émetteur OAuth et URLs HTTPS des deux moteurs | À fournir, joignables par le navigateur et le backend Open WebUI | Réseau/PKI ; aucun en-tête utilisateur ne remplace LDAP |
 | Callbacks Open WebUI locaux | Origine/port réels de chaque poste et deux chemins exacts | Administrateur du poste ; saisie dans `oauth.json` |
@@ -108,7 +109,7 @@ copiés dans l'instance privée. Ils ne sont pas des exports natifs universels.
 | Copie complétée de cette fiche | Coordination SI | Sans secrets ; conserver hors dépôt si elle contient des informations internes |
 | `incidents-corpus.json` | Déployeur + responsables données | Inventaire, fenêtre connue, champs, cadences, `status: ready` après revue |
 | `metric-mapping.json` | Déployeur + responsable métriques | Cinq mesures, labels et unités validés |
-| `itsm-tickets.json` | Responsable des alertes + déployeur | Export complet au format attendu et provenance de sa fraîcheur |
+| `itsm-tickets.json` | Responsable des alertes + déployeur | Contrat du PoC, `complete: true` après revue et champ `provenance` renseigné avec origine, date d’export et périmètre ; voir le [format du snapshot](02-configuration.md#préparer-le-snapshot-des-alertes-courantes) |
 | `ldap-ca.crt`, `ca-sources.pem` | Responsable PKI | CA LDAP et bundle des CA des sources/Albert ; pas de clé privée |
 | `private/ldap-reader.password` | Responsable LDAP | `0600`, secret du seul lecteur |
 | `private/opensearch.password` | Responsable OpenSearch | `0600`, secret lecteur |

@@ -227,6 +227,26 @@ La politique active et les données métier sont conservées ; après
 initialisation, employer les commandes `policy` ou l'administration NiceGUI
 pour changer les droits.
 
+## Préparer le snapshot des alertes courantes
+
+Le responsable des alertes prépare `itsm-tickets.json` à partir du modèle
+`deploy/ubuntu/examples/itsm-tickets.json`. Ce fichier utilise le contrat du
+PoC ; un export natif d’un autre outil doit être adapté avant son import.
+
+| Champ à la racine du JSON | Valeur ou sens attendu |
+| --- | --- |
+| `simulator` | `ITSM-NG`, identifiant technique du contrat conservé aussi pour un export réel autorisé |
+| `schema` | `dinum-demo-ticket-v1` |
+| `complete` | `true` quand le responsable a confirmé que le snapshot couvre le périmètre autorisé annoncé |
+| `provenance` | Texte non vide indiquant le système d’origine, la date d’export avec fuseau, le périmètre couvert et les limites de fraîcheur ; préciser explicitement les données fictives du laboratoire |
+| `tickets` | Liste des alertes et traitements au format du modèle ; une liste vide signifie qu’aucun élément n’a été fourni pour ce périmètre |
+
+Retirer le marqueur `requires_operator_configuration` après la revue du fichier.
+Dans l’assistant NiceGUI, le message **« Alertes : snapshot complet, provenance
+et contrat dinum-demo-ticket-v1 attendus »** demande de faire corriger ces
+éléments par leur préparateur. Il ne signale pas un défaut de connexion à ITSM.
+Le snapshot reste distinct de la recherche de précédents par API de l’étape 9.
+
 ## Borner les états de conversation
 
 La livraison Ubuntu configure explicitement `DINUM_DIALOGUE_MAX_STATES=8192`

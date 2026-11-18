@@ -1192,3 +1192,15 @@ refus fermé passe ; la recherche métier textuelle seule reste non qualifiée.
 Cette campagne qualifie la configuration et la résolution déterministe, pas
 une nouvelle conversation Albert, une charge, une endurance ou des données du
 SI réel. Les anciennes campagnes datées restent distinctes.
+
+
+## Déploiement externe de bout en bout — 18 novembre 2026
+
+Le [rapport de répétition du guide](28-deployment-rehearsal.md) couvre les douze
+étapes sur une nouvelle VM Ubuntu 24.04 ARM64 : récupération publique du paquet,
+raccordement NiceGUI, images par registry TLS authentifiée, approbation des
+mappings, API native ITSM-NG 1.6.17, conversations réelles Albert, trois profils
+ACL et compte non classé, puis sauvegarde/restauration et nouvelles demandes.
+Il expose les cinq écarts corrigés, les premières tentatives conservées et les
+limites de cette preuve. La recette du SI réel reste à exécuter avec ses
+propres données et contraintes.
