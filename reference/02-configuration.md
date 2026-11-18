@@ -390,7 +390,7 @@ du [raccordement du poste utilisateur](01-installation.md#raccorder-le-poste-uti
 Pour le parcours OAuth courant, la base reste **0.11.3**, avec l’adaptateur
 de renouvellement livré dans l’image dérivée approuvée. La preuve stock décrite
 ci-dessous concerne la recette Bearer du 6 novembre ; elle ne désigne pas une
-image de remplacement pour le parcours actuel. Les [versions courantes](../README.md#versions-à-utiliser-pour-cette-livraison)
+image de remplacement pour le parcours actuel. Le [début du guide](../README.md#avant-de-commencer)
 et le reçu identifient les fichiers à utiliser pour une nouvelle installation.
 
 Le client qualifié le 6 novembre 2026 est **Open WebUI stock 0.11.3-slim**, sur

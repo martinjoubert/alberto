@@ -139,8 +139,10 @@ nouveaux essais pendant la décision, sans désactiver les contrôles d'accès.
 
 Sur le serveur de reprise de **même architecture**, avec le paquet source
 correspondant à la sauvegarde, choisir une destination inexistante. Ne pas
-exécuter `prepare`. Arrêter les consommateurs concernés, vérifier disque et
-ports, puis :
+exécuter `prepare`. Vérifier le disque disponible, puis restaurer la copie
+sans démarrer ses services. L’instance d’origine peut rester en fonctionnement
+pendant cette préparation ; l’arrêter après la restauration réussie, avant
+`up` sur la copie si elles utilisent les mêmes ports.
 
 ```bash
 # Vérifie la sauvegarde et la restaure dans une nouvelle instance ; ne démarre aucun service et ne remplace pas l'originale.

@@ -363,8 +363,7 @@ La liaison utilise le sujet LDAP stable, pas un mail fourni par le client.
 À chaque recherche, une nouvelle session ITSM est créée puis fermée ; son
 `glpiID` doit correspondre à l'identifiant provisionné. Aucun compte ITSM
 partagé ne remplace les utilisateurs. Si un App-Token est imposé par ITSM,
-l'opérateur ajoute `app_token` à la racine du fichier privé
-`$RIE_INSTANCE/secrets/itsm-users.json` avec `sudoedit`. Les tokens ne doivent
+[l’ajouter depuis son fichier privé](#ajouter-lapp-token-fourni-par-itsm). Les tokens ne doivent
 jamais apparaître dans les URL, commandes, logs, captures ou paquets publics.
 
 5. Activer la configuration, valider puis appliquer :
@@ -404,6 +403,24 @@ Le mode de démonstration s'active avec une configuration privée minimale :
 Il est refusé hors `demo`. Les cinq tickets fictifs incluent deux solutions
 concordantes, une autre famille de panne, une tentative refusée et un dossier
 exclu. Ils ne constituent pas un test contre un serveur ITSM réel.
+
+### Ajouter l’App-Token fourni par ITSM
+
+Complément de l’[étape 9 du guide](../README.md#9-raccorder-les-précédents-itsm-ng),
+**uniquement si le serveur ITSM exige un App-Token**. Sur Ubuntu, conserver les
+variables `RIE_INSTANCE` et `RIE_SI` définies dans ce guide. Le fichier privé
+`$RIE_SI/private/itsm-app.token` doit avoir été fourni par le responsable ITSM.
+
+La commande ajoute ce secret au stockage privé existant sans afficher sa
+valeur et préserve les liaisons individuelles enregistrées par `itsm-user` :
+
+```bash
+# Ajoute l'App-Token depuis le fichier privé, sans afficher sa valeur ni la passer en argument.
+sudo python3 -c 'import json,pathlib,sys; p=pathlib.Path(sys.argv[1]); d=json.loads(p.read_text()); d["app_token"]=pathlib.Path(sys.argv[2]).read_text().strip(); p.write_text(json.dumps(d,indent=2)+"\n"); p.chmod(0o600)' "$RIE_INSTANCE/secrets/itsm-users.json" "$RIE_SI/private/itsm-app.token"
+```
+
+**Attendu :** commande terminée sans erreur ni valeur affichée. Reprendre
+[Valider et appliquer le raccordement ITSM](../README.md#valider-et-appliquer-le-raccordement-itsm).
 
 ## Droits et absence de contournement
 
