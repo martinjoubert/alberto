@@ -5,6 +5,10 @@ Python et le portail NiceGUI sur Ubuntu, en **mode `external`** : OpenSearch,
 VictoriaMetrics, LDAP et ITSM-NG sont déjà fournis par le SI. Open WebUI reste
 installé sur chaque poste utilisateur.
 
+Une **instance** désigne ici une installation du PoC sur Ubuntu, avec ses propres
+services, configuration, secrets, règles ACL et données locales. La variable
+`RIE_INSTANCE`, choisie à l’étape 3, désigne son dossier privé de configuration.
+
 Le même parcours s’utilise dans une [sandbox préparée](reference/22-external-sandbox.md).
 Les questions de l’étape 11 donnent des exemples copiables pour son corpus
 fictif. Dans le SI réel, utiliser les paramètres et cas de recette validés par
@@ -13,9 +17,9 @@ auxquels une étape renvoie.
 
 ## Avant de commencer
 
-Télécharger l’[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz)
-et [son fichier SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz.sha256).
-Le [paquet documentaire Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-18-si-deploy-r10.zip)
+Télécharger l’[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz)
+et [son fichier SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz.sha256).
+Le [paquet documentaire Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-18-si-deploy-r11.zip)
 permet de conserver les pages et diagrammes hors du dépôt.
 
 <a id="versions-à-utiliser-pour-cette-livraison"></a>
@@ -114,11 +118,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-18-r10"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-18-r11"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.
@@ -205,15 +209,7 @@ sudo stat -c '%a %n' "$RIE_INSTANCE" "$RIE_INSTANCE/secrets" "$RIE_INSTANCE/.env
 `700`, `700`, `600`. Les services démarreront à l’étape 7. `prepare` est réservé
 à une destination neuve ; les clés générées doivent être conservées.
 
-<a id="6-renseigner-les-sources-droits-et-albert"></a>
-<a id="préparer-avec-nicegui"></a>
-<a id="copier-les-modèles-et-les-fichiers-remis"></a>
-<a id="définir-les-paramètres-de-connexion"></a>
-<a id="définir-les-index-pdl-et-le-ldap"></a>
-<a id="comprendre-les-noms-ldap"></a>
-<a id="choisir-explicitement-les-droits-initiaux"></a>
-
-## 6. Préparer le raccordement avec NiceGUI
+## 6. Préparer le raccordement avec NiceGUI<a id="6-renseigner-les-sources-droits-et-albert"></a><a id="préparer-avec-nicegui"></a><a id="copier-les-modèles-et-les-fichiers-remis"></a><a id="définir-les-paramètres-de-connexion"></a><a id="définir-les-index-pdl-et-le-ldap"></a><a id="comprendre-les-noms-ldap"></a><a id="choisir-explicitement-les-droits-initiaux"></a>
 
 L’assistant NiceGUI prépare les fichiers de l’instance créée à l’étape 5.
 Remplir ses écrans avec les valeurs de la fiche de raccordement.
