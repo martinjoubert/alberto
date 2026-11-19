@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "description": "Historical delivery archives, preserved byte-for-byte; use the root README for the current installation.",
+  "previous_root_commit": "d1876cd4b2ad6143f68ff53e1de19bde1cacf675",
+  "archives": [
+    {
+      "revision": "legacy-pdl-0.1.0",
+      "file": "dinum-pdl-agent-0.1.0-source.zip",
+      "path": "archive/legacy-pdl-0.1.0/dinum-pdl-agent-0.1.0-source.zip",
+      "bytes": 59962,
+      "sha256": "2b2d27036e70c89d2cfccb904414a6dc9026990c764dbf52321ae490e489aab6",
+      "checksum_path": "archive/legacy-pdl-0.1.0/dinum-pdl-agent-0.1.0-source.zip.sha256",
+      "checksum_sha256": "956cb1dc8b5c7c80ed8c38292bd255a52f9d26a0f0e462607795e7e2c23346d7"
+    },
+    {
+      "revision": "r2",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz",
+      "path": "archive/r2/rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz",
+      "bytes": 10420211,
+      "sha256": "4f8ad7d89bda6d143d1a6dde6fb8c01ecb8f941f677b8a249bc74da639ab6319",
+      "checksum_path": "archive/r2/rie-si-rie-ubuntu-2026-11-17-si-deploy-r2.tar.gz.sha256",
+      "checksum_sha256": "3dbee0044de4be26cdd8a2e6cf022b7d5e5087244d4eeeb47e5b4b5289f36db0"
+    },
+    {
+      "revision": "r3",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz",
+      "path": "archive/r3/rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz",
+      "bytes": 10440773,
+      "sha256": "364f015dec07b7b3a13e234c767635912c06442b8dd978300e254b5e43703204",
+      "checksum_path": "archive/r3/rie-si-rie-ubuntu-2026-11-17-si-deploy-r3.tar.gz.sha256",
+      "checksum_sha256": "844e0ceda858b0c7b5de47a879be8ff6a8f32cd4dce8384712afd17c05bc81c5"
+    },
+    {
+      "revision": "r4",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz",
+      "path": "archive/r4/rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz",
+      "bytes": 10441662,
+      "sha256": "24dcdb4180536e9322e2247009bf5f8caa93c2c494fe96ebc9d5cdbc9ae1c31f",
+      "checksum_path": "archive/r4/rie-si-rie-ubuntu-2026-11-17-si-deploy-r4.tar.gz.sha256",
+      "checksum_sha256": "6ec729a7ea84d46337bf92eef913e1046a78c64c3c9f324032b856447d5a20f6"
+    },
+    {
+      "revision": "r5",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz",
+      "path": "archive/r5/rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz",
+      "bytes": 10441748,
+      "sha256": "c52557de0d7f535c4f02f57dbae771c1e3d3ce8d50bcf397914193dea966f465",
+      "checksum_path": "archive/r5/rie-si-rie-ubuntu-2026-11-17-si-deploy-r5.tar.gz.sha256",
+      "checksum_sha256": "78bff22ff4b7a24e36f784bc279a53a29a8a04dad161d628098d5d17a875308e"
+    },
+    {
+      "revision": "r6",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz",
+      "path": "archive/r6/rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz",
+      "bytes": 10442622,
+      "sha256": "be729738e4eb571a2771645c6f873a4045fcd20f2057ce5e6d2e26704f9399df",
+      "checksum_path": "archive/r6/rie-si-rie-ubuntu-2026-11-17-si-deploy-r6.tar.gz.sha256",
+      "checksum_sha256": "02fabaca9901c0924c51efe15abadb983244dd2dcfef9931151bfdd910832a3f"
+    },
+    {
+      "revision": "r7",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz",
+      "path": "archive/r7/rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz",
+      "bytes": 10759913,
+      "sha256": "8d4d35969b1a0d5a254aff0d044d0a1a5e96b4e2ca2feb704f9f42eb41098076",
+      "checksum_path": "archive/r7/rie-si-rie-ubuntu-2026-11-17-si-deploy-r7.tar.gz.sha256",
+      "checksum_sha256": "a6e6508660642e4960b92f7d248a7b02d587dfb648ff6eacefa28ecfc25028df"
+    },
+    {
+      "revision": "r8",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r8.tar.gz",
+      "path": "archive/r8/rie-si-rie-ubuntu-2026-11-17-si-deploy-r8.tar.gz",
+      "bytes": 10765226,
+      "sha256": "cba7b56093f52854ff149b3a9e056b6b68ff89c33dce8549acb0f6ee664c0aba",
+      "checksum_path": "archive/r8/rie-si-rie-ubuntu-2026-11-17-si-deploy-r8.tar.gz.sha256",
+      "checksum_sha256": "5b399029414da2ff2be157c74a182e588ae0f5f5e89a97a032b156dd3b91af3f"
+    },
+    {
+      "revision": "r9",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy-r9.tar.gz",
+      "path": "archive/r9/rie-si-rie-ubuntu-2026-11-17-si-deploy-r9.tar.gz",
+      "bytes": 10761469,
+      "sha256": "d27fb8718cbc11a6e390dbfa7bce9f6d543c4645bd398f7aa8dc48e91bfc3210",
+      "checksum_path": "archive/r9/rie-si-rie-ubuntu-2026-11-17-si-deploy-r9.tar.gz.sha256",
+      "checksum_sha256": "5db32de4d13bcb4558d5c2199b0537f13ad4c8e58c5f4eabf2a6b5fdc49a3dbe"
+    },
+    {
+      "revision": "r1",
+      "file": "rie-si-rie-ubuntu-2026-11-17-si-deploy.tar.gz",
+      "path": "archive/r1/rie-si-rie-ubuntu-2026-11-17-si-deploy.tar.gz",
+      "bytes": 10421111,
+      "sha256": "68dbb30597e497ef95d533d1797f4defb96a0c29129cb7068f173633716db1d6",
+      "checksum_path": "archive/r1/rie-si-rie-ubuntu-2026-11-17-si-deploy.tar.gz.sha256",
+      "checksum_sha256": "5b07484f4d2d476a0304be7df5fab449ccb591d3ca348e236cc9e060c60b3004"
+    },
+    {
+      "revision": "r10",
+      "file": "rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz",
+      "path": "archive/r10/rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz",
+      "bytes": 10767304,
+      "sha256": "8a633c780083e3b6c7945bcd4e17cce52467bcf9e1778fd3d004d559bcd01458",
+      "checksum_path": "archive/r10/rie-si-rie-ubuntu-2026-11-18-si-deploy-r10.tar.gz.sha256",
+      "checksum_sha256": "8167df376c31fe2727cfe8b17abbe6f8811de9f9678942a335da521be718206a"
+    },
+    {
+      "revision": "r11",
+      "file": "rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz",
+      "path": "archive/r11/rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz",
+      "bytes": 10767361,
+      "sha256": "b176dcca8331403e66f39b5ec3fb605e7746523bf9bb4458136a3c58debdbfac",
+      "checksum_path": "archive/r11/rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz.sha256",
+      "checksum_sha256": "7a4b37d1cce7b811edacda8aad727c09bd0bf6527df04fa5ef8cc867b14ad63f"
+    },
+    {
+      "revision": "r2",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r2.zip",
+      "path": "archive/r2/rie-si-rie-wikijs-2026-11-17-si-deploy-r2.zip",
+      "bytes": 19800715,
+      "sha256": "3c84534bcc77a27335d883997714557d7f2f1a0d026faf4a679d2242fa3f23f3",
+      "checksum_path": "archive/r2/rie-si-rie-wikijs-2026-11-17-si-deploy-r2.zip.sha256",
+      "checksum_sha256": "2af124854c8856e32a4f381755961839b95b6f9cb3379669fb2c397aa6f7c4cf"
+    },
+    {
+      "revision": "r3",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r3.zip",
+      "path": "archive/r3/rie-si-rie-wikijs-2026-11-17-si-deploy-r3.zip",
+      "bytes": 19820351,
+      "sha256": "f9784eb72c1588328d9e28663e1cae68fd73ec53a8e4a673fc0be6acce3f651e",
+      "checksum_path": "archive/r3/rie-si-rie-wikijs-2026-11-17-si-deploy-r3.zip.sha256",
+      "checksum_sha256": "1ceca173b8b09389ce0d5263dbdeaea91f052987f430689b3502187959527df7"
+    },
+    {
+      "revision": "r4",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip",
+      "path": "archive/r4/rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip",
+      "bytes": 19823866,
+      "sha256": "e2df1f500104db94724f278151e58999abb85b507f25606fb354f993819dbb59",
+      "checksum_path": "archive/r4/rie-si-rie-wikijs-2026-11-17-si-deploy-r4.zip.sha256",
+      "checksum_sha256": "5db7b6988f7ff5fe10d6e491aababe6405b8296c938cf62535ae68be85c9862a"
+    },
+    {
+      "revision": "r5",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip",
+      "path": "archive/r5/rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip",
+      "bytes": 19821722,
+      "sha256": "1977061763d51e3de61a843de69f48d5e23c01f7b2a1a5eb8b19d538f1fa876d",
+      "checksum_path": "archive/r5/rie-si-rie-wikijs-2026-11-17-si-deploy-r5.zip.sha256",
+      "checksum_sha256": "5a67dbec581d49e6d7c01303e2dbe4aec69b2feed8b4a75234361b98f2e5113e"
+    },
+    {
+      "revision": "r6",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip",
+      "path": "archive/r6/rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip",
+      "bytes": 19823417,
+      "sha256": "f4572d9a855ff512602f480d8be26dda4f97f6f65c50661efde05c07b1cb8022",
+      "checksum_path": "archive/r6/rie-si-rie-wikijs-2026-11-17-si-deploy-r6.zip.sha256",
+      "checksum_sha256": "7fcf6edb83c988442449da751558cc3795d37d2e415f2c6e59e677677145795d"
+    },
+    {
+      "revision": "r7",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip",
+      "path": "archive/r7/rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip",
+      "bytes": 20465223,
+      "sha256": "60a0ec12ebc5874ace94f2a3bcadbd1f8870b410b8c8406a8ce8e8e05340e802",
+      "checksum_path": "archive/r7/rie-si-rie-wikijs-2026-11-17-si-deploy-r7.zip.sha256",
+      "checksum_sha256": "9aba2913eb247e6a4e84969673bc061c8b74119ed34df6b16e80b66fd2f16ff0"
+    },
+    {
+      "revision": "r8",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r8.zip",
+      "path": "archive/r8/rie-si-rie-wikijs-2026-11-17-si-deploy-r8.zip",
+      "bytes": 20483376,
+      "sha256": "536c5525deca2ebd2ea75ff78f245d941205c5250324ed99a85c07c82903065c",
+      "checksum_path": "archive/r8/rie-si-rie-wikijs-2026-11-17-si-deploy-r8.zip.sha256",
+      "checksum_sha256": "04565bc23c8fa558a957d30b6a99c8053ffd01ca757ecfa1a872619f900d09f9"
+    },
+    {
+      "revision": "r9",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy-r9.zip",
+      "path": "archive/r9/rie-si-rie-wikijs-2026-11-17-si-deploy-r9.zip",
+      "bytes": 20472707,
+      "sha256": "df70ef80c8e39e0ad353913e7f05251ebe03c10e0ca7a5ae3a03c1d59a2d3144",
+      "checksum_path": "archive/r9/rie-si-rie-wikijs-2026-11-17-si-deploy-r9.zip.sha256",
+      "checksum_sha256": "88a6a063d95671149cc9294f08fb7be9f97f74d395c1b8df817c61f8b62877f2"
+    },
+    {
+      "revision": "r1",
+      "file": "rie-si-rie-wikijs-2026-11-17-si-deploy.zip",
+      "path": "archive/r1/rie-si-rie-wikijs-2026-11-17-si-deploy.zip",
+      "bytes": 19815486,
+      "sha256": "bf182a8c34147eaed263f33ad42e6182cdd2503f3754365c0281fb08a46b74bc",
+      "checksum_path": "archive/r1/rie-si-rie-wikijs-2026-11-17-si-deploy.zip.sha256",
+      "checksum_sha256": "bdfb2d322f54e915767ff5ea997c13aad9c2e86d5bbfd2055909d409e7ed6c44"
+    },
+    {
+      "revision": "r10",
+      "file": "rie-si-rie-wikijs-2026-11-18-si-deploy-r10.zip",
+      "path": "archive/r10/rie-si-rie-wikijs-2026-11-18-si-deploy-r10.zip",
+      "bytes": 20497033,
+      "sha256": "5fa84d2acf881dcc088d19d678dca945d0153509202ae8fcc8339befd087c824",
+      "checksum_path": "archive/r10/rie-si-rie-wikijs-2026-11-18-si-deploy-r10.zip.sha256",
+      "checksum_sha256": "577d7ebfef5ce37b4018fdacfbe290055e3da8262e32ed410d40da8b6f04aaf4"
+    },
+    {
+      "revision": "r11",
+      "file": "rie-si-rie-wikijs-2026-11-18-si-deploy-r11.zip",
+      "path": "archive/r11/rie-si-rie-wikijs-2026-11-18-si-deploy-r11.zip",
+      "bytes": 20497288,
+      "sha256": "12d493caf6bd1c0636f7daa449d3ed006b1b2af0fb60a4962fe05f9b9ce46d2a",
+      "checksum_path": "archive/r11/rie-si-rie-wikijs-2026-11-18-si-deploy-r11.zip.sha256",
+      "checksum_sha256": "7c96f7e65ff343b9cd152e923dfaa1770221105ce8d232a11be324fbc563edcd"
+    }
+  ],
+  "previous_delivery_receipt": {
+    "path": "archive/r11/DELIVERY.json",
+    "sha256": "75a884b7d9e1881b6eca1211e2610c29df040b8eedc106aa57bf581c3c66b328"
+  }
+}

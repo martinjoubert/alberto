@@ -164,3 +164,27 @@ ces accès et le filtrage effectif ne sont pas disponibles.
 
 Les modifications de données intervenues depuis la sauvegarde doivent être prises
 en compte avant le retour ; elles ne sont pas fusionnées automatiquement.
+
+
+## Ranger les livraisons dans le dépôt de distribution
+
+Le dépôt GitHub de distribution conserve le guide `README.md` comme seul
+fichier à la racine. Les compléments, illustrations et sources des diagrammes
+restent dans `reference/`, `assets/`, `diagrams/` et `sources/`. Le code des
+moteurs est remis dans le paquet source identifié par son manifeste.
+
+- `releases/rNN/` contient les deux paquets courants, leurs fichiers `.sha256`
+  et le reçu `DELIVERY.json` de cette version.
+- `archive/rNN/` conserve les versions précédentes et leurs empreintes,
+  sans modifier les archives. Le premier paquet PDL autonome est rangé
+  séparément sous `archive/legacy-pdl-0.1.0/`.
+- Les index de `releases/` et `archive/` indiquent la version courante et
+  permettent de retrouver les précédentes.
+
+À chaque publication, mettre à jour les liens de téléchargement du guide,
+contrôler les paquets extraits et vérifier les empreintes après déplacement.
+Le reçu courant décrit sa propre version ; l’historique est consultable
+séparément dans `archive/`. Les anciennes URL pointant sur un fichier déplacé
+à la racine se retrouvent via l’index des archives ou la révision GitHub
+historique ; aucun fichier d’archive n’est réécrit pour modifier ses liens.
+Ce rangement facilite la navigation ; il ne réécrit pas l’historique Git.

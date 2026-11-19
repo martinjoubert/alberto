@@ -1,0 +1,69 @@
+{
+  "schema_version": 2,
+  "release_revision": "r12",
+  "date": "2026-11-19",
+  "source_commit": "1a497342ff7cb1ddc5263ac59b45de4559801354",
+  "source_dirty": false,
+  "path_base": "repository_root",
+  "archives": [
+    {
+      "kind": "source",
+      "file": "rie-si-rie-ubuntu-2026-11-19-si-deploy-r12.tar.gz",
+      "path": "releases/r12/rie-si-rie-ubuntu-2026-11-19-si-deploy-r12.tar.gz",
+      "bytes": 10767811,
+      "sha256": "e1fd50634670abe8ff730fe399b2f80784dea0d57ee044832b1051e32cc76deb"
+    },
+    {
+      "kind": "documentation",
+      "file": "rie-si-rie-wikijs-2026-11-19-si-deploy-r12.zip",
+      "path": "releases/r12/rie-si-rie-wikijs-2026-11-19-si-deploy-r12.zip",
+      "bytes": 20499067,
+      "sha256": "0f10c39652fbdbb5849bf48d5560bb2973532e8def846e06ebb6295144877d27"
+    }
+  ],
+  "runtime_context": "ced86293f609c10b37ac",
+  "portal_context": "13b8958dfb04e42e0095",
+  "change_scope": "Documentation and public delivery layout only. Application code is unchanged from the real Albert rehearsal.",
+  "documentation": {
+    "guide": "README.md",
+    "reference_directory": "reference",
+    "source_guide": "docs/si-rie/README.md",
+    "pages": 30,
+    "root_files": [
+      "README.md"
+    ]
+  },
+  "history": {
+    "index": "archive/index.json",
+    "previous_delivery_receipt": "archive/r11/DELIVERY.json",
+    "historical_archives": 23,
+    "historical_bytes_modified": false
+  },
+  "qualification": {
+    "report": "reference/28-deployment-rehearsal.md",
+    "real_albert_rehearsal_date": "2026-11-18",
+    "qualified_application_source_commit": "6b239b9695c9e802522c2f1f1a95448bf8246c00",
+    "application_runtime_context_equal_to_qualified": true,
+    "real_albert_rerun_for_layout_change": false,
+    "real_si_reception": "not_qualified",
+    "new_2h_endurance": false,
+    "ubuntu_2604_rerun": false,
+    "amd64_performance": false,
+    "si_gitlab_filtered_registry": false
+  },
+  "validation": {
+    "documentation_tests_passed": 9,
+    "documentation_local_links_checked": 426,
+    "source_archive_verified_outside_repository": true,
+    "wiki_sha256_verified_files": 237,
+    "previous_runtime_regressions": {
+      "passed": 1397,
+      "skipped": 1,
+      "source_commit": "873e02326c199d88cad140ed15a34762e0862925",
+      "rerun_for_layout_only_change": false
+    }
+  },
+  "gitlab_history_included": false,
+  "private_credentials_included": false,
+  "si_registry_images": "References and access must be provided by the SI owner; this repository contains source packages, not a qualified SI registry."
+}

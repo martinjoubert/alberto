@@ -17,10 +17,15 @@ auxquels une étape renvoie.
 
 ## Avant de commencer
 
-Télécharger l’[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz)
-et [son fichier SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz.sha256).
-Le [paquet documentaire Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/rie-si-rie-wikijs-2026-11-18-si-deploy-r11.zip)
+Télécharger l’[archive source](https://github.com/martinjoubert/alberto/raw/refs/heads/main/releases/r12/rie-si-rie-ubuntu-2026-11-19-si-deploy-r12.tar.gz)
+et [son fichier SHA-256](https://github.com/martinjoubert/alberto/raw/refs/heads/main/releases/r12/rie-si-rie-ubuntu-2026-11-19-si-deploy-r12.tar.gz.sha256).
+Le [paquet documentaire Wiki.js](https://github.com/martinjoubert/alberto/raw/refs/heads/main/releases/r12/rie-si-rie-wikijs-2026-11-19-si-deploy-r12.zip)
 permet de conserver les pages et diagrammes hors du dépôt.
+
+Les paquets de la version courante sont regroupés dans
+[`releases/r12`](https://github.com/martinjoubert/alberto/tree/main/releases/r12).
+Les [anciennes livraisons](https://github.com/martinjoubert/alberto/tree/main/archive)
+restent disponibles pour consulter l’historique.
 
 <a id="versions-à-utiliser-pour-cette-livraison"></a>
 <a id="préparation-des-images--responsable-de-la-construction-avant-létape-1"></a>
@@ -118,11 +123,11 @@ distinctes. Ne pas extraire par-dessus un dossier existant.
 # Entre dans le dossier de réception du paquet ; adapter si le SI l'a remis ailleurs.
 cd "$HOME/deploy"
 # Désigne le nom exact de l'archive de cette livraison, à comparer au reçu.
-export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-18-si-deploy-r11.tar.gz
+export RIE_ARCHIVE=rie-si-rie-ubuntu-2026-11-19-si-deploy-r12.tar.gz
 # Vérifie l'archive contre son fichier SHA-256 reçu ; attendre OK.
 sha256sum -c "$RIE_ARCHIVE.sha256"
 # Choisit un dossier neuf pour cette version des sources.
-export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-18-r11"
+export RIE_SOURCES="$HOME/rie-deploy-sources-2026-11-19-r12"
 # Crée le dossier ; s'il existe, choisir un autre nom avant extraction.
 mkdir "$RIE_SOURCES"
 # Extrait les sources ; aucun logiciel ni service n'est installé.
